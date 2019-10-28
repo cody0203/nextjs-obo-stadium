@@ -4,10 +4,9 @@ import { useRouter } from "next/router";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../static/css/index.css";
 import "../static/css/main.css";
 import "../static/css/components/header.css";
-import "../static/css/except-home-page.css";
+import "../static/css/components/products.css";
 
 // Font Awesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -20,20 +19,11 @@ library.add(fab, faSearch);
 import Header from "./header";
 import Footer from "./footer";
 
-const links = [
-  { href: "https://zeit.co/now", label: "ZEIT" },
-  { href: "https://github.com/zeit/next.js", label: "GitHub" }
-].map(link => {
-  link.key = `nav-link-${link.href}-${link.label}`;
-  return link;
-});
-
 const Layout = props => {
   const router = useRouter();
-
   return (
     <div>
-      <Header currentPage={router.pathname} />
+      <Header currentPage={router.pathname} title={props.title} />
       {props.children}
       <Footer />
     </div>

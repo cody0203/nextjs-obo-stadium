@@ -23,7 +23,7 @@ const Header = props => {
           <img
             className="navbar-brand"
             className="img-fluid"
-            src="static/images/logo-white.png"
+            src="/images/logo-white.png"
             alt="logo"
           />
         </Link>
@@ -76,17 +76,7 @@ const Header = props => {
           </Nav>
         </Collapse>
       </Navbar>
-
-      <div className="content text-center">
-        <h1 className="slogan main-heading text-uppercase">
-          BEST THINGS WITH BEST OFFERS
-        </h1>
-        <div className="search-form justify-content-md-center d-flex">
-          <div className="container">
-            <div className="row justify-content-center"></div>
-          </div>
-        </div>
-      </div>
+      {props.title}
 
       <div className="search-form-small">
         <input
