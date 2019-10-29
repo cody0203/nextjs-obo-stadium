@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/layout";
 import Slider from "react-slick";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Product = () => {
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   let slider1, slider2;
+  const router = useRouter();
+
   useEffect(() => {
     setNav1(slider1);
     setNav2(slider2);
@@ -206,34 +210,48 @@ const Product = () => {
                     <i className="fas fa-chevron-down dropdown-arrow" />
                   </button>
                 </div>
-                <a href="./buy-page.html" className="buy-btn">
-                  <button className="btn btn-primary buy green-btn">
-                    <div className="ask-text left-content">
-                      <div className="ask-price main-content">9.555.000 ₫</div>
-                      <div className="ask-desc sub-content">
-                        Giá đặt bán thấp nhất
+                <Link
+                  href="/product/buy/[id]"
+                  as={`/product/buy/${router.query.id}`}
+                >
+                  <a className="buy-btn">
+                    <button className="btn btn-primary buy green-btn">
+                      <div className="ask-text left-content">
+                        <div className="ask-price main-content">
+                          9.555.000 ₫
+                        </div>
+                        <div className="ask-desc sub-content">
+                          Giá đặt bán thấp nhất
+                        </div>
                       </div>
-                    </div>
-                    <div className="buy-text right-content">
-                      <div className="buy-now main-content">Mua ngay</div>
-                      <div className="bid sub-content">hoặc đấu giá</div>
-                    </div>
-                  </button>
-                </a>
-                <a href="./sell-page.html" className="sell-btn">
-                  <button className="btn btn-primary sell red-btn">
-                    <div className="ask-text left-content">
-                      <div className="bid-price main-content">9.310.000 ₫</div>
-                      <div className="ask-desc sub-content">
-                        Giá đặt mua cao nhất
+                      <div className="buy-text right-content">
+                        <div className="buy-now main-content">Mua ngay</div>
+                        <div className="bid sub-content">hoặc đấu giá</div>
                       </div>
-                    </div>
-                    <div className="sell-text right-content">
-                      <div className="buy-now main-content">Bán ngay</div>
-                      <div className="bid sub-content">hoặc đặt giá bán</div>
-                    </div>
-                  </button>
-                </a>
+                    </button>
+                  </a>
+                </Link>
+                <Link
+                  href="/product/sell/[id]"
+                  as={`/product/sell/${router.query.id}`}
+                >
+                  <a className="sell-btn">
+                    <button className="btn btn-primary sell red-btn">
+                      <div className="ask-text left-content">
+                        <div className="bid-price main-content">
+                          9.310.000 ₫
+                        </div>
+                        <div className="ask-desc sub-content">
+                          Giá đặt mua cao nhất
+                        </div>
+                      </div>
+                      <div className="sell-text right-content">
+                        <div className="buy-now main-content">Bán ngay</div>
+                        <div className="bid sub-content">hoặc đặt giá bán</div>
+                      </div>
+                    </button>
+                  </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -361,6 +379,14 @@ const Product = () => {
           @import "/static/css/product-details.css";
 
           .slick-slider.slider-nav .slick-track {
+            display: flex;
+          }
+        `}
+      </style>
+
+      <style>
+        {`
+          .jsx-1141515200 .slick-slider .slick-track {
             display: flex;
           }
         `}
