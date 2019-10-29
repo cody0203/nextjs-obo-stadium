@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 // CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import "../static/css/main.css";
@@ -30,7 +30,7 @@ const Layout = props => {
       {props.children}
       <Footer />
 
-      <style>
+      <style jsx global>
         {`
           html {
             font-size: 16px;
