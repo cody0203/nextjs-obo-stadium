@@ -35,5 +35,3 @@ input[type=radio]:checked + label .radio-dot:before {
 input[type=radio] + label .radio-dot:before {
   border-radius: 50%;
 }
-
-/*# sourceMappingURL=input-radio.css.map */

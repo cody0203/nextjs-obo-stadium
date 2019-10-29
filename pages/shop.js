@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "../components/layout";
 import Link from "next/link";
+import { Checkbox } from "pretty-checkbox-react";
 
 import "../static/css/except-home-page.css";
 
@@ -792,6 +793,47 @@ const Shop = () => {
       name: "Adidas Yeezy Boost 350 V2 Core Black Red"
     }
   ];
+
+  const checkIcon = (
+    <svg viewBox="0 0 20 20">
+      <path
+        d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
+        style={{ stroke: "white", fill: "white" }}
+      ></path>
+    </svg>
+  );
+
+  let sizeVn = [
+    38.5,
+    39,
+    40,
+    40.5,
+    41,
+    42,
+    42.5,
+    43,
+    44,
+    44.5,
+    45,
+    45.5,
+    46,
+    47,
+    47.5,
+    48,
+    48.5,
+    49.5,
+    50.5,
+    51.5
+  ];
+
+  const sizes = sizeVn.map(size => {
+    return (
+      <div className="item" key={size}>
+        {size}
+      </div>
+    );
+  });
+
   const product = products.map(product => {
     return (
       <Link href="/product/[id]" as={`/product/${product.id}`} key={product.id}>
@@ -861,137 +903,35 @@ const Shop = () => {
                   id="brand-collapse"
                 >
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="nike"
-                        id="nike"
-                        data-id="Nike"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="nike">
-                          Nike
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Nike
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="air-jordan"
-                        id="air-jordan"
-                        data-id="Air Jordan"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="air-jordan">
-                          Air Jordan
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Air Jordan
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="adidas"
-                        id="adidas"
-                        data-id="Adidas"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="adidas">
-                          Adidas
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Adidas
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="converse"
-                        id="converse"
-                        data-id="Converse"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="converse">
-                          Converse
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Conserve
+                    </Checkbox>
                   </div>
                   <div id="see-more-dropdown">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name="asics"
-                          id="asics"
-                          data-id="Asics"
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor="asics">
-                            Asics
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        Asics
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name="vans"
-                          id="vans"
-                          data-id="Vans"
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor="vans">
-                            Vans
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        Vans
+                      </Checkbox>
                     </div>
                   </div>
                   <div className="see-more" id="see-more-brand">
@@ -1017,92 +957,24 @@ const Shop = () => {
                   id="categories-collapse"
                 >
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="male"
-                        id="male"
-                        data-id="Male"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="male">
-                          Nam
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Nam
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="female"
-                        id="female"
-                        data-id="Female"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="female">
-                          Nữ
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Nữ
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="youth"
-                        id="youth"
-                        data-id="Youth"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="youth">
-                          Thiếu niên
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Thiếu niên
+                    </Checkbox>
                   </div>
                   <div className="item">
-                    <div className="pretty p-svg p-curve">
-                      <input
-                        className="filter-checkbox"
-                        type="checkbox"
-                        name="toddler"
-                        id="toddler"
-                        data-id="Toddler"
-                      />
-                      <div className="state p-success">
-                        <svg className="svg svg-icon" viewBox="0 0 20 20">
-                          <path
-                            d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                            style={{ stroke: "white", fill: "white" }}
-                          />
-                        </svg>
-                        <label className="checkbox-label" htmlFor="toddler">
-                          Sơ sinh
-                        </label>
-                      </div>
-                    </div>
+                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                      Sơ sinh
+                    </Checkbox>
                   </div>
                 </div>
               </div>
@@ -1119,10 +991,9 @@ const Shop = () => {
                   <div className="text">Size</div>
                   <i className="fas fa-chevron-up" />
                 </div>
-                <div
-                  className="select-filter collapse show"
-                  id="size-collapse"
-                />
+                <div className="select-filter collapse show" id="size-collapse">
+                  {sizes}
+                </div>
               </div>
               <div className="break-line" />
               <div className="price-range content">
@@ -1165,235 +1036,62 @@ const Shop = () => {
                 >
                   <div className="date-row">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name="under-2010"
-                          id="under-2010"
-                          data-id={2010}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label
-                            className="checkbox-label"
-                            htmlFor="under-2010"
-                          >
-                            &lt; 2010
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        &lt; 2010
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2011}
-                          id={2011}
-                          data-id={2011}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2011}>
-                            2011
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2011
+                      </Checkbox>
                     </div>
                   </div>
                   <div className="date-row">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2012}
-                          id={2012}
-                          data-id={2012}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2012}>
-                            2012
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2012
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2013}
-                          id={2013}
-                          data-id={2013}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2013}>
-                            2013
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2013
+                      </Checkbox>
                     </div>
                   </div>
                   <div className="date-row">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2014}
-                          id={2014}
-                          data-id={2014}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2014}>
-                            2014
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2014
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2015}
-                          id={2015}
-                          data-id={2015}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2015}>
-                            2015
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2015
+                      </Checkbox>
                     </div>
                   </div>
                   <div className="date-row">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2016}
-                          id={2016}
-                          data-id={2016}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2016}>
-                            2016
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2016
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2017}
-                          id={2017}
-                          data-id={2017}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2017}>
-                            2017
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2017
+                      </Checkbox>
                     </div>
                   </div>
                   <div className="date-row">
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2018}
-                          id={2018}
-                          data-id={2018}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2018}>
-                            2018
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2018
+                      </Checkbox>
                     </div>
                     <div className="item">
-                      <div className="pretty p-svg p-curve">
-                        <input
-                          className="filter-checkbox"
-                          type="checkbox"
-                          name={2019}
-                          id={2019}
-                          data-id={2019}
-                        />
-                        <div className="state p-success">
-                          <svg className="svg svg-icon" viewBox="0 0 20 20">
-                            <path
-                              d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                              style={{ stroke: "white", fill: "white" }}
-                            />
-                          </svg>
-                          <label className="checkbox-label" htmlFor={2019}>
-                            2019
-                          </label>
-                        </div>
-                      </div>
+                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
+                        2019
+                      </Checkbox>
                     </div>
                   </div>
                 </div>
