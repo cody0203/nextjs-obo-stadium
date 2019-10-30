@@ -9,7 +9,10 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head></Head>
+        <Head>
+          <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+          <link rel='stylesheet' type='text/css' href='/css/nprogress.css' />
+        </Head>
         <body>
           <Main />
           <NextScript />
