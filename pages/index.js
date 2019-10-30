@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "../components/layout";
 import LastestNews from "../components/lastest-news";
+import Head from "next/head";
 
 const Home = () => {
   const title = (
@@ -17,6 +18,35 @@ const Home = () => {
   );
   return (
     <Layout title={title}>
+      <Head>
+        <title>Trang chủ</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/products.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/lastest-news.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/index/index-newsletter.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/index/index-category.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/index/product-showcase.css"
+        />
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+      </Head>
       <main>
         <section className="products-showcase best-seller container">
           <div className="row">
@@ -605,16 +635,16 @@ const Home = () => {
         </a>
       </main>
 
-      <style jsx>
+      {/* <style jsx>
         {`
-          @import "../static/css/components/products.css";
-          @import "../static/css/components/lastest-news.css";
-          @import "../static/css/components/index/index-newsletter.css";
-          @import "../static/css/components/index/index-category.css";
-          @import "../static/css/components/index/product-showcase.css";
-          @import "../static/css/index.css";
+          @import "/css/components/products.css";
+          @import "/css/components/lastest-news.css";
+          @import "/css/components/index/index-newsletter.css";
+          @import "/css/components/index/index-category.css";
+          @import "/css/components/index/product-showcase.css";
+          @import "/css/index.css";
         `}
-      </style>
+      </style> */}
     </Layout>
   );
 };

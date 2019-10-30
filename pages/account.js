@@ -1,9 +1,34 @@
 import React from "react";
 import Layout from "../components/layout";
+import Head from "next/head";
 
 const Account = () => {
   return (
     <Layout>
+      <Head>
+        <title>Tai khoan</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/buying/shipping-info.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/payment-methods-modal.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/except-home-page.css"
+        />
+        <link rel="stylesheet" type="text/css" href="/css/account.css" />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/account-setting.css"
+        />
+      </Head>
       <main>
         <div className="main-content-wrapper container">
           <div className="row">
@@ -45,16 +70,6 @@ const Account = () => {
           </div>
         </div>
       </main>
-
-      <style jsx>
-        {`
-          @import "/static/css/components/buying/shipping-info.css";
-          @import "/static/css/components/payment-methods-modal.css";
-          @import "/static/css/except-home-page.css";
-          @import "/static/css/account.css";
-          @import "/static/css/account-setting.css";
-        `}
-      </style>
     </Layout>
   );
 };

@@ -124,6 +124,7 @@ button:disabled {
 .form-control {
   color: #333;
   height: auto;
+  max-width: 100%;
 }
 .form-control:focus {
   color: #333;
@@ -238,4 +239,4 @@ footer .footer-link .item:hover {
 .pretty input:checked ~ .state.p-success label:after,
 .pretty.p-toggle .state.p-success label:after {
   background-color: #f04e40 !important;
-} 
+}

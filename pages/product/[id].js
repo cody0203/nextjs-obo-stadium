@@ -3,6 +3,7 @@ import Layout from "../../components/layout";
 import Slider from "react-slick";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const Product = () => {
   const [nav1, setNav1] = useState(null);
@@ -56,6 +57,44 @@ const Product = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>San pham</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/products.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/index/product-showcase.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/product-details/product-info.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/product-details/size-choose.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/product-details/size-guide-table.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/except-home-page.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/product-details.css"
+        />
+      </Head>
       <main>
         {/* Breadcrum Section */}
         <div className="breadcrumb container">
@@ -368,29 +407,6 @@ const Product = () => {
           </div>
         </section>
       </main>
-      <style jsx>
-        {`
-          @import "/static/css/components/products.css";
-          @import "/static/css/components/index/product-showcase.css";
-          @import "/static/css/components/product-details/product-info.css";
-          @import "/static/css/components/product-details/size-choose.css";
-          @import "/static/css/components/product-details/size-guide-table.css";
-          @import "/static/css/except-home-page.css";
-          @import "/static/css/product-details.css";
-
-          .slick-slider.slider-nav .slick-track {
-            display: flex;
-          }
-        `}
-      </style>
-
-      <style>
-        {`
-          .jsx-1141515200 .slick-slider .slick-track {
-            display: flex;
-          }
-        `}
-      </style>
     </Layout>
   );
 };

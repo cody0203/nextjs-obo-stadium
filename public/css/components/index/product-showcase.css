@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
-.product-row {
+.row.product-row {
   padding-left: 0.9375rem;
   padding-right: 0.9375rem;
   flex-wrap: nowrap;
@@ -17,7 +17,7 @@
   font-weight: bold;
 }
 .products-showcase .see-more-btn-text {
-  color: #C1554E;
+  color: #c1554e;
   font-weight: 400;
 }
 

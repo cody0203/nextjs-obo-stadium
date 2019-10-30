@@ -1,10 +1,20 @@
 import React from "react";
 import Layout from "../components/layout";
 import Link from "next/link";
+import Head from "next/head";
 
 const Congrats = () => {
   return (
     <Layout>
+      <Head>
+        <title>Chuc mung</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/except-home-page.css"
+        />
+        <link rel="stylesheet" type="text/css" href="/css/congrats.css" />
+      </Head>
       <main>
         <div className="main-wrapper container-fluid">
           <div className="header">
@@ -89,13 +99,6 @@ const Congrats = () => {
           </div>
         </div>
       </main>
-
-      <style jsx>
-        {`
-          @import "/static/css/except-home-page.css";
-          @import "/static/css/congrats.css";
-        `}
-      </style>
     </Layout>
   );
 };

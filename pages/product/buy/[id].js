@@ -1,10 +1,60 @@
 import React from "react";
 import Layout from "../../../components/layout";
 import Link from "next/link";
+import Head from "next/head";
 
 const Buy = () => {
   return (
     <Layout>
+      <Head>
+        <title>Mua</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/buying/product-info.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/buying/pricing.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/buying/shipping-info.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/product-details/size-choose.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/buying/buying-section.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/product-details/size-guide-table.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/input-radio.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/components/payment-methods-modal.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/except-home-page.css"
+        />
+        <link rel="stylesheet" type="text/css" href="/css/buying.css" />
+      </Head>
       <main>
         <div className="main-wrapper container">
           <div className="row">
@@ -154,20 +204,20 @@ const Buy = () => {
         </div>
       </main>
 
-      <style jsx>
+      {/* <style jsx>
         {`
-          @import "/static/css/components/buying/product-info.css";
-          @import "/static/css/components/buying/pricing.css";
-          @import "/static/css/components/buying/shipping-info.css";
-          @import "/static/css/components/product-details/size-choose.css";
-          @import "/static/css/components/buying/buying-section.css";
-          @import "/static/css/components/product-details/size-guide-table.css";
-          @import "/static/css/components/input-radio.css";
-          @import "/static/css/components/payment-methods-modal.css";
-          @import "/static/css/except-home-page.css";
-          @import "/static/css/buying.css";
+          @import "/css/components/buying/product-info.css";
+          @import "/css/components/buying/pricing.css";
+          @import "/css/components/buying/shipping-info.css";
+          @import "/css/components/product-details/size-choose.css";
+          @import "/css/components/buying/buying-section.css";
+          @import "/css/components/product-details/size-guide-table.css";
+          @import "/css/components/input-radio.css";
+          @import "/css/components/payment-methods-modal.css";
+          @import "/css/except-home-page.css";
+          @import "/css/buying.css";
         `}
-      </style>
+      </style> */}
     </Layout>
   );
 };

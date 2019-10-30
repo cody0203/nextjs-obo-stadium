@@ -2,8 +2,7 @@ import React from "react";
 import Layout from "../components/layout";
 import Link from "next/link";
 import { Checkbox } from "pretty-checkbox-react";
-
-import "../static/css/except-home-page.css";
+import Head from 'next/head';
 
 const Shop = () => {
   const products = [
@@ -862,6 +861,13 @@ const Shop = () => {
   });
   return (
     <Layout>
+      <Head>
+        <title>Cửa hàng</title>
+        <link rel="stylesheet" type="text/css" href="/css/components/shop/filter-bar.css" />
+        <link rel="stylesheet" type="text/css" href="/css/components/shop/product-showing.css" />
+        <link rel="stylesheet" type="text/css" href="/css/components/shop/filter-bar-small.css" />
+        <link rel="stylesheet" type="text/css" href="/css/except-home-page.css" />
+      </Head>
       <main>
         <div className="breadcrumb container">
           <a className="previous-page" href="./index.html">
@@ -1856,14 +1862,14 @@ const Shop = () => {
         </a>
       </main>
 
-      <style jsx>
+      {/* <style jsx>
         {`
-          @import "/static/css/components/shop/filter-bar.css";
-          @import "/static/css/components/shop/product-showing.css";
-          @import "/static/css/components/shop/filter-bar-small.css";
-          @import "/static/css/except-home-page.css";
+          @import "/css/components/shop/filter-bar.css";
+          @import "/css/components/shop/product-showing.css";
+          @import "/css/components/shop/filter-bar-small.css";
+          @import "/css/except-home-page.css";
         `}
-      </style>
+      </style> */}
     </Layout>
   );
 };

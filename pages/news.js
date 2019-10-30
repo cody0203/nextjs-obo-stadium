@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "../components/layout";
 import Link from "next/link";
+import Head from "next/head";
 
 const News = () => {
   const title = (
@@ -13,6 +14,16 @@ const News = () => {
 
   return (
     <Layout title={title}>
+      <Head>
+        <title>Tin tức</title>
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/news.css" />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/css/except-home-page.css"
+        />
+      </Head>
       <main>
         <div className="breadcrumb container">
           <a href="./index.html" className="previous-page">
@@ -222,13 +233,13 @@ const News = () => {
         </nav>
       </main>
 
-      <style jsx>
+      {/* <style jsx>
         {`
-          @import "/static/css/index.css";
-          @import "/static/css/news.css";
-          @import "/static/css/except-home-page.css";
+          @import "/css/index.css";
+          @import "/css/news.css";
+          @import "/css/except-home-page.css";
         `}
-      </style>
+      </style> */}
     </Layout>
   );
 };

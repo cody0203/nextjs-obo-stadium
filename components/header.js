@@ -19,7 +19,7 @@ const Header = props => {
   return (
     <header className="container-fluid">
       <Navbar className="navbar navbar-expand-lg navbar-light container">
-        <Link href="/" prefetch={true}>
+        <Link href="/">
           <a style={{ cursor: "pointer" }}>
             <img
               className="navbar-brand"
@@ -50,21 +50,21 @@ const Header = props => {
         >
           <Nav className="navbar-nav">
             <NavItem className="nav-item">
-              <Link href="/shop" prefetch={true}>
+              <Link href="/shop">
                 <a className="nav-link" id="shop">
                   Sản phẩm
                 </a>
               </Link>
             </NavItem>
             <NavItem className="nav-item">
-              <Link href="/news" prefetch={true}>
+              <Link href="/news">
                 <a className="nav-link" id="news">
                   Tin tức
                 </a>
               </Link>
             </NavItem>
             <NavItem className="nav-item">
-              <Link href="/account" prefetch={true}>
+              <Link href="/account">
                 <a
                   className="nav-link account-setting"
                   id="account"
