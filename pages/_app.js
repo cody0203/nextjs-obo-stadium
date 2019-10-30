@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import App from "next/app";
 import Router from "next/router";
 import NProgress from "nprogress";
+import Overlay from "../components/overlay";
+import { PageTransition } from "next-page-transitions";
 
-Router.events.on("routeChangeStart", url => {
-  console.log(`Loading: ${url}`);
-  NProgress.start();
-});
-Router.events.on("routeChangeComplete", () => {
-  return NProgress.done()
-});
-Router.events.on("routeChangeError", () => NProgress.done());
+// const Loading = () => {
+//   const [loading, setLoading] = useState(null);
+
+//   useEffect(
+//     () => {
+//       Router.events.on("routeChangeStart", url => {
+//         console.log(`Loading: ${url}`);
+//         setLoading(true);
+//         NProgress.start();
+//       });
+//       return () => {
+//         Router.events.on("routeChangeComplete", url => {
+//           console.log(`Loaded: ${url}`);
+//           setLoading(false);
+//           NProgress.done();
+//         });
+//         Router.events.on("routeChangeError", () => NProgress.done());
+//       };
+//     },
+//     [],
+//     [loading]
+//   );
+//   let overlay;
+
+//   if (loading === true) {
+//     overlay = <Overlay />;
+//   } else {
+//     overlay = <div></div>;
+//   }
+
+//   return <div>{overlay}</div>;
+// };
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
@@ -21,21 +47,16 @@ class MyApp extends App {
   // static async getInitialProps(appContext) {
   //   // calls page's `getInitialProps` and fills `appProps.pageProps`
   //   const appProps = await App.getInitialProps(appContext);
-  //
-  //   return { ...appProps }
-  // }
 
-  static async getInitialProps(ctx) {
-    console.log('a')
-    return {
-      loaded: true
-    }
-  }
+  //   return { ...appProps };
+  // }
 
   render() {
     const { Component, pageProps } = this.props;
     return (
-        <Component {...pageProps} />
+      <>
+        <Component {...pageProps}></Component>
+      </>
     );
   }
 }

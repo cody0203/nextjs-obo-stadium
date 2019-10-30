@@ -24,10 +24,7 @@ const Layout = props => {
   return (
     <div>
       <Header currentPage={router.pathname} title={props.title} />
-      <div>
-        <div id="overlay"></div>
-        {props.children}
-      </div>
+      <div>{props.children}</div>
       <Footer />
       <style jsx global>
         {`

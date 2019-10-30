@@ -10,8 +10,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-          <link rel='stylesheet' type='text/css' href='/css/nprogress.css' />
+          <link
+            rel="shortcut icon"
+            href="/images/favicon.ico"
+            type="image/x-icon"
+          />
+          <link rel="stylesheet" type="text/css" href="/css/nprogress.css" />
         </Head>
         <body>
           <Main />
