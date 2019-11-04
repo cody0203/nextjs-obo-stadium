@@ -5,6 +5,8 @@ import { Checkbox } from "pretty-checkbox-react";
 import Head from "next/head";
 import { connect } from "react-redux";
 import { FormattedNumber } from "react-intl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../components/fontawesome";
 
 function mapStateToProps(state) {
   return {
@@ -117,10 +119,10 @@ const ConnectedShop = props => {
       </Head>
       <main>
         <div className="breadcrumb container">
-          <a className="previous-page" href="./index.html">
-            Trang chủ
-          </a>
-          <i className="fas fa-chevron-right arrow" />
+          <Link href="/index">
+            <a className="previous-page">Trang chủ</a>
+          </Link>
+          <FontAwesomeIcon icon="chevron-right" className="arrow" />
           <span className="current-page">Sản phẩm</span>
         </div>
         <div className="shop-content-wrapper container">
@@ -128,7 +130,7 @@ const ConnectedShop = props => {
             <div className="filter-bar col-lg-3">
               <div className="filter-header content">
                 <div className="left-side d-flex align-items-center">
-                  <i className="fas fa-sliders-h" />
+                  <FontAwesomeIcon icon="sliders-h" />
                   <div className="text">Lọc</div>
                 </div>
                 <button
@@ -149,7 +151,7 @@ const ConnectedShop = props => {
                   aria-controls="brand-collapse"
                 >
                   <div className="text">Thương hiệu</div>
-                  <i className="fas fa-chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                 </div>
                 <div
                   className="select-filter collapse show"
@@ -203,7 +205,7 @@ const ConnectedShop = props => {
                   aria-controls="categories-collapse"
                 >
                   <div className="text">Danh mục</div>
-                  <i className="fas fa-chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                 </div>
                 <div
                   className="select-filter collapse show"
@@ -242,7 +244,7 @@ const ConnectedShop = props => {
                   aria-controls="size-collapse"
                 >
                   <div className="text">Size</div>
-                  <i className="fas fa-chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                 </div>
                 <div className="select-filter collapse show" id="size-collapse">
                   {sizes}
@@ -281,7 +283,7 @@ const ConnectedShop = props => {
                   aria-controls="collapseExample"
                 >
                   <div className="text">Năm ra mắt</div>
-                  <i className="fas fa-chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                 </div>
                 <div
                   className="select-filter collapse show"
@@ -354,7 +356,7 @@ const ConnectedShop = props => {
               <div className="sort">
                 <div className="sort-content">
                   Sắp xếp theo <span className="sort-name">Hàng mới</span>
-                  <i className="fas fa-chevron-down" />
+                  <FontAwesomeIcon icon="chevron-down" />
                   <div className="sort-dropdown">
                     <div className="sort-item new-arrival active">Hàng mới</div>
                     <div className="sort-item best-seller">Bán chạy</div>

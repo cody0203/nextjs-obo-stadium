@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import App from "next/app";
 import { Provider } from "react-redux";
 import store from "../redux/store/index";
 import { IntlProvider } from "react-intl";
+
+// CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+import "pretty-checkbox/dist/pretty-checkbox.min.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for

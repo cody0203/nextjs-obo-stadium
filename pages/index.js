@@ -13,7 +13,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedHome = props => {
-
   const title = (
     <div className="content text-center">
       <h1 className="slogan main-heading text-uppercase">
@@ -61,8 +60,8 @@ const ConnectedHome = props => {
                 <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
                 <p className="price">
                   <FormattedNumber
-                    style='currency'
-                    currency='VND'
+                    style="currency"
+                    currency="VND"
                     value={product.sell_price}
                   />
                 </p>

@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { connect } from "react-redux";
-import { FormattedNumber } from "react-intl";
+import { FormattedNumber, FormattedDate } from "react-intl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../../components/fontawesome";
 
 function mapStateToProps(state) {
   return {
@@ -100,11 +102,11 @@ const ConnectedProduct = props => {
       </div>
     );
   });
-
+  console.log(product);
   return (
     <Layout>
       <Head>
-        <title>San pham</title>
+        <title>{product.name}</title>
         <link
           rel="stylesheet"
           type="text/css"
@@ -144,14 +146,14 @@ const ConnectedProduct = props => {
       <main>
         {/* Breadcrum Section */}
         <div className="breadcrumb container">
-          <a href="/index" className="previous-page">
-            Trang chủ
-          </a>
-          <i className="fas fa-chevron-right arrow" />
-          <a href="/shop" className="previous-page">
-            Sản phẩm
-          </a>
-          <i className="fas fa-chevron-right arrow" />
+          <Link href="/index">
+            <a className="previous-page">Trang chủ</a>
+          </Link>
+          <FontAwesomeIcon icon="chevron-right" className="arrow" />
+          <Link href="/shop">
+            <a className="previous-page">Sản phẩm</a>
+          </Link>
+          <FontAwesomeIcon icon="chevron-right" className="arrow" />
           <span className="current-page">{product.name}</span>
         </div>
         {/* Products Content Section */}
@@ -201,12 +203,21 @@ const ConnectedProduct = props => {
                 <span>&nbsp;Solid grey/Chalk white/Core black</span>
               </div>
               <div className="desc-sub">
-                <span className="desc-sub-title">Giá bán lẻ khi ra mắt:</span>
-                <span>&nbsp;{product.retail_price} ₫</span>
+                <span className="desc-sub-title">Giá bán lẻ khi ra mắt: </span>
+                <FormattedNumber
+                  style="currency"
+                  currency="VND"
+                  value={product.retail_price}
+                />
               </div>
               <div className="desc-sub">
-                <span className="desc-sub-title">Ngày ra mắt:</span>
-                <span>&nbsp;11/01/2017</span>
+                <span className="desc-sub-title">Ngày ra mắt: </span>
+                <FormattedDate
+                  value={new Date(+product.release_date * 1000)}
+                  year="numeric"
+                  month="long"
+                  day="2-digit"
+                />
               </div>
               <div className="btns">
                 <div className="size-btn">
@@ -215,7 +226,10 @@ const ConnectedProduct = props => {
                     <span className="size-details">
                       8US | {product.available_size[0]}VN | 26CM
                     </span>
-                    <i className="fas fa-chevron-down dropdown-arrow" />
+                    <FontAwesomeIcon
+                      icon="chevron-down"
+                      className="dropdown-arrow"
+                    />
                   </button>
                 </div>
                 <Link href="/shop/buy/[id]" as={`/shop/buy/${router.query.id}`}>
