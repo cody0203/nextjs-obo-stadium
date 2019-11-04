@@ -86,7 +86,13 @@ const ConnectedProduct = props => {
           <div className="card-body">
             <h5 className="card-title">{product.name}</h5>
             <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-            <p className="price">{product.sell_price} ₫</p>
+            <p className="price">
+              <FormattedNumber
+                style="currency"
+                currency="VND"
+                value={product.sell_price}
+              />
+            </p>
             <p className="card-text sold">Đã bán {product.total_sold} đôi</p>
           </div>
         </div>
@@ -242,7 +248,7 @@ const ConnectedProduct = props => {
                     <button className="btn btn-primary sell red-btn">
                       <div className="ask-text left-content">
                         <div className="bid-price main-content">
-                        <FormattedNumber
+                          <FormattedNumber
                             style="currency"
                             currency="VND"
                             value={product.buy_price}
