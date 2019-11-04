@@ -138,15 +138,15 @@ const ConnectedProduct = props => {
       <main>
         {/* Breadcrum Section */}
         <div className="breadcrumb container">
-          <a href="./index.html" className="previous-page">
+          <a href="/index" className="previous-page">
             Trang chủ
           </a>
           <i className="fas fa-chevron-right arrow" />
-          <a href="./shop.html" className="previous-page">
+          <a href="/shop" className="previous-page">
             Sản phẩm
           </a>
           <i className="fas fa-chevron-right arrow" />
-          <span className="current-page">Tên sản phẩm</span>
+          <span className="current-page">{product.name}</span>
         </div>
         {/* Products Content Section */}
         <section className="product-content-wrapper container">
