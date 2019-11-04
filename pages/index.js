@@ -2,8 +2,18 @@ import React from "react";
 import Layout from "../components/layout";
 import LastestNews from "../components/lastest-news";
 import Head from "next/head";
+import { connect } from "react-redux";
+import Link from "next/link";
+import { FormattedNumber } from "react-intl";
 
-const Home = () => {
+function mapStateToProps(state) {
+  return {
+    products: state.productReducer.products
+  };
+}
+
+const ConnectedHome = props => {
+
   const title = (
     <div className="content text-center">
       <h1 className="slogan main-heading text-uppercase">
@@ -16,6 +26,58 @@ const Home = () => {
       </div>
     </div>
   );
+
+  const findBestSeller = props.products
+    .filter(products => {
+      return products.status === "Best Seller";
+    })
+    .slice(0, 5);
+
+  const findStaffChoose = props.products
+    .filter(products => {
+      return products.status === "Staff Choose";
+    })
+    .slice(0, 5);
+
+  const findUnderRetails = props.products
+    .filter(products => {
+      return products.status === "Under Retails";
+    })
+    .slice(0, 5);
+
+  function productCategoriesRender(category) {
+    return category.map(product => {
+      return (
+        <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
+          <a className="product position-relative">
+            <div className="card">
+              <img
+                className="card-img-top"
+                src={product.thumbnail}
+                alt={product.name}
+              />
+              <div className="card-body">
+                <h5 className="card-title">{product.name}</h5>
+                <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
+                <p className="price">
+                  <FormattedNumber
+                    style='currency'
+                    currency='VND'
+                    value={product.sell_price}
+                  />
+                </p>
+                <p className="card-text sold">
+                  Đã bán {product.total_sold} đôi
+                </p>
+              </div>
+            </div>
+            <div className="shadow mx-auto position-absolute" />
+          </a>
+        </Link>
+      );
+    });
+  }
+
   return (
     <Layout title={title}>
       <Head>
@@ -61,97 +123,7 @@ const Home = () => {
             </div>
           </div>
           <div className="row product-row d-flex justify-content-md-between">
-            <a
-              className="product position-relative"
-              href="./product-details.html"
-            >
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Adidas Yeezy Boost 350 V2 Lundmark (Non
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">7.200.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1963 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </a>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 4 Retro Cool Grey (2019)
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">4.810.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1312 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 1 Retro Low OG SP Travis Scott
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">20.790.000 ₫</p>
-                  <p className="card-text sold">Đã bán 2246 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Air Jordan 1 Mid Yellow Toe Black
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">3.740.000 ₫</p>
-                  <p className="card-text sold">Đã bán 564 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">Nike SB Dunk Low Parra</h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">6.620.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1456 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
+            {productCategoriesRender(findBestSeller)}
           </div>
         </section>
         {/* Break Banner*/}
@@ -179,94 +151,7 @@ const Home = () => {
             </div>
           </div>
           <div className="row product-row d-flex justify-content-md-between">
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Adidas Yeezy Boost 350 V2 Lundmark (Non
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">7.200.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1963 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 4 Retro Cool Grey (2019)
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">4.810.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1312 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 1 Retro Low OG SP Travis Scott
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">20.790.000 ₫</p>
-                  <p className="card-text sold">Đã bán 2246 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Air Jordan 1 Mid Yellow Toe Black
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">3.740.000 ₫</p>
-                  <p className="card-text sold">Đã bán 564 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">Nike SB Dunk Low Parra</h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">6.620.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1456 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
+            {productCategoriesRender(findStaffChoose)}
           </div>
         </section>
         {/* Break Banner*/}
@@ -294,94 +179,7 @@ const Home = () => {
             </div>
           </div>
           <div className="row product-row d-flex justify-content-md-between">
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Adidas Yeezy Boost 350 V2 Lundmark (Non
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">7.200.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1963 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 4 Retro Cool Grey (2019)
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">4.810.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1312 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Jordan 1 Retro Low OG SP Travis Scott
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">20.790.000 ₫</p>
-                  <p className="card-text sold">Đã bán 2246 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    Air Jordan 1 Mid Yellow Toe Black
-                  </h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">3.740.000 ₫</p>
-                  <p className="card-text sold">Đã bán 564 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  className="card-img-top"
-                  src="/images/product/adidas-Yeezy-Boost-350-V2-Lundmark-Product.png"
-                  alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">Nike SB Dunk Low Parra</h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">6.620.000 ₫</p>
-                  <p className="card-text sold">Đã bán 1456 đôi</p>
-                </div>
-              </div>
-              <div className="shadow mx-auto position-absolute" />
-            </div>
+            {productCategoriesRender(findUnderRetails)}
           </div>
         </section>
         {/* Break Banner*/}
@@ -634,19 +432,10 @@ const Home = () => {
           <img src="/images/back-to-top.png" alt="back-to-top" />
         </a>
       </main>
-
-      {/* <style jsx>
-        {`
-          @import "/css/components/products.css";
-          @import "/css/components/lastest-news.css";
-          @import "/css/components/index/index-newsletter.css";
-          @import "/css/components/index/index-category.css";
-          @import "/css/components/index/product-showcase.css";
-          @import "/css/index.css";
-        `}
-      </style> */}
     </Layout>
   );
 };
+
+const Home = connect(mapStateToProps)(ConnectedHome);
 
 export default Home;

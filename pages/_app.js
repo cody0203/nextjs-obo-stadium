@@ -1,42 +1,8 @@
 import React, { useEffect, useState } from "react";
 import App from "next/app";
-import Router from "next/router";
-import NProgress from "nprogress";
-import Overlay from "../components/overlay";
-import { PageTransition } from "next-page-transitions";
-
-// const Loading = () => {
-//   const [loading, setLoading] = useState(null);
-
-//   useEffect(
-//     () => {
-//       Router.events.on("routeChangeStart", url => {
-//         console.log(`Loading: ${url}`);
-//         setLoading(true);
-//         NProgress.start();
-//       });
-//       return () => {
-//         Router.events.on("routeChangeComplete", url => {
-//           console.log(`Loaded: ${url}`);
-//           setLoading(false);
-//           NProgress.done();
-//         });
-//         Router.events.on("routeChangeError", () => NProgress.done());
-//       };
-//     },
-//     [],
-//     [loading]
-//   );
-//   let overlay;
-
-//   if (loading === true) {
-//     overlay = <Overlay />;
-//   } else {
-//     overlay = <div></div>;
-//   }
-
-//   return <div>{overlay}</div>;
-// };
+import { Provider } from "react-redux";
+import store from "../redux/store/index";
+import { IntlProvider } from "react-intl";
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
@@ -54,9 +20,11 @@ class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <>
-        <Component {...pageProps}></Component>
-      </>
+      <Provider store={store}>
+        <IntlProvider locale="vi">
+          <Component {...pageProps}></Component>
+        </IntlProvider>
+      </Provider>
     );
   }
 }

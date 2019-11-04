@@ -30,7 +30,6 @@ const Layout = props => {
         {`
           @import "/css/main.css";
           @import "/css/components/header.css";
-          @import "/css/components/products.css";
         `}
       </style>
     </div>

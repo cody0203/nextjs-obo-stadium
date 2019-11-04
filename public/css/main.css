@@ -202,6 +202,9 @@ footer .footer-link .item:hover {
 .top-header .social-icon .fa-facebook-square:hover {
   color: #fafafa;
 }
+.card {
+  border: none;
+}
 @media (min-width: 1230px) {
   .container {
     max-width: 1230px;
