@@ -42,7 +42,7 @@ const ConnectedFilterBar = props => {
   });
 
   const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
-  const [filterRelateDate] = useState([
+  const [filterReleaseDate] = useState([
     "2010",
     "2011",
     "2012",
@@ -117,6 +117,22 @@ const ConnectedFilterBar = props => {
       categoryChose.splice(index, 1);
     }
     setFilterData(Object.assign({}, filterData, { categories: categoryChose }));
+  };
+
+  // Get data release date filter
+  const releaseDateChoose = (date, event) => {
+    const releaseDateChose = [...filterData.relateDates];
+    const currentReleaseDateChose = date;
+    let index;
+    if (event.target.checked) {
+      releaseDateChose.push(currentReleaseDateChose);
+    } else {
+      index = releaseDateChose.indexOf(date);
+      releaseDateChose.splice(index, 1);
+    }
+    setFilterData(
+      Object.assign({}, filterData, { relateDates: releaseDateChose })
+    );
   };
 
   // Render
@@ -197,7 +213,40 @@ const ConnectedFilterBar = props => {
     );
   });
 
-  // Render relate date
+  // Render release date
+  const releaseDateItems = filterReleaseDate.map((item, index) => {
+    if (item === "2010") {
+      item = "< 2010";
+    }
+
+    if (index % 2 !== 0) {
+      return (
+        <div className="item odd" key={item}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            onChange={releaseDateChoose.bind(this, item)}
+          >
+            {item}
+          </Checkbox>
+        </div>
+      );
+    } else {
+      return (
+        <div className="item" key={item}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            onChange={releaseDateChoose.bind(this, item)}
+          >
+            {item}
+          </Checkbox>
+        </div>
+      );
+    }
+  });
 
   return (
     <div className="filter-bar col-lg-3">
@@ -305,7 +354,7 @@ const ConnectedFilterBar = props => {
           className="select-filter"
           id="collapseExample"
         >
-          <div className="date-row">
+          {/* <div className="date-row">
             <div className="item">
               <Checkbox shape="curve" color="danger" svg={checkIcon}>
                 &lt; 2010
@@ -364,7 +413,8 @@ const ConnectedFilterBar = props => {
                 2019
               </Checkbox>
             </div>
-          </div>
+          </div> */}
+          {releaseDateItems}
         </Collapse>
       </div>
     </div>

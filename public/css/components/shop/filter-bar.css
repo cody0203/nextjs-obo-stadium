@@ -97,6 +97,19 @@
   text-transform: uppercase;
 }
 
+.release-date .pretty {
+  margin: 0;
+}
+
+.release-date .select-filter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.release-date .item.odd {
+  text-align: right;
+}
+
 .date-row {
   display: flex;
   align-items: center;
