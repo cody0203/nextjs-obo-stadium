@@ -1,12 +1,13 @@
 import React from "react";
 import Layout from "../components/layout";
 import Link from "next/link";
-import { Checkbox } from "pretty-checkbox-react";
 import Head from "next/head";
 import { connect } from "react-redux";
 import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/fontawesome";
+
+import FilterBar from "../components/filter-bar"
 
 function mapStateToProps(state) {
   return {
@@ -15,45 +16,6 @@ function mapStateToProps(state) {
 }
 
 const ConnectedShop = props => {
-  const checkIcon = (
-    <svg viewBox="0 0 20 20">
-      <path
-        d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-        style={{ stroke: "white", fill: "white" }}
-      ></path>
-    </svg>
-  );
-
-  let sizeVn = [
-    38.5,
-    39,
-    40,
-    40.5,
-    41,
-    42,
-    42.5,
-    43,
-    44,
-    44.5,
-    45,
-    45.5,
-    46,
-    47,
-    47.5,
-    48,
-    48.5,
-    49.5,
-    50.5,
-    51.5
-  ];
-
-  const sizes = sizeVn.map(size => {
-    return (
-      <div className="item" key={size}>
-        {size}
-      </div>
-    );
-  });
 
   const product = props.products.map(product => {
     return (
@@ -87,6 +49,7 @@ const ConnectedShop = props => {
       </Link>
     );
   });
+  
   return (
     <Layout>
       <Head>
@@ -127,231 +90,7 @@ const ConnectedShop = props => {
         </div>
         <div className="shop-content-wrapper container">
           <div className="row">
-            <div className="filter-bar col-lg-3">
-              <div className="filter-header content">
-                <div className="left-side d-flex align-items-center">
-                  <FontAwesomeIcon icon="sliders-h" />
-                  <div className="text">Lọc</div>
-                </div>
-                <button
-                  className="clear-filter btn btn-primary"
-                  disabled="disabled"
-                >
-                  Bỏ lọc
-                </button>
-              </div>
-              <div className="break-line" />
-              <div className="brand content">
-                <div
-                  className="title"
-                  data-toggle="collapse"
-                  href="#brand-collapse"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="brand-collapse"
-                >
-                  <div className="text">Thương hiệu</div>
-                  <FontAwesomeIcon icon="chevron-up" />
-                </div>
-                <div
-                  className="select-filter collapse show"
-                  id="brand-collapse"
-                >
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Nike
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Air Jordan
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Adidas
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Conserve
-                    </Checkbox>
-                  </div>
-                  <div id="see-more-dropdown">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        Asics
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        Vans
-                      </Checkbox>
-                    </div>
-                  </div>
-                  <div className="see-more" id="see-more-brand">
-                    Xem thêm
-                  </div>
-                </div>
-              </div>
-              <div className="break-line" />
-              <div className="category content">
-                <div
-                  className="title"
-                  data-toggle="collapse"
-                  href="#categories-collapse"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="categories-collapse"
-                >
-                  <div className="text">Danh mục</div>
-                  <FontAwesomeIcon icon="chevron-up" />
-                </div>
-                <div
-                  className="select-filter collapse show"
-                  id="categories-collapse"
-                >
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Nam
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Nữ
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Thiếu niên
-                    </Checkbox>
-                  </div>
-                  <div className="item">
-                    <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                      Sơ sinh
-                    </Checkbox>
-                  </div>
-                </div>
-              </div>
-              <div className="break-line" />
-              <div className="size content">
-                <div
-                  className="title"
-                  data-toggle="collapse"
-                  href="#size-collapse"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="size-collapse"
-                >
-                  <div className="text">Size</div>
-                  <FontAwesomeIcon icon="chevron-up" />
-                </div>
-                <div className="select-filter collapse show" id="size-collapse">
-                  {sizes}
-                </div>
-              </div>
-              <div className="break-line" />
-              <div className="price-range content">
-                <div className="title">
-                  <div className="text">Khoảng giá</div>
-                </div>
-                <input
-                  className="form-control price-input"
-                  id="from-price"
-                  type="text"
-                  placeholder="Từ"
-                />
-                <input
-                  className="form-control price-input"
-                  id="to-price"
-                  type="text"
-                  placeholder="Đến"
-                  pattern="[0-9]"
-                />
-                <button className="btn btn-primary apply-price red-btn">
-                  áp dụng
-                </button>
-              </div>
-              <div className="break-line" />
-              <div className="release-date content">
-                <div
-                  className="title"
-                  data-toggle="collapse"
-                  href="#collapseExample"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="collapseExample"
-                >
-                  <div className="text">Năm ra mắt</div>
-                  <FontAwesomeIcon icon="chevron-up" />
-                </div>
-                <div
-                  className="select-filter collapse show"
-                  id="collapseExample"
-                >
-                  <div className="date-row">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        &lt; 2010
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2011
-                      </Checkbox>
-                    </div>
-                  </div>
-                  <div className="date-row">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2012
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2013
-                      </Checkbox>
-                    </div>
-                  </div>
-                  <div className="date-row">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2014
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2015
-                      </Checkbox>
-                    </div>
-                  </div>
-                  <div className="date-row">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2016
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2017
-                      </Checkbox>
-                    </div>
-                  </div>
-                  <div className="date-row">
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2018
-                      </Checkbox>
-                    </div>
-                    <div className="item">
-                      <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                        2019
-                      </Checkbox>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <FilterBar />
             <div className="product-showing col-lg-9 col-12">
               <div className="sort">
                 <div className="sort-content">

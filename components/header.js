@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
   Collapse,
@@ -13,8 +14,33 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Header = props => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+
+  const menu = [
+    { title: "Sản phẩm", href: "/shop" },
+    { title: "Tin tức", href: "/news" },
+    { title: "Tài khoản", href: "/account" }
+  ];
+
+  const menuItems = menu.map(item => {
+    return (
+      <NavItem className="nav-item" key={item.href}>
+        <Link href={item.href}>
+          <a
+            className={
+              item.href === router.pathname ? "nav-link active-nav" : "nav-link"
+            }
+            id="shop"
+          >
+            {item.title}
+          </a>
+        </Link>
+      </NavItem>
+    );
+  });
 
   return (
     <header className="container-fluid">
@@ -49,32 +75,7 @@ const Header = props => {
           className="justify-content-md-end text-center"
         >
           <Nav className="navbar-nav">
-            <NavItem className="nav-item">
-              <Link href="/shop">
-                <a className="nav-link" id="shop">
-                  Sản phẩm
-                </a>
-              </Link>
-            </NavItem>
-            <NavItem className="nav-item">
-              <Link href="/news">
-                <a className="nav-link" id="news">
-                  Tin tức
-                </a>
-              </Link>
-            </NavItem>
-            <NavItem className="nav-item">
-              <Link href="/account">
-                <a
-                  className="nav-link account-setting"
-                  id="account"
-                  data-toggle="modal"
-                  data-target="#signInSignUp"
-                >
-                  Tài khoản
-                </a>
-              </Link>
-            </NavItem>
+            {menuItems}
           </Nav>
         </Collapse>
       </Navbar>
