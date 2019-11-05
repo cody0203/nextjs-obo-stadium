@@ -1,25 +1,127 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Checkbox } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../components/fontawesome";
-import { Collapse } from 'reactstrap';
+import { Collapse } from "reactstrap";
+import { connect } from "react-redux";
 
-const FilterBar = props => {
+import "../components/fontawesome";
+import { sizes } from "../db";
+
+function mapStateToProps(state) {
+  return {
+    products: state.productReducer.products,
+    brands: [
+      ...new Set(state.productReducer.products.map(product => product.brand))
+    ]
+  };
+}
+
+const ConnectedFilterBar = props => {
+  // States
   const [isOpen, setIsOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState({
     brand: true,
     category: true,
     size: true,
     relateDate: true
-  })
+  });
 
+  const [isChose, setIsChose] = useState(
+    Object.assign(...sizes.map(size => ({ [size]: false })))
+  );
+
+  const [filterData, setFilterData] = useState({
+    sizes: [],
+    brands: [],
+    categories: [],
+    relateDates: [],
+    prices: {
+      from: 0,
+      to: 0
+    }
+  });
+
+  const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
+  const [filterRelateDate] = useState([
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019"
+  ]);
+
+  // LifeCycles
+
+  // Methods
   const toggleMoreBrand = () => setIsOpen(!isOpen);
 
-  const toggleSection = (event) => {
+  const toggleSection = event => {
     const section = event.target.dataset.title;
-    setIsSectionOpen(Object.assign({}, isSectionOpen, isSectionOpen[section] = !isSectionOpen[section]))
-  }
+    setIsSectionOpen(
+      Object.assign(
+        {},
+        isSectionOpen,
+        (isSectionOpen[section] = !isSectionOpen[section])
+      )
+    );
+  };
 
+  const sizeChoose = event => {
+    const sizes = [...filterData.sizes];
+    const choseSize = event.target.dataset.size;
+
+    setIsChose(
+      Object.assign({}, isChose, (isChose[choseSize] = !isChose[choseSize]))
+    );
+
+    let index;
+    if (isChose[choseSize] === true) {
+      sizes.push(choseSize);
+    } else {
+      index = sizes.indexOf(choseSize);
+      sizes.splice(index, 1);
+    }
+    setFilterData(Object.assign({}, filterData, { sizes: sizes }));
+  };
+
+  // Get data brands filter
+  const brandChoose = event => {
+    const brandChose = [...filterData.brands];
+    const currentBrandChose = event.target.id;
+    let index;
+
+    if (event.target.checked) {
+      brandChose.push(currentBrandChose);
+    } else {
+      index = brandChose.indexOf(event.target.id);
+      brandChose.splice(index, 1);
+    }
+    setFilterData(Object.assign({}, filterData, { brands: brandChose }));
+  };
+
+  // Get data categories filter
+  const categoryChoose = event => {
+    const categoryChose = [...filterData.categories];
+    const currentCategoryChose = event.target.id;
+    let index;
+
+    if (event.target.checked) {
+      categoryChose.push(currentCategoryChose);
+    } else {
+      index = categoryChose.indexOf(event.target.id);
+      categoryChose.splice(index, 1);
+    }
+    setFilterData(Object.assign({}, filterData, { categories: categoryChose }));
+  };
+
+  // Render
+
+  // Render checkbox
   const checkIcon = (
     <svg viewBox="0 0 20 20">
       <path
@@ -29,36 +131,74 @@ const FilterBar = props => {
     </svg>
   );
 
-  let sizeVn = [
-    38.5,
-    39,
-    40,
-    40.5,
-    41,
-    42,
-    42.5,
-    43,
-    44,
-    44.5,
-    45,
-    45.5,
-    46,
-    47,
-    47.5,
-    48,
-    48.5,
-    49.5,
-    50.5,
-    51.5
-  ];
-
-  const sizes = sizeVn.map(size => {
+  // Render sizes
+  const sizeItems = sizes.map(size => {
     return (
-      <div className="item" key={size}>
+      <div
+        className={isChose[size] ? "item size-choose" : "item"}
+        key={size}
+        data-size={size}
+        onClick={sizeChoose}
+      >
         {size}
       </div>
     );
   });
+
+  // Render brands
+  const firstPart = [];
+  const lastPart = [];
+  const brandItems = props.brands.map((brand, index) => {
+    if (index < 4) {
+      firstPart.push(
+        <div className="item" key={brand}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            id={brand}
+            onChange={brandChoose}
+          >
+            {brand}
+          </Checkbox>
+        </div>
+      );
+    } else {
+      lastPart.push(
+        <div className="item" key={brand}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            id={brand}
+            onChange={brandChoose}
+          >
+            {brand}
+          </Checkbox>
+        </div>
+      );
+    }
+  });
+
+  // Render categories
+  const categoryItems = filterCategories.map(item => {
+    return (
+      <div className="item" key={item}>
+        <Checkbox
+          shape="curve"
+          color="danger"
+          svg={checkIcon}
+          id={item}
+          onChange={categoryChoose}
+        >
+          {item}
+        </Checkbox>
+      </div>
+    );
+  });
+
+  // Render relate date
+
   return (
     <div className="filter-bar col-lg-3">
       <div className="filter-header content">
@@ -66,103 +206,70 @@ const FilterBar = props => {
           <FontAwesomeIcon icon="sliders-h" />
           <div className="text">Lọc</div>
         </div>
-        <button className="clear-filter btn btn-primary" disabled="disabled">
-          Bỏ lọc
-        </button>
+        {filterData.sizes.length !== 0 ||
+        filterData.brands.length !== 0 ||
+        filterData.categories.length !== 0 ||
+        filterData.relateDates.length !== 0 ||
+        filterData.prices.to !== 0 ||
+        filterData.prices.from !== 0 ? (
+          <button className="clear-filter btn btn-primary">Bỏ lọc</button>
+        ) : (
+          <button className="clear-filter btn btn-primary" disabled={true}>
+            Bỏ lọc
+          </button>
+        )}
       </div>
       <div className="break-line" />
       <div className="brand content">
-        <div
-          className="title"
-          onClick={toggleSection}
-          data-title="brand"
-        >
-          <div className="text">Thương hiệu</div>
-          <FontAwesomeIcon icon={isSectionOpen.brand ? "chevron-up" : "chevron-down" } />
+        <div className="title" onClick={toggleSection} data-title="brand">
+          Thương hiệu
+          <FontAwesomeIcon
+            icon={isSectionOpen.brand ? "chevron-up" : "chevron-down"}
+          />
         </div>
         <Collapse isOpen={isSectionOpen.brand} className="select-filter">
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Nike
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Air Jordan
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Adidas
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Conserve
-            </Checkbox>
-          </div>
-          <Collapse isOpen={isOpen}>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                Asics
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                Vans
-              </Checkbox>
-            </div>
-          </Collapse>
-          <div className="see-more" id="see-more-brand" onClick={toggleMoreBrand}>
+          <div className="item">{firstPart}</div>
+          <Collapse isOpen={isOpen}>{lastPart}</Collapse>
+          <div
+            className="see-more"
+            id="see-more-brand"
+            onClick={toggleMoreBrand}
+          >
             {isOpen ? "Rút gọn" : "Xem thêm"}
           </div>
+          {brandItems}
         </Collapse>
       </div>
       <div className="break-line" />
       <div className="category content">
-        <div
-          className="title"
-          onClick={toggleSection}
-          data-title="category"
-        >
-          <div className="text">Danh mục</div>
-          <FontAwesomeIcon icon={isSectionOpen.category ? "chevron-up" : "chevron-down" } />
+        <div className="title" onClick={toggleSection} data-title="category">
+          Danh mục
+          <FontAwesomeIcon
+            icon={isSectionOpen.category ? "chevron-up" : "chevron-down"}
+          />
         </div>
-        <Collapse isOpen={isSectionOpen.category} className="select-filter" id="categories-collapse">
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Nam
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Nữ
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Thiếu niên
-            </Checkbox>
-          </div>
-          <div className="item">
-            <Checkbox shape="curve" color="danger" svg={checkIcon}>
-              Sơ sinh
-            </Checkbox>
-          </div>
+        <Collapse
+          isOpen={isSectionOpen.category}
+          className="select-filter"
+          id="categories-collapse"
+        >
+          {categoryItems}
         </Collapse>
       </div>
       <div className="break-line" />
       <div className="size content">
-        <div
-          className="title"
-          onClick={toggleSection}
-          data-title="size"
-        >
-          <div className="text">Size</div>
-          <FontAwesomeIcon icon={isSectionOpen.size ? "chevron-up" : "chevron-down" } />
+        <div className="title" onClick={toggleSection} data-title="size">
+          Size
+          <FontAwesomeIcon
+            icon={isSectionOpen.size ? "chevron-up" : "chevron-down"}
+          />
         </div>
-        <Collapse isOpen={isSectionOpen.size} className="select-filter" id="size-collapse">
-          {sizes}
+        <Collapse
+          isOpen={isSectionOpen.size}
+          className="select-filter"
+          id="size-collapse"
+        >
+          {sizeItems}
         </Collapse>
       </div>
       <div className="break-line" />
@@ -187,15 +294,17 @@ const FilterBar = props => {
       </div>
       <div className="break-line" />
       <div className="release-date content">
-        <div
-          className="title"
-          onClick={toggleSection}
-          data-title="relateDate"
-        >
-          <div className="text">Năm ra mắt</div>
-          <FontAwesomeIcon icon={isSectionOpen.relateDate ? "chevron-up" : "chevron-down" } />
+        <div className="title" onClick={toggleSection} data-title="relateDate">
+          Năm ra mắt
+          <FontAwesomeIcon
+            icon={isSectionOpen.relateDate ? "chevron-up" : "chevron-down"}
+          />
         </div>
-        <Collapse isOpen={isSectionOpen.relateDate} className="select-filter" id="collapseExample">
+        <Collapse
+          isOpen={isSectionOpen.relateDate}
+          className="select-filter"
+          id="collapseExample"
+        >
           <div className="date-row">
             <div className="item">
               <Checkbox shape="curve" color="danger" svg={checkIcon}>
@@ -261,5 +370,7 @@ const FilterBar = props => {
     </div>
   );
 };
+
+const FilterBar = connect(mapStateToProps)(ConnectedFilterBar);
 
 export default FilterBar;
