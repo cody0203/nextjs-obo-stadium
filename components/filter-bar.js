@@ -115,7 +115,6 @@ const ConnectedFilterBar = props => {
     });
   };
 
-  
   const getFilterDatas = (source, data, target) => {
     const sourceData = [...source];
     let index;
