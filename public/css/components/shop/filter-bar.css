@@ -97,12 +97,16 @@
   text-transform: uppercase;
 }
 
-.date-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.625rem;
+.release-date .select-filter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
-.date-row .pretty {
-  margin: 0px;
+
+.release-date .item .pretty {
+  margin: 0;
+}
+
+
+.release-date .item.odd {
+  text-align: right;
 }

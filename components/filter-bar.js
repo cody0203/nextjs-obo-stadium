@@ -1,18 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Checkbox } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Collapse } from "reactstrap";
 import { connect } from "react-redux";
-
 import "../components/fontawesome";
+
 import { sizes } from "../db";
+import filterProducts from "../redux/actions/filter";
+import Aux from "./hoc/aux";
 
 function mapStateToProps(state) {
   return {
     products: state.productReducer.products,
     brands: [
       ...new Set(state.productReducer.products.map(product => product.brand))
-    ]
+    ],
+    filterData: state.filterReducer
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    filterProducts: payload => {
+      dispatch(filterProducts(payload));
+    }
   };
 }
 
@@ -30,20 +41,9 @@ const ConnectedFilterBar = props => {
     Object.assign(...sizes.map(size => ({ [size]: false })))
   );
 
-  const [filterData, setFilterData] = useState({
-    sizes: [],
-    brands: [],
-    categories: [],
-    relateDates: [],
-    prices: {
-      from: 0,
-      to: 0
-    }
-  });
-
   const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
-  const [filterRelateDate] = useState([
-    "2010",
+  const [filterReleaseDate] = useState([
+    "< 2010",
     "2011",
     "2012",
     "2013",
@@ -71,52 +71,62 @@ const ConnectedFilterBar = props => {
     );
   };
 
-  const sizeChoose = event => {
-    const sizes = [...filterData.sizes];
+  const activeSizeChoose = event => {
     const choseSize = event.target.dataset.size;
 
     setIsChose(
       Object.assign({}, isChose, (isChose[choseSize] = !isChose[choseSize]))
     );
-
-    let index;
-    if (isChose[choseSize] === true) {
-      sizes.push(choseSize);
-    } else {
-      index = sizes.indexOf(choseSize);
-      sizes.splice(index, 1);
-    }
-    setFilterData(Object.assign({}, filterData, { sizes: sizes }));
   };
 
   // Get data brands filter
-  const brandChoose = event => {
-    const brandChose = [...filterData.brands];
-    const currentBrandChose = event.target.id;
-    let index;
+  const brandChoose = (brand, event) => {
+    props.filterProducts({
+      brands: getFilterDatas(props.filterData.brands, brand, event.target)
+    });
+  };
 
-    if (event.target.checked) {
-      brandChose.push(currentBrandChose);
-    } else {
-      index = brandChose.indexOf(event.target.id);
-      brandChose.splice(index, 1);
-    }
-    setFilterData(Object.assign({}, filterData, { brands: brandChose }));
+  // Get data sizes filter
+  const sizeChoose = (size, event) => {
+    props.filterProducts({
+      sizes: getFilterDatas(props.filterData.sizes, size, event.target)
+    });
   };
 
   // Get data categories filter
-  const categoryChoose = event => {
-    const categoryChose = [...filterData.categories];
-    const currentCategoryChose = event.target.id;
+  const categoryChoose = (category, event) => {
+    props.filterProducts({
+      categories: getFilterDatas(
+        props.filterData.categories,
+        category,
+        event.target
+      )
+    });
+  };
+
+  // Get data release date filter
+  const releaseDateChoose = (date, event) => {
+    props.filterProducts({
+      releaseDates: getFilterDatas(
+        props.filterData.releaseDates,
+        date,
+        event.target
+      )
+    });
+  };
+
+  
+  const getFilterDatas = (source, data, target) => {
+    const sourceData = [...source];
     let index;
 
-    if (event.target.checked) {
-      categoryChose.push(currentCategoryChose);
+    if (target.checked) {
+      sourceData.push(data);
     } else {
-      index = categoryChose.indexOf(event.target.id);
-      categoryChose.splice(index, 1);
+      index = sourceData.indexOf(data);
+      sourceData.splice(index, 1);
     }
-    setFilterData(Object.assign({}, filterData, { categories: categoryChose }));
+    return sourceData;
   };
 
   // Render
@@ -134,14 +144,23 @@ const ConnectedFilterBar = props => {
   // Render sizes
   const sizeItems = sizes.map(size => {
     return (
-      <div
-        className={isChose[size] ? "item size-choose" : "item"}
-        key={size}
-        data-size={size}
-        onClick={sizeChoose}
-      >
-        {size}
-      </div>
+      <Aux key={size}>
+        <input
+          type="checkbox"
+          id={size}
+          name={size}
+          style={{ display: "none" }}
+          onChange={sizeChoose.bind(this, size)}
+        />
+        <label
+          className={isChose[size] ? "item size-choose" : "item"}
+          data-size={size}
+          onClick={activeSizeChoose}
+          htmlFor={size}
+        >
+          {size}
+        </label>
+      </Aux>
     );
   });
 
@@ -156,8 +175,7 @@ const ConnectedFilterBar = props => {
             shape="curve"
             color="danger"
             svg={checkIcon}
-            id={brand}
-            onChange={brandChoose}
+            onChange={brandChoose.bind(this, brand)}
           >
             {brand}
           </Checkbox>
@@ -170,8 +188,7 @@ const ConnectedFilterBar = props => {
             shape="curve"
             color="danger"
             svg={checkIcon}
-            id={brand}
-            onChange={brandChoose}
+            onChange={brandChoose.bind(this, brand)}
           >
             {brand}
           </Checkbox>
@@ -188,8 +205,7 @@ const ConnectedFilterBar = props => {
           shape="curve"
           color="danger"
           svg={checkIcon}
-          id={item}
-          onChange={categoryChoose}
+          onChange={categoryChoose.bind(this, item)}
         >
           {item}
         </Checkbox>
@@ -197,7 +213,36 @@ const ConnectedFilterBar = props => {
     );
   });
 
-  // Render relate date
+  // Render release date
+  const releaseDateItems = filterReleaseDate.map((item, index) => {
+    if (index % 2 === 0) {
+      return (
+        <div className="item" key={index}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            onChange={releaseDateChoose.bind(this, item)}
+          >
+            {item}
+          </Checkbox>
+        </div>
+      );
+    } else {
+      return (
+        <div className="item odd" key={index}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            onChange={releaseDateChoose.bind(this, item)}
+          >
+            {item}
+          </Checkbox>
+        </div>
+      );
+    }
+  });
 
   return (
     <div className="filter-bar col-lg-3">
@@ -206,12 +251,12 @@ const ConnectedFilterBar = props => {
           <FontAwesomeIcon icon="sliders-h" />
           <div className="text">Lọc</div>
         </div>
-        {filterData.sizes.length !== 0 ||
-        filterData.brands.length !== 0 ||
-        filterData.categories.length !== 0 ||
-        filterData.relateDates.length !== 0 ||
-        filterData.prices.to !== 0 ||
-        filterData.prices.from !== 0 ? (
+        {props.filterData.sizes.length !== 0 ||
+        props.filterData.brands.length !== 0 ||
+        props.filterData.categories.length !== 0 ||
+        props.filterData.releaseDates.length !== 0 ||
+        props.filterData.prices.to !== 0 ||
+        props.filterData.prices.from !== 0 ? (
           <button className="clear-filter btn btn-primary">Bỏ lọc</button>
         ) : (
           <button className="clear-filter btn btn-primary" disabled={true}>
@@ -305,72 +350,16 @@ const ConnectedFilterBar = props => {
           className="select-filter"
           id="collapseExample"
         >
-          <div className="date-row">
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                &lt; 2010
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2011
-              </Checkbox>
-            </div>
-          </div>
-          <div className="date-row">
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2012
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2013
-              </Checkbox>
-            </div>
-          </div>
-          <div className="date-row">
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2014
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2015
-              </Checkbox>
-            </div>
-          </div>
-          <div className="date-row">
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2016
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2017
-              </Checkbox>
-            </div>
-          </div>
-          <div className="date-row">
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2018
-              </Checkbox>
-            </div>
-            <div className="item">
-              <Checkbox shape="curve" color="danger" svg={checkIcon}>
-                2019
-              </Checkbox>
-            </div>
-          </div>
+          {releaseDateItems}
         </Collapse>
       </div>
     </div>
   );
 };
 
-const FilterBar = connect(mapStateToProps)(ConnectedFilterBar);
+const FilterBar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConnectedFilterBar);
 
 export default FilterBar;

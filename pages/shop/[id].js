@@ -166,6 +166,7 @@ const ConnectedProduct = props => {
           <div className="main-info row">
             <div className="product-image col-lg-6">
               <div className="img-zoom-container">
+
                 <img
                   src={product.thumbnail}
                   alt="image-1"

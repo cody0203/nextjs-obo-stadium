@@ -7,6 +7,7 @@ import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/fontawesome";
 
+
 import FilterBar from "../components/filter-bar"
 
 function mapStateToProps(state) {
