@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Checkbox } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Collapse } from "reactstrap";
@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 import "../components/fontawesome";
 
 import { sizes } from "../db";
-import filterProducts from "../redux/actions/filter";
+import { filterProducts } from "../redux/actions/filter";
+import { clearFilter } from "../redux/actions/filter";
+
 import Aux from "./hoc/aux";
 
 function mapStateToProps(state) {
@@ -21,9 +23,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    filterProducts: payload => {
-      dispatch(filterProducts(payload));
-    }
+    filterProducts: payload => dispatch(filterProducts(payload)),
+    clearFilter: () => dispatch(clearFilter())
   };
 }
 
@@ -56,6 +57,12 @@ const ConnectedFilterBar = props => {
   ]);
 
   // LifeCycles
+
+  useEffect(() => {
+    return () => {
+      props.clearFilter()
+    }
+  }, [] )
 
   // Methods
   const toggleMoreBrand = () => setIsOpen(!isOpen);
