@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Collapse } from "reactstrap";
+import {
+  Collapse,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from "reactstrap";
 import { connect } from "react-redux";
 import "../components/fontawesome";
 
@@ -28,7 +34,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const ConnectedFilterBar = props => {
+const ConnectedFilterBarSmall = props => {
   // States
   const [isOpen, setIsOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState({
@@ -74,13 +80,34 @@ const ConnectedFilterBar = props => {
     to: ""
   });
 
-  // LifeCycles
+  const closeModal = () => {
+    setIsSizeChose(Object.assign(...sizes.map(size => ({ [size]: false }))));
+    setIsBrandChose(
+      Object.assign(...props.brands.map(brand => ({ [brand]: false })))
+    );
+    setIsCategoryChose(
+      Object.assign(
+        ...filterCategories.map(category => ({ [category]: false }))
+      )
+    );
+    setIsReleaseDateChose(
+      Object.assign(...filterReleaseDate.map(date => ({ [date]: false })))
+    );
+    setFilterPrices({
+      from: "",
+      to: ""
+    });
 
-  useEffect(() => {
-    return () => {
-      props.clearFilter();
-    };
-  }, []);
+    setIsSectionOpen({
+      brand: true,
+      category: true,
+      size: true,
+      relateDate: true
+    });
+
+    setIsOpen(false)
+    props.clearFilter();
+  }
 
   // Methods
   const toggleMoreBrand = () => setIsOpen(!isOpen);
@@ -335,13 +362,125 @@ const ConnectedFilterBar = props => {
     }
   });
 
+  // Props
+  const { filterModal, toggleFilterModal } = props;
+
   return (
-    <div className="filter-bar col-lg-3">
-      <div className="filter-header content">
-        <div className="left-side d-flex align-items-center">
-          <FontAwesomeIcon icon="sliders-h" />
-          <div className="text">Lọc</div>
+    <Modal isOpen={filterModal} toggle={toggleFilterModal} unmountOnClose={true} onClosed={closeModal}>
+      <ModalHeader toggle={toggleFilterModal}>Lọc sản phẩm</ModalHeader>
+      <ModalBody>
+        <div className="filter-bar col-lg-3">
+          <div className="filter-header content">
+            <div className="left-side d-flex align-items-center"></div>
+          </div>
+          <div className="brand content">
+            <div className="title" onClick={toggleSection} data-title="brand">
+              Thương hiệu
+              <FontAwesomeIcon
+                icon={isSectionOpen.brand ? "chevron-up" : "chevron-down"}
+              />
+            </div>
+            <Collapse isOpen={isSectionOpen.brand} className="select-filter">
+              <div className="item">{firstPart}</div>
+              <Collapse isOpen={isOpen}>{lastPart}</Collapse>
+              <div
+                className="see-more"
+                id="see-more-brand"
+                onClick={toggleMoreBrand}
+              >
+                {isOpen ? "Rút gọn" : "Xem thêm"}
+              </div>
+              {brandItems}
+            </Collapse>
+          </div>
+          <div className="break-line" />
+          <div className="category content">
+            <div
+              className="title"
+              onClick={toggleSection}
+              data-title="category"
+            >
+              Danh mục
+              <FontAwesomeIcon
+                icon={isSectionOpen.category ? "chevron-up" : "chevron-down"}
+              />
+            </div>
+            <Collapse
+              isOpen={isSectionOpen.category}
+              className="select-filter"
+              id="categories-collapse"
+            >
+              {categoryItems}
+            </Collapse>
+          </div>
+          <div className="break-line" />
+          <div className="size content">
+            <div className="title" onClick={toggleSection} data-title="size">
+              Size
+              <FontAwesomeIcon
+                icon={isSectionOpen.size ? "chevron-up" : "chevron-down"}
+              />
+            </div>
+            <Collapse
+              isOpen={isSectionOpen.size}
+              className="select-filter"
+              id="size-collapse"
+            >
+              {sizeItems}
+            </Collapse>
+          </div>
+          <div className="break-line" />
+          <div className="price-range content">
+            <div className="title">
+              <div className="text">Khoảng giá</div>
+            </div>
+            <input
+              className="form-control price-input"
+              type="text"
+              name="from"
+              value={filterPrices.from || ""}
+              onChange={handleFilterPrices}
+              placeholder="Từ"
+            />
+            <input
+              className="form-control price-input"
+              type="text"
+              name="to"
+              value={filterPrices.to || ""}
+              onChange={handleFilterPrices}
+              placeholder="Đến"
+              pattern="[0-9]"
+            />
+            <button
+              className="btn btn-primary apply-price red-btn"
+              onClick={pricesChoose}
+            >
+              áp dụng
+            </button>
+          </div>
+          <div className="break-line" />
+          <div className="release-date content">
+            <div
+              className="title"
+              onClick={toggleSection}
+              data-title="relateDate"
+            >
+              Năm ra mắt
+              <FontAwesomeIcon
+                icon={isSectionOpen.relateDate ? "chevron-up" : "chevron-down"}
+              />
+            </div>
+            <Collapse
+              isOpen={isSectionOpen.relateDate}
+              className="select-filter"
+              id="collapseExample"
+            >
+              {releaseDateItems}
+            </Collapse>
+          </div>
         </div>
+      </ModalBody>
+      <ModalFooter>
         {props.filterData.sizes.length !== 0 ||
         props.filterData.brands.length !== 0 ||
         props.filterData.categories.length !== 0 ||
@@ -359,112 +498,14 @@ const ConnectedFilterBar = props => {
             Bỏ lọc
           </button>
         )}
-      </div>
-      <div className="break-line" />
-      <div className="brand content">
-        <div className="title" onClick={toggleSection} data-title="brand">
-          Thương hiệu
-          <FontAwesomeIcon
-            icon={isSectionOpen.brand ? "chevron-up" : "chevron-down"}
-          />
-        </div>
-        <Collapse isOpen={isSectionOpen.brand} className="select-filter">
-          <div className="item">{firstPart}</div>
-          <Collapse isOpen={isOpen}>{lastPart}</Collapse>
-          <div
-            className="see-more"
-            id="see-more-brand"
-            onClick={toggleMoreBrand}
-          >
-            {isOpen ? "Rút gọn" : "Xem thêm"}
-          </div>
-          {brandItems}
-        </Collapse>
-      </div>
-      <div className="break-line" />
-      <div className="category content">
-        <div className="title" onClick={toggleSection} data-title="category">
-          Danh mục
-          <FontAwesomeIcon
-            icon={isSectionOpen.category ? "chevron-up" : "chevron-down"}
-          />
-        </div>
-        <Collapse
-          isOpen={isSectionOpen.category}
-          className="select-filter"
-          id="categories-collapse"
-        >
-          {categoryItems}
-        </Collapse>
-      </div>
-      <div className="break-line" />
-      <div className="size content">
-        <div className="title" onClick={toggleSection} data-title="size">
-          Size
-          <FontAwesomeIcon
-            icon={isSectionOpen.size ? "chevron-up" : "chevron-down"}
-          />
-        </div>
-        <Collapse
-          isOpen={isSectionOpen.size}
-          className="select-filter"
-          id="size-collapse"
-        >
-          {sizeItems}
-        </Collapse>
-      </div>
-      <div className="break-line" />
-      <div className="price-range content">
-        <div className="title">
-          <div className="text">Khoảng giá</div>
-        </div>
-        <input
-          className="form-control price-input"
-          type="text"
-          name="from"
-          value={filterPrices.from || ""}
-          onChange={handleFilterPrices}
-          placeholder="Từ"
-        />
-        <input
-          className="form-control price-input"
-          type="text"
-          name="to"
-          value={filterPrices.to || ""}
-          onChange={handleFilterPrices}
-          placeholder="Đến"
-          pattern="[0-9]"
-        />
-        <button
-          className="btn btn-primary apply-price red-btn"
-          onClick={pricesChoose}
-        >
-          áp dụng
-        </button>
-      </div>
-      <div className="break-line" />
-      <div className="release-date content">
-        <div className="title" onClick={toggleSection} data-title="relateDate">
-          Năm ra mắt
-          <FontAwesomeIcon
-            icon={isSectionOpen.relateDate ? "chevron-up" : "chevron-down"}
-          />
-        </div>
-        <Collapse
-          isOpen={isSectionOpen.relateDate}
-          className="select-filter"
-          id="collapseExample"
-        >
-          {releaseDateItems}
-        </Collapse>
-      </div>
-    </div>
+      </ModalFooter>
+    </Modal>
   );
 };
 
-const FilterBar = connect(
+const FilterBarSmall = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ConnectedFilterBar);
+)(ConnectedFilterBarSmall);
 
-export default FilterBar;
+export default FilterBarSmall;

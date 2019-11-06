@@ -6,7 +6,8 @@ import {
   faChevronRight,
   faChevronDown,
   faChevronUp,
-  faSlidersH
+  faSlidersH,
+  faFilter
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -15,5 +16,6 @@ library.add(
   faChevronRight,
   faChevronDown,
   faChevronUp,
-  faSlidersH
+  faSlidersH,
+  faFilter
 );

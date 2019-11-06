@@ -7,8 +7,8 @@ const filterState = {
   categories: [],
   releaseDates: [],
   prices: {
-    from: 0,
-    to: 0
+    from: "",
+    to: ""
   }
 };
 

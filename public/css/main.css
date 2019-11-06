@@ -18,6 +18,11 @@ a {
   color: #333;
   cursor: pointer;
 }
+
+.search-form-small .search-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 a:hover {
   color: inherit;
 }
