@@ -105,9 +105,9 @@ const ConnectedFilterBarSmall = props => {
       relateDate: true
     });
 
-    setIsOpen(false)
+    setIsOpen(false);
     props.clearFilter();
-  }
+  };
 
   // Methods
   const toggleMoreBrand = () => setIsOpen(!isOpen);
@@ -152,6 +152,7 @@ const ConnectedFilterBarSmall = props => {
       from: "",
       to: ""
     });
+    props.toggleFilterModal();
     props.clearFilter();
   };
 
@@ -164,18 +165,9 @@ const ConnectedFilterBarSmall = props => {
         (isBrandChose[brand] = !isBrandChose[brand])
       )
     );
-
-    props.filterProducts({
-      brands: getFilterDatas(props.filterData.brands, brand, event.target)
-    });
   };
 
   // Get data sizes filter
-  const sizeChoose = (size, event) => {
-    props.filterProducts({
-      sizes: getFilterDatas(props.filterData.sizes, size, event.target)
-    });
-  };
 
   // Get data categories filter
   const categoryChoose = (category, event) => {
@@ -186,14 +178,6 @@ const ConnectedFilterBarSmall = props => {
         (isCategoryChose[category] = !isCategoryChose[category])
       )
     );
-
-    props.filterProducts({
-      categories: getFilterDatas(
-        props.filterData.categories,
-        category,
-        event.target
-      )
-    });
   };
 
   // Get data release date filter
@@ -205,14 +189,6 @@ const ConnectedFilterBarSmall = props => {
         (isReleaseDateChose[date] = !isReleaseDateChose[date])
       )
     );
-
-    props.filterProducts({
-      releaseDates: getFilterDatas(
-        props.filterData.releaseDates,
-        date,
-        event.target
-      )
-    });
   };
 
   const handleFilterPrices = event => {
@@ -223,24 +199,46 @@ const ConnectedFilterBarSmall = props => {
     });
   };
 
-  const pricesChoose = () => {
+  const applyFilter = () => {
+    // initial variables assign
+    let [brands, sizes, categories, releaseDates] = [[], [], [], []];
+
+    // Dispatch brand datas
+    props.filterProducts({
+      brands: getFilterDatas(brands, isBrandChose)
+    });
+
+    // Dispatch size datas
+    props.filterProducts({
+      sizes: getFilterDatas(sizes, isSizeChose)
+    });
+
+    // Dispatch category datas
+    props.filterProducts({
+      categories: getFilterDatas(categories, isCategoryChose)
+    });
+
+    // Dispatch release date datas
+    props.filterProducts({
+      releaseDates: getFilterDatas(releaseDates, isReleaseDateChose)
+    });
+
+    // Dispatch price datas
     props.filterProducts({
       prices: filterPrices
     });
+
+    props.toggleFilterModal();
   };
 
-  const getFilterDatas = (source, data, target) => {
-    const sourceData = [...source];
-    let index;
-
-    if (target.checked) {
-      sourceData.push(data);
-    } else {
-      index = sourceData.indexOf(data);
-      sourceData.splice(index, 1);
+  const getFilterDatas = (newData, source) => {
+    for (let item in source) {
+      if (source[item] === true) {
+        newData.push(item);
+      }
     }
-    return sourceData;
-  };
+    return newData;
+  }
 
   // Render
 
@@ -263,7 +261,6 @@ const ConnectedFilterBarSmall = props => {
           id={size}
           name={size}
           style={{ display: "none" }}
-          onChange={sizeChoose.bind(this, size)}
         />
         <label
           className={isSizeChose[size] ? "item size-choose" : "item"}
@@ -366,7 +363,12 @@ const ConnectedFilterBarSmall = props => {
   const { filterModal, toggleFilterModal } = props;
 
   return (
-    <Modal isOpen={filterModal} toggle={toggleFilterModal} unmountOnClose={true} onClosed={closeModal}>
+    <Modal
+      isOpen={filterModal}
+      toggle={toggleFilterModal}
+      unmountOnClose={true}
+      onClosed={closeModal}
+    >
       <ModalHeader toggle={toggleFilterModal}>Lọc sản phẩm</ModalHeader>
       <ModalBody>
         <div className="filter-bar col-lg-3">
@@ -451,12 +453,6 @@ const ConnectedFilterBarSmall = props => {
               placeholder="Đến"
               pattern="[0-9]"
             />
-            <button
-              className="btn btn-primary apply-price red-btn"
-              onClick={pricesChoose}
-            >
-              áp dụng
-            </button>
           </div>
           <div className="break-line" />
           <div className="release-date content">
@@ -480,24 +476,20 @@ const ConnectedFilterBarSmall = props => {
           </div>
         </div>
       </ModalBody>
-      <ModalFooter>
-        {props.filterData.sizes.length !== 0 ||
-        props.filterData.brands.length !== 0 ||
-        props.filterData.categories.length !== 0 ||
-        props.filterData.releaseDates.length !== 0 ||
-        props.filterData.prices.from !== "" ||
-        props.filterData.prices.to !== "" ? (
-          <button
-            className="clear-filter btn btn-primary"
-            onClick={clearFilterData}
-          >
-            Bỏ lọc
-          </button>
-        ) : (
-          <button className="clear-filter btn btn-primary" disabled={true}>
-            Bỏ lọc
-          </button>
-        )}
+      <ModalFooter style={{ display: "flex", alignItems: "stretch" }}>
+        <button
+          className="clear-filter btn btn-primary"
+          onClick={clearFilterData}
+        >
+          Huỷ
+        </button>
+
+        <button
+          className="btn btn-primary apply-price red-btn"
+          onClick={applyFilter}
+        >
+          áp dụng
+        </button>
       </ModalFooter>
     </Modal>
   );

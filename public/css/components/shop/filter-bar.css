@@ -46,10 +46,8 @@
 }
 
 .clear-filter.btn-primary.disabled,
-.clear-filter.btn-primary:disabled {
-  background-color: #333333;
-}
-
+.clear-filter.btn-primary:disabled,
+.clear-filter.btn-primary:not(:disabled):not(.disabled):active,
 .clear-filter.btn-primary:hover,
 .clear-filter.btn-primary:focus {
   background-color: #333333;
