@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Layout from "../components/layout";
 import LastestNews from "../components/lastest-news";
 import Head from "next/head";
 import { connect } from "react-redux";
 import Link from "next/link";
 import { FormattedNumber } from "react-intl";
+import getProducts from "../redux/actions/product"
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     products: state.productReducer.products
   };
@@ -25,6 +27,10 @@ const ConnectedHome = props => {
       </div>
     </div>
   );
+
+  useEffect(() => {
+    props.getProducts()
+  }, [])
 
   const findBestSeller = props.products
     .filter(products => {
@@ -435,6 +441,11 @@ const ConnectedHome = props => {
   );
 };
 
-const Home = connect(mapStateToProps)(ConnectedHome);
+ConnectedHome.getInitialProps = ({store, isServer}) => {
+  store.dispatch(getProducts())
+  return isServer
+}
+
+const Home = connect(mapStateToProps, {getProducts})(ConnectedHome);
 
 export default Home;

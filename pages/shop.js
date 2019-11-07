@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/fontawesome";
 
 import FilterBar from "../components/filter-bar";
-import FilterBarSmall from "../components/filter-bar-small";
+// import FilterBarSmall from "../components/filter-bar-small";
 import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import { clearFilter } from "../redux/actions/filter";
@@ -23,14 +23,14 @@ import { clearFilter } from "../redux/actions/filter";
 function mapDispatchToProps(dispatch) {
   return {
     clearFilter: () => dispatch(clearFilter())
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    products: state.productReducer.products
   };
 }
+
+// function mapStateToProps(state) {
+//   return {
+//     products: state.productReducer.products
+//   };
+// }
 
 const ConnectedShop = props => {
   // States
@@ -49,7 +49,7 @@ const ConnectedShop = props => {
   const [filterModal, setFilterModal] = useState(false);
 
   const toggleFilterModal = () => {
-    setFilterModal(!filterModal)
+    setFilterModal(!filterModal);
   };
 
   // Life cycles
@@ -199,7 +199,10 @@ const ConnectedShop = props => {
             </div>
           </div>
         </div>
-        <FilterBarSmall filterModal={filterModal} toggleFilterModal={toggleFilterModal} />
+        {/* <FilterBarSmall
+          filterModal={filterModal}
+          toggleFilterModal={toggleFilterModal}
+        /> */}
         <div
           className="modal fade"
           id="signInSignUp"
@@ -333,6 +336,9 @@ const ConnectedShop = props => {
   );
 };
 
-const Shop = connect(mapStateToProps, mapDispatchToProps)(ConnectedShop);
+const Shop = connect(
+  null,
+  mapDispatchToProps
+)(ConnectedShop);
 
 export default Shop;
