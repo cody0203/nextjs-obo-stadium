@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../components/fontawesome";
 
 import store from "../../redux/store/index"
-import getProducts from "../../redux/actions/product";
+import {getProducts} from "../../redux/actions/product";
 
 function mapStateToProps(state) {
   return {

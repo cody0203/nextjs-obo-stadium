@@ -14,6 +14,7 @@ import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/fontawesome";
 import axios from "axios";
+import Router, { useRouter } from "next/router";
 
 import FilterBar from "../components/filter-bar";
 // import FilterBarSmall from "../components/filter-bar-small";
@@ -38,6 +39,9 @@ function mapStateToProps(state) {
 }
 
 const Shop = props => {
+  // Router
+  const router = useRouter();
+  
   // States
   const [isOpen, setIsOpen] = useState(false);
 
@@ -89,27 +93,33 @@ const Shop = props => {
       chose: condition
     });
     let url;
+    let slug;
     switch (condition) {
       case "Bán chạy":
-        url =
-          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=total_sold&_order=desc";
-        sortRequest(url);
+        slug = `_page=1&_limit=16&_sort=total_sold&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        sortRequest(url, slug);
+        break;
       case "Hàng mới":
-        url =
-          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc";
-        sortRequest(url);
+        slug = `_page=1&_limit=16&_sort=release_date&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        sortRequest(url, slug);
+        break;
       case "Giá thấp đến cao":
-        url =
-          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=sell_price&_order=asc";
-        sortRequest(url);
+        slug = `_page=1&_limit=16&_sort=sell_price&_order=asc`;
+        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        sortRequest(url, slug);
+        break;
       case "Giá cao đến thấp":
-        url =
-          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=sell_price&_order=desc";
-        sortRequest(url);
+        slug = `_page=1&_limit=16&_sort=sell_price&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        sortRequest(url, slug);
+        break;
     }
+
   };
 
-  const sortRequest = url => {
+  const sortRequest = (url, slug) => {
     axios
       .get(url)
       .then(response => {
@@ -121,8 +131,11 @@ const Shop = props => {
       .then(json => {
         setShopProducts(json.data);
       });
+      router.push(`${Router.pathname}?${slug}`);
   };
 
+
+  console.log(router.asPath)
   // Renderes
 
   // Render products
