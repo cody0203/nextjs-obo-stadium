@@ -19,6 +19,8 @@ import FilterBar from "../components/filter-bar";
 import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import { clearFilter } from "../redux/actions/filter";
+import store from "../redux/store/index"
+import getProducts from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -26,13 +28,13 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     products: state.productReducer.products
-//   };
-// }
+function mapStateToProps(state) {
+  return {
+    products: state.productReducer.products
+  };
+}
 
-const ConnectedShop = props => {
+const Shop = props => {
   // States
   const [isOpen, setIsOpen] = useState(false);
 
@@ -336,9 +338,14 @@ const ConnectedShop = props => {
   );
 };
 
-const Shop = connect(
-  null,
-  mapDispatchToProps
-)(ConnectedShop);
+Shop.getInitialProps = async ({ store, isServer }) => {
+  if (isServer) {
+    await store.dispatch(getProducts(isServer))
+  }
+  return {isServer}
+}
 
-export default Shop;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Shop);;

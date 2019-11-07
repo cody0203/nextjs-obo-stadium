@@ -8,8 +8,7 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
-  Button,
-  Input
+  Button
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

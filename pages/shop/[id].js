@@ -9,15 +9,20 @@ import { FormattedNumber, FormattedDate } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../components/fontawesome";
 
+import store from "../../redux/store/index"
+import getProducts from "../../redux/actions/product";
+
 function mapStateToProps(state) {
   return {
     products: state.productReducer.products
   };
 }
 
-const ConnectedProduct = props => {
+const Product = props => {
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
+
+  console.log(props)
 
   let slider1, slider2;
   const router = useRouter();
@@ -313,12 +318,15 @@ const ConnectedProduct = props => {
   );
 };
 
-ConnectedProduct.getInitialProps = context => {
+Product.getInitialProps = async (ctx) => {
+  const {store, query, isServer} = ctx
+  if (isServer) {
+    await store.dispatch(getProducts())
+  }
   return {
-    productId: context.query.id
+    isServer,
+    productId: query.id
   };
 };
 
-const Product = connect(mapStateToProps)(ConnectedProduct);
-
-export default Product;
+export default connect(mapStateToProps)(Product);

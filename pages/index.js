@@ -2,19 +2,26 @@ import React, {useEffect} from "react";
 import Layout from "../components/layout";
 import LastestNews from "../components/lastest-news";
 import Head from "next/head";
-import { connect } from "react-redux";
 import Link from "next/link";
+
 import { FormattedNumber } from "react-intl";
-import getProducts from "../redux/actions/product"
+import { connect } from 'react-redux';
+import store from "../redux/store/index"
+import getProducts from "../redux/actions/product";
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     products: state.productReducer.products
   };
 }
 
-const ConnectedHome = props => {
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     getProducts: dispatch(getProducts())
+//   }
+// }
+
+const Home = props => {
   const title = (
     <div className="content text-center">
       <h1 className="slogan main-heading text-uppercase">
@@ -27,11 +34,7 @@ const ConnectedHome = props => {
       </div>
     </div>
   );
-
-  useEffect(() => {
-    props.getProducts()
-  }, [])
-
+  console.log(props)
   const findBestSeller = props.products
     .filter(products => {
       return products.status === "Best Seller";
@@ -441,11 +444,11 @@ const ConnectedHome = props => {
   );
 };
 
-ConnectedHome.getInitialProps = ({store, isServer}) => {
-  store.dispatch(getProducts())
-  return isServer
+Home.getInitialProps = async ({ store, isServer }) => {
+  if (isServer) {
+    await store.dispatch(getProducts())
+  }
+  return {isServer}
 }
 
-const Home = connect(mapStateToProps, {getProducts})(ConnectedHome);
-
-export default Home;
+export default connect(mapStateToProps)(Home);

@@ -22,13 +22,13 @@ export default withRedux(store)(
     }
 
     render() {
-      const { Component, pageProps } = this.props;
+      const { Component, pageProps, store } = this.props;
       return (
-        <Provider store={store}>
-          <IntlProvider locale="vi">
-            <Component {...pageProps}></Component>
-          </IntlProvider>
-        </Provider>
+          <Provider store={store}>
+            <IntlProvider locale="vi">
+              <Component {...pageProps}></Component>
+            </IntlProvider>
+          </Provider>
       );
     }
   }

@@ -15,9 +15,9 @@ import Aux from "./hoc/aux";
 function mapStateToProps(state) {
   return {
     products: state.productReducer.products,
-    // brands: [
-    //   ...new Set(state.productReducer.products.map(product => product.brand))
-    // ],
+    brands: [
+      ...new Set(state.productReducer.products.map(product => product.brand))
+    ],
     filterData: state.filterReducer
   };
 }
@@ -59,9 +59,10 @@ const ConnectedFilterBar = props => {
     Object.assign(...sizes.map(size => ({ [size]: false })))
   );
 
-  // const [isBrandChose, setIsBrandChose] = useState();
-  // Object.assign(...props.brands.map(brand => ({ [brand]: false })))
-
+  const [isBrandChose, setIsBrandChose] = useState(
+    Object.assign(...props.brands.map(brand => ({ [brand]: false })))
+  );
+  
   const [isCategoryChose, setIsCategoryChose] = useState(
     Object.assign(...filterCategories.map(category => ({ [category]: false })))
   );
@@ -252,39 +253,39 @@ const ConnectedFilterBar = props => {
   });
 
   // Render brands
-  // const firstPart = [];
-  // const lastPart = [];
-  // const brandItems = props.brands.map((brand, index) => {
-  //   if (index < 4) {
-  //     firstPart.push(
-  //       <div className="item" key={brand}>
-  //         <Checkbox
-  //           shape="curve"
-  //           color="danger"
-  //           svg={checkIcon}
-  //           checked={isBrandChose[brand]}
-  //           onChange={brandChoose.bind(this, brand)}
-  //         >
-  //           {brand}
-  //         </Checkbox>
-  //       </div>
-  //     );
-  //   } else {
-  //     lastPart.push(
-  //       <div className="item" key={brand}>
-  //         <Checkbox
-  //           shape="curve"
-  //           color="danger"
-  //           svg={checkIcon}
-  //           checked={isBrandChose[brand]}
-  //           onChange={brandChoose.bind(this, brand)}
-  //         >
-  //           {brand}
-  //         </Checkbox>
-  //       </div>
-  //     );
-  //   }
-  // });
+  const firstPart = [];
+  const lastPart = [];
+  const brandItems = props.brands.map((brand, index) => {
+    if (index < 4) {
+      firstPart.push(
+        <div className="item" key={brand}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            checked={isBrandChose[brand]}
+            onChange={brandChoose.bind(this, brand)}
+          >
+            {brand}
+          </Checkbox>
+        </div>
+      );
+    } else {
+      lastPart.push(
+        <div className="item" key={brand}>
+          <Checkbox
+            shape="curve"
+            color="danger"
+            svg={checkIcon}
+            checked={isBrandChose[brand]}
+            onChange={brandChoose.bind(this, brand)}
+          >
+            {brand}
+          </Checkbox>
+        </div>
+      );
+    }
+  });
 
   // Render categories
   const categoryItems = filterCategories.map(category => {
@@ -369,7 +370,7 @@ const ConnectedFilterBar = props => {
             icon={isSectionOpen.brand ? "chevron-up" : "chevron-down"}
           />
         </div>
-        {/* <Collapse isOpen={isSectionOpen.brand} className="select-filter">
+        <Collapse isOpen={isSectionOpen.brand} className="select-filter">
           <div className="item">{firstPart}</div>
           <Collapse isOpen={isOpen}>{lastPart}</Collapse>
           <div
@@ -380,7 +381,7 @@ const ConnectedFilterBar = props => {
             {isOpen ? "Rút gọn" : "Xem thêm"}
           </div>
           {brandItems}
-        </Collapse> */}
+        </Collapse>
       </div>
       <div className="break-line" />
       <div className="category content">

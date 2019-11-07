@@ -3,7 +3,9 @@ import reducer from "../reducers/index";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 
-export const store = initialState => {
+const exampleInitialState = undefined;
+
+export const store = (initialState = exampleInitialState) => {
   return createStore(
     reducer,
     initialState,
