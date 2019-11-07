@@ -147,29 +147,98 @@ const ConnectedFilterBar = props => {
     );
 
     props.filterProducts({
-      brands: getFilterDatas(props.filterData.brands, brand, event.target)
+      brands: getFilterDatas(
+        props.filterData.brands,
+        brand,
+        event.target,
+        "brand"
+      )
     });
   };
 
   // Get data sizes filter
   const sizeChoose = async (size, event) => {
     props.filterProducts({
-      sizes: getFilterDatas(props.filterData.sizes, size, event.target)
+      sizes: getFilterDatas(
+        props.filterData.sizes,
+        size,
+        event.target,
+        "available_size_like"
+      )
     });
   };
 
-  const filterRequest = data => {
+  // Get data categories filter
+  const categoryChoose = (category, event) => {
+    setIsCategoryChose(
+      Object.assign(
+        {},
+        isCategoryChose,
+        (isCategoryChose[category] = !isCategoryChose[category])
+      )
+    );
+
+    props.filterProducts({
+      categories: getFilterDatas(
+        props.filterData.categories,
+        category,
+        event.target,
+        "category"
+      )
+    });
+  };
+
+  // Get data release date filter
+  const releaseDateChoose = (date, event) => {
+    setIsReleaseDateChose(
+      Object.assign(
+        {},
+        isReleaseDateChose,
+        (isReleaseDateChose[date] = !isReleaseDateChose[date])
+      )
+    );
+
+    props.filterProducts({
+      releaseDates: getFilterDatas(
+        props.filterData.releaseDates,
+        date,
+        event.target,
+        "release date"
+      )
+    });
+  };
+
+  const handleFilterPrices = event => {
+    const value = parseInt(event.target.value) || "";
+    setFilterPrices({
+      ...filterPrices,
+      [event.target.name]: value
+    });
+  };
+
+  const pricesChoose = () => {
+    props.filterProducts({
+      prices: filterPrices
+    });
+  };
+
+  const filterRequest = (data, type) => {
     let currentUrl = router.asPath;
     let url;
     let slug = data;
-    console.log(slug);
+    let queryIndex;
+    let queries;
+    console.log(router);
     if (currentUrl === "/shop") {
-      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&available_size_like=${[
+      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&${type}=${[
         slug
       ].join(",")}`;
-      console.log(url);
     } else {
-      console.log(false);
+      queryIndex = currentUrl.indexOf("?");
+      queries = currentUrl.slice(queryIndex);
+      url = `https://cody-json-server.herokuapp.com/products${queries}&${type}=${[
+        slug
+      ].join(",")}`;
     }
 
     axios
@@ -190,59 +259,7 @@ const ConnectedFilterBar = props => {
     // router.push(`${Router.pathname}?${slug}`);
   };
 
-  // Get data categories filter
-  const categoryChoose = (category, event) => {
-    setIsCategoryChose(
-      Object.assign(
-        {},
-        isCategoryChose,
-        (isCategoryChose[category] = !isCategoryChose[category])
-      )
-    );
-
-    props.filterProducts({
-      categories: getFilterDatas(
-        props.filterData.categories,
-        category,
-        event.target
-      )
-    });
-  };
-
-  // Get data release date filter
-  const releaseDateChoose = (date, event) => {
-    setIsReleaseDateChose(
-      Object.assign(
-        {},
-        isReleaseDateChose,
-        (isReleaseDateChose[date] = !isReleaseDateChose[date])
-      )
-    );
-
-    props.filterProducts({
-      releaseDates: getFilterDatas(
-        props.filterData.releaseDates,
-        date,
-        event.target
-      )
-    });
-  };
-
-  const handleFilterPrices = event => {
-    const value = parseInt(event.target.value) || "";
-    setFilterPrices({
-      ...filterPrices,
-      [event.target.name]: value
-    });
-  };
-
-  const pricesChoose = () => {
-    props.filterProducts({
-      prices: filterPrices
-    });
-  };
-
-  const getFilterDatas = (source, data, target) => {
+  const getFilterDatas = (source, data, target, type) => {
     const sourceData = [...source];
     let index;
 
@@ -252,7 +269,7 @@ const ConnectedFilterBar = props => {
       index = sourceData.indexOf(data);
       sourceData.splice(index, 1);
     }
-    filterRequest(sourceData);
+    filterRequest(sourceData, type);
     return sourceData;
   };
 
