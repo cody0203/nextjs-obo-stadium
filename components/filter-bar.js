@@ -134,6 +134,7 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     props.clearFilter();
+    filterRequest([], "");
   };
 
   // Get data brands filter
@@ -183,7 +184,7 @@ const ConnectedFilterBar = props => {
         props.filterData.categories,
         category,
         event.target,
-        "category"
+        "gender"
       )
     });
   };
@@ -203,7 +204,7 @@ const ConnectedFilterBar = props => {
         props.filterData.releaseDates,
         date,
         event.target,
-        "release date"
+        "release_date"
       )
     });
   };
@@ -228,17 +229,21 @@ const ConnectedFilterBar = props => {
     let slug = data;
     let queryIndex;
     let queries;
-    console.log(router);
-    if (currentUrl === "/shop") {
-      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&${type}=${[
-        slug
-      ].join(",")}`;
+    console.log(slug);
+    if (slug.length !== 0) {
+      if (currentUrl === "/shop") {
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&${type}=${[
+          slug
+        ].join(",")}`;
+      } else {
+        queryIndex = currentUrl.indexOf("?");
+        queries = currentUrl.slice(queryIndex);
+        url = `https://cody-json-server.herokuapp.com/products${queries}&${type}=${[
+          slug
+        ].join(",")}`;
+      }
     } else {
-      queryIndex = currentUrl.indexOf("?");
-      queries = currentUrl.slice(queryIndex);
-      url = `https://cody-json-server.herokuapp.com/products${queries}&${type}=${[
-        slug
-      ].join(",")}`;
+      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16`;
     }
 
     axios
