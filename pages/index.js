@@ -1,25 +1,18 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/layout";
 import LastestNews from "../components/lastest-news";
 import Head from "next/head";
 import Link from "next/link";
 
 import { FormattedNumber } from "react-intl";
-import { connect } from 'react-redux';
-import store from "../redux/store/index"
-import getProducts from "../redux/actions/product";
+import { connect } from "react-redux";
+import { getAllProducts } from "../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
     products: state.productReducer.products
   };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     getProducts: dispatch(getProducts())
-//   }
-// }
 
 const Home = props => {
   const title = (
@@ -34,7 +27,7 @@ const Home = props => {
       </div>
     </div>
   );
-  console.log(props)
+  console.log(props);
   const findBestSeller = props.products
     .filter(products => {
       return products.status === "Best Seller";
@@ -445,10 +438,9 @@ const Home = props => {
 };
 
 Home.getInitialProps = async ({ store, isServer }) => {
-  if (isServer) {
-    await store.dispatch(getProducts())
-  }
-  return {isServer}
-}
+  await store.dispatch(getAllProducts());
+
+  return { isServer };
+};
 
 export default connect(mapStateToProps)(Home);

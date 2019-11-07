@@ -1,17 +1,26 @@
-import { GET_PRODUCTS } from "../constants/action-types";
-import { products } from "../../db";
+import { GET_PRODUCTS, GET_ALL_PRODUCTS } from "../constants/action-types";
 
 const initialState = {
-  products: []
+  products: [],
+  headers: {}
 };
 
 const productReducer = (state = initialState, action) => {
-  if (action.type === GET_PRODUCTS) {
-    return Object.assign({}, state, {
-      products: state.products.concat(action.payload)
-    });
+  switch (action.type) {
+    case GET_PRODUCTS: {
+      return Object.assign({}, state, {
+        products: action.payload.data,
+        headers: action.payload.headers
+      });
+    }
+    case GET_ALL_PRODUCTS: {
+      return Object.assign({}, state, {
+        products: action.payload
+      });
+    }
+    default:
+      return state;
   }
-  return state;
 };
 
 export default productReducer;

@@ -8,7 +8,7 @@ import "../components/fontawesome";
 import { sizes } from "../db";
 import { filterProducts } from "../redux/actions/filter";
 import { clearFilter } from "../redux/actions/filter";
-import getProducts from "../redux/actions/product";
+import {getProducts} from "../redux/actions/product";
 
 import Aux from "./hoc/aux";
 

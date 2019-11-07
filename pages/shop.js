@@ -13,30 +13,35 @@ import { connect } from "react-redux";
 import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../components/fontawesome";
+import axios from "axios";
 
 import FilterBar from "../components/filter-bar";
 // import FilterBarSmall from "../components/filter-bar-small";
 import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import { clearFilter } from "../redux/actions/filter";
-import store from "../redux/store/index"
-import getProducts from "../redux/actions/product";
+import store from "../redux/store/index";
+import { getProducts } from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearFilter: () => dispatch(clearFilter())
+    clearFilter: () => dispatch(clearFilter()),
+    getProducts: () => dispatch(getProducts())
   };
 }
 
 function mapStateToProps(state) {
   return {
-    products: state.productReducer.products
+    products: state.productReducer.products,
+    headers: state.productReducer.headers
   };
 }
 
 const Shop = props => {
   // States
   const [isOpen, setIsOpen] = useState(false);
+
+  const [shopProducts, setShopProducts] = useState([]);
 
   const [sortBy, setSortBy] = useState({
     conditions: [
@@ -62,6 +67,10 @@ const Shop = props => {
     };
   });
 
+  useEffect(() => {
+    setShopProducts(props.products);
+  }, []);
+
   // Methods
 
   // Toggle Sort
@@ -79,12 +88,45 @@ const Shop = props => {
       ...sortBy,
       chose: condition
     });
+    let url;
+    switch (condition) {
+      case "Bán chạy":
+        url =
+          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=total_sold&_order=desc";
+        sortRequest(url);
+      case "Hàng mới":
+        url =
+          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc";
+        sortRequest(url);
+      case "Giá thấp đến cao":
+        url =
+          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=sell_price&_order=asc";
+        sortRequest(url);
+      case "Giá cao đến thấp":
+        url =
+          "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=sell_price&_order=desc";
+        sortRequest(url);
+    }
+  };
+
+  const sortRequest = url => {
+    axios
+      .get(url)
+      .then(response => {
+        return {
+          data: response.data,
+          headers: response.headers
+        };
+      })
+      .then(json => {
+        setShopProducts(json.data);
+      });
   };
 
   // Renderes
 
   // Render products
-  const product = props.products.map(product => {
+  const product = shopProducts.map(product => {
     return (
       <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
         <a className="product-link" data-brand="${data[i]['brand']}">
@@ -338,14 +380,14 @@ const Shop = props => {
   );
 };
 
-Shop.getInitialProps = async ({ store, isServer }) => {
-  if (isServer) {
-    await store.dispatch(getProducts(isServer))
-  }
-  return {isServer}
-}
+Shop.getInitialProps = async ctx => {
+  const { store, isServer } = ctx;
+  const url = await store.dispatch(getProducts());
+
+  return { isServer };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Shop);;
+)(Shop);
