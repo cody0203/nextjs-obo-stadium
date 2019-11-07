@@ -10,7 +10,7 @@ import axios from "axios";
 import { sizes } from "../db";
 import { filterProducts } from "../redux/actions/filter";
 import { clearFilter } from "../redux/actions/filter";
-import { getProducts } from "../redux/actions/product";
+import { getProducts, setProducts } from "../redux/actions/product";
 
 import Aux from "./hoc/aux";
 
@@ -28,7 +28,8 @@ function mapDispatchToProps(dispatch) {
   return {
     getProducts: () => dispatch(getProducts()),
     filterProducts: payload => dispatch(filterProducts(payload)),
-    clearFilter: () => dispatch(clearFilter())
+    clearFilter: () => dispatch(clearFilter()),
+    setProducts: payload => dispatch(setProducts(payload))
   };
 }
 
@@ -44,7 +45,6 @@ const ConnectedFilterBar = props => {
     size: true,
     relateDate: true
   });
-  const [shopProducts, setShopProducts] = useState([]);
 
   const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
 
@@ -88,10 +88,6 @@ const ConnectedFilterBar = props => {
     return () => {
       props.clearFilter();
     };
-  }, []);
-
-  useEffect(() => {
-    setShopProducts(props.products);
   }, []);
 
   // Methods
@@ -157,46 +153,40 @@ const ConnectedFilterBar = props => {
 
   // Get data sizes filter
   const sizeChoose = async (size, event) => {
-    const data = () => {
-      props.filterProducts({
-        sizes: getFilterDatas(props.filterData.sizes, size, event.target)
-      });
-    };
-
-    const request = () => {
-      filterRequest();
-    };
-
-    const result = await Promise.all([data(), request()]);
-
-    return result;
-
-
+    props.filterProducts({
+      sizes: getFilterDatas(props.filterData.sizes, size, event.target)
+    });
   };
 
-  const filterRequest = () => {
+  const filterRequest = data => {
     let currentUrl = router.asPath;
     let url;
-    let slug = props.filterData.sizes;
+    let slug = data;
     console.log(slug);
     if (currentUrl === "/shop") {
-      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&available_size_like=${[slug].join(",")}`;
+      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&available_size_like=${[
+        slug
+      ].join(",")}`;
       console.log(url);
     } else {
       console.log(false);
     }
 
     axios
-    .get(url)
-    .then(response => {
-      return {
-        data: response.data,
-        headers: response.headers
-      };
-    })
-    .then(json => {
-      setShopProducts(json.data);
-    });
+      .get(url)
+      .then(response => {
+        return {
+          data: response.data,
+          headers: response.headers
+        };
+      })
+      .then(json => {
+        if (json.data.length !== 0) {
+          props.setProducts(json.data);
+        } else {
+          props.setProducts([""]);
+        }
+      });
     // router.push(`${Router.pathname}?${slug}`);
   };
 
@@ -262,6 +252,7 @@ const ConnectedFilterBar = props => {
       index = sourceData.indexOf(data);
       sourceData.splice(index, 1);
     }
+    filterRequest(sourceData);
     return sourceData;
   };
 

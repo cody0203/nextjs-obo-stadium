@@ -22,12 +22,13 @@ import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import { clearFilter } from "../redux/actions/filter";
 import store from "../redux/store/index";
-import { getProducts } from "../redux/actions/product";
+import { getProducts, setProducts } from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
     clearFilter: () => dispatch(clearFilter()),
-    getProducts: () => dispatch(getProducts())
+    getProducts: () => dispatch(getProducts()),
+    setProducts: payload => dispatch(setProducts(payload))
   };
 }
 
@@ -41,11 +42,9 @@ function mapStateToProps(state) {
 const Shop = props => {
   // Router
   const router = useRouter();
-  
+
   // States
   const [isOpen, setIsOpen] = useState(false);
-
-  const [shopProducts, setShopProducts] = useState([]);
 
   const [sortBy, setSortBy] = useState({
     conditions: [
@@ -70,10 +69,6 @@ const Shop = props => {
       document.removeEventListener("click", toggleSort);
     };
   });
-
-  useEffect(() => {
-    setShopProducts(props.products);
-  }, []);
 
   // Methods
 
@@ -116,7 +111,6 @@ const Shop = props => {
         sortRequest(url, slug);
         break;
     }
-
   };
 
   const sortRequest = (url, slug) => {
@@ -129,47 +123,50 @@ const Shop = props => {
         };
       })
       .then(json => {
-        setShopProducts(json.data);
+        props.setProducts(json.data);
+        console.log(json.data);
       });
-      router.push(`${Router.pathname}?${slug}`);
+    router.push(`${Router.pathname}?${slug}`);
   };
 
-
-  console.log(router.asPath)
   // Renderes
 
   // Render products
-  const product = shopProducts.map(product => {
-    return (
-      <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
-        <a className="product-link" data-brand="${data[i]['brand']}">
-          <div className="product position-relative">
-            <div className="card">
-              <img
-                src={product.thumbnail}
-                className="card-img-top"
-                alt={product.name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{product.name}</h5>
-                <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                <p className="price">
-                  <FormattedNumber
-                    style="currency"
-                    currency="VND"
-                    value={product.sell_price}
-                  />
-                </p>
-                <p className="card-text sold">
-                  Đã bán {product.total_sold} đôi
-                </p>
+  const product = props.products.map(product => {
+    if (product) {
+      return (
+        <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
+          <a className="product-link" data-brand="${data[i]['brand']}">
+            <div className="product position-relative">
+              <div className="card">
+                <img
+                  src={product.thumbnail}
+                  className="card-img-top"
+                  alt={product.name}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
+                  <p className="price">
+                    <FormattedNumber
+                      style="currency"
+                      currency="VND"
+                      value={product.sell_price}
+                    />
+                  </p>
+                  <p className="card-text sold">
+                    Đã bán {product.total_sold} đôi
+                  </p>
+                </div>
               </div>
+              <div className="shadow mx-auto position-absolute" />
             </div>
-            <div className="shadow mx-auto position-absolute" />
-          </div>
-        </a>
-      </Link>
-    );
+          </a>
+        </Link>
+      );
+    } else {
+      return <div key="not found">Không tìm thấy lựa chọn</div>;
+    }
   });
 
   // Render sort by
@@ -395,7 +392,7 @@ const Shop = props => {
 
 Shop.getInitialProps = async ctx => {
   const { store, isServer } = ctx;
-  const url = await store.dispatch(getProducts());
+  await store.dispatch(getProducts());
 
   return { isServer };
 };

@@ -1,7 +1,13 @@
-import { GET_PRODUCTS, GET_ALL_PRODUCTS } from "../constants/action-types";
+import {
+  GET_PRODUCTS,
+  GET_ALL_PRODUCTS,
+  SET_PRODUCTS
+} from "../constants/action-types";
 
 const initialState = {
+  productsAll: [],
   products: [],
+  product: [],
   headers: {}
 };
 
@@ -14,6 +20,11 @@ const productReducer = (state = initialState, action) => {
       });
     }
     case GET_ALL_PRODUCTS: {
+      return Object.assign({}, state, {
+        productsAll: action.payload
+      });
+    }
+    case SET_PRODUCTS: {
       return Object.assign({}, state, {
         products: action.payload
       });

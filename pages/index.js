@@ -10,7 +10,7 @@ import { getAllProducts } from "../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
-    products: state.productReducer.products
+    products: state.productReducer.productsAll
   };
 }
 

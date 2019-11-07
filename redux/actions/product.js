@@ -1,11 +1,16 @@
-import { GET_PRODUCTS } from "../constants/action-types";
-import { GET_ALL_PRODUCTS } from "../constants/action-types";
+import {
+  GET_PRODUCTS,
+  SET_PRODUCTS,
+  GET_ALL_PRODUCTS
+} from "../constants/action-types";
 import axios from "axios";
 
 export function getProducts() {
   return dispatch =>
     axios
-      .get("https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc")
+      .get(
+        "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc"
+      )
       .then(response => {
         return {
           data: response.data,
@@ -21,6 +26,13 @@ export function getProducts() {
           }
         });
       });
+}
+
+export function setProducts(payload) {
+  return {
+    type: SET_PRODUCTS,
+    payload
+  };
 }
 
 export function getAllProducts() {
