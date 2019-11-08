@@ -136,7 +136,6 @@ const Shop = props => {
         sortRequest(url, slug);
         break;
     }
-    router.push({pathname: "/shop", query: {sort: slug}});
   };
 
   const sortRequest = (url, slug) => {
@@ -150,6 +149,7 @@ const Shop = props => {
       })
       .then(json => {
         props.setProducts(json.data);
+        router.push({pathname: "/shop", query: {sort: slug}});
       });
   };
 
@@ -160,7 +160,6 @@ const Shop = props => {
     const queries = router.query;
     setPagination ({ ...pagination, currentPage: number });
     router.push({ pathname: "/shop", query: {...queries, page: number } });
-    console.log(JSON.stringify(router.query))
   };
 
   const handleNavPagination = type => {
