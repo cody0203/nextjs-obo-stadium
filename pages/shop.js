@@ -116,26 +116,27 @@ const Shop = props => {
     let slug;
     switch (condition) {
       case "Bán chạy":
-        slug = `_page=1&_limit=16&_sort=total_sold&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        slug = `total_sold&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
         sortRequest(url, slug);
         break;
       case "Hàng mới":
-        slug = `_page=1&_limit=16&_sort=release_date&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        slug = `release_date&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
         sortRequest(url, slug);
         break;
       case "Giá thấp đến cao":
-        slug = `_page=1&_limit=16&_sort=sell_price&_order=asc`;
-        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        slug = `sell_price&_order=asc`;
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
         sortRequest(url, slug);
         break;
       case "Giá cao đến thấp":
-        slug = `_page=1&_limit=16&_sort=sell_price&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?${slug}`;
+        slug = `sell_price&_order=desc`;
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
         sortRequest(url, slug);
         break;
     }
+    router.push({pathname: "/shop", query: {sort: slug}});
   };
 
   const sortRequest = (url, slug) => {
@@ -150,16 +151,16 @@ const Shop = props => {
       .then(json => {
         props.setProducts(json.data);
       });
-    router.push(`${Router.pathname}?${slug}`);
   };
 
   // Pagination
 
   const handlePagination = number => {
     props.getProducts(number);
-
-    setPagination({ ...pagination, currentPage: number });
-    router.push({ pathname: "/shop", query: { page: number } });
+    const queries = router.query;
+    setPagination ({ ...pagination, currentPage: number });
+    router.push({ pathname: "/shop", query: {...queries, page: number } });
+    console.log(JSON.stringify(router.query))
   };
 
   const handleNavPagination = type => {
@@ -168,7 +169,7 @@ const Shop = props => {
     switch (type) {
       case "next":
         setPagination({ ...pagination, currentPage: currentPage + 1 });
-        router.push({ pathname: "/shop", query: { page: currentPage + 1 } });
+        router.push({ pathname: "/shop", query: {  page: currentPage + 1 } });
         break;
       case "previous":
         setPagination({ ...pagination, currentPage: currentPage - 1 });
