@@ -59,10 +59,10 @@ const Shop = props => {
     totalItems: Number(props.headers["x-total-count"]),
     pageNumbers: [],
     perPage: 16,
-    totalPage: 0,
-    currentPage: 1,
-    isLast: 0,
-    isFirst: 0
+    totalPage: Math.ceil(Number(props.headers["x-total-count"]) / 16),
+    currentPage: Number(props.query.page) || 1,
+    isLast: 1,
+    isFirst: 1
   });
 
   // Life cycles
@@ -74,22 +74,58 @@ const Shop = props => {
   });
 
   useEffect(() => {
-    if (props.asPath === "/shop") {
-      setPagination({
-        ...pagination,
-        totalPage: Math.ceil(pagination.totalItems / pagination.perPage)
-      });
-    } else if (props.query.page !== undefined) {
-      setPagination({
-        ...pagination,
-        totalPage: Math.ceil(pagination.totalItems / pagination.perPage),
-        currentPage: Number(props.query.page)
-      });
-    }
+    async function setupPagination() {
+      const pageNumbers = [];
+      const currentPage = Number(props.query.page) || 1;
+      const totalPages = pagination.totalPage;
+      for (let i = 0; i < pagination.totalPage; i++) {
+        pageNumbers.push(i + 1);
+      }
 
+      if (props.asPath === "/shop" && currentPage !== undefined) {
+        setPaginationAsync({
+          ...pagination,
+          pageNumbers,
+          isFirst: true,
+          isLast: false
+        });
+      }
+      if (currentPage === 1) {
+        setPaginationAsync({
+          ...pagination,
+          pageNumbers,
+          isFirst: true,
+          isLast: false
+        });
+      } else if (currentPage > 1 && currentPage < totalPages) {
+        setPaginationAsync({
+          ...pagination,
+          pageNumbers,
+          isFirst: false,
+          isLast: false
+        });
+      } else if (currentPage > 1 && currentPage === totalPages) {
+        setPaginationAsync({
+          ...pagination,
+          pageNumbers,
+          isFirst: false,
+          isLast: true
+        });
+      }
+    }
+    setupPagination();
+    return () => {
+      props.getProducts(1);
+    };
   }, []);
 
   // Methods
+
+  const setPaginationAsync = state => {
+    return new Promise(resolve => {
+      setPagination(state);
+    });
+  };
 
   const toggleFilterModal = () => {
     setFilterModal(!filterModal);
@@ -147,18 +183,32 @@ const Shop = props => {
       })
       .then(json => {
         props.setProducts(json.data);
-        console.log(json.data);
       });
     router.push(`${Router.pathname}?${slug}`);
   };
 
   // Pagaination
 
-  const handlePagination = (number, event) => {
+  const handlePagination = number => {
     props.getProducts(number);
 
     setPagination({ ...pagination, currentPage: number });
-    router.push({pathname: "/shop", query: {page: number}})
+    router.push({ pathname: "/shop", query: { page: number } });
+  };
+
+  const handleNavPagination = type => {
+    const currentPage = Number(router.query.page) || 1;
+
+    switch(type) {
+      case "next":
+      setPagination({ ...pagination, currentPage: currentPage + 1 });
+      router.push({ pathname: "/shop", query: { page: currentPage + 1 } });
+      break;
+      case "previous":
+      setPagination({ ...pagination, currentPage: currentPage - 1 });
+      router.push({ pathname: "/shop", query: { page: currentPage - 1 } });
+      break;
+    }
   };
 
   // Renderes
@@ -227,16 +277,13 @@ const Shop = props => {
 
   //Render pagination
 
-  const pageNumbers = [];
-  for (let i = 0; i < pagination.totalPage; i++) {
-    pageNumbers.push(i + 1);
-  }
-
-  const renderPagination = pageNumbers.map(number => (
-    <PaginationItem active={number === pagination.currentPage} key={number}>
-      <PaginationLink onClick={handlePagination.bind(this, number)}>
-        {number}
-      </PaginationLink>
+  const renderPagination = pagination.pageNumbers.map(number => (
+    <PaginationItem
+      active={number === pagination.currentPage}
+      key={number}
+      onClick={handlePagination.bind(null, number)}
+    >
+      <PaginationLink>{number}</PaginationLink>
     </PaginationItem>
   ));
 
@@ -297,19 +344,31 @@ const Shop = props => {
               </div>
               <div className="product-row">{product}</div>
               <Pagination className="pagination-wrapper">
-                <PaginationItem disabled={pagination.isFirst === true}>
-                  <PaginationLink first href="#" />
+                <PaginationItem
+                  disabled={pagination.isFirst === true}
+                  onClick={handleNavPagination.bind(null, 'first')}
+                >
+                  <PaginationLink first />
                 </PaginationItem>
-                <PaginationItem disabled={pagination.isFirst === true}>
-                  <PaginationLink previous href="#" />
+                <PaginationItem
+                  disabled={pagination.isFirst === true}
+                  onClick={handleNavPagination.bind(null, 'previous')}
+                >
+                  <PaginationLink previous />
                 </PaginationItem>
 
                 {renderPagination}
-                <PaginationItem disabled={pagination.isLast === true}>
-                  <PaginationLink next href="#" />
+                <PaginationItem
+                  disabled={pagination.isLast === true}
+                  onClick={handleNavPagination.bind(null, 'next')}
+                >
+                  <PaginationLink next />
                 </PaginationItem>
-                <PaginationItem disabled={pagination.isLast === true}>
-                  <PaginationLink last href="#" />
+                <PaginationItem
+                  disabled={pagination.isLast === true}
+                  onClick={handleNavPagination.bind(null, 'last')}
+                >
+                  <PaginationLink last />
                 </PaginationItem>
               </Pagination>
             </div>
@@ -473,12 +532,11 @@ Shop.getInitialProps = async ctx => {
   const { store, isServer, asPath, query } = ctx;
   const storeData = store.getState();
 
-  console.log(asPath);
   if (storeData.productReducer.products.length === 0) {
     await store.dispatch(getProducts(1));
   }
   if (query.page !== undefined) {
-    await store.dispatch(getProducts(query.page))
+    await store.dispatch(getProducts(query.page));
   }
 
   return { isServer, asPath, query };
