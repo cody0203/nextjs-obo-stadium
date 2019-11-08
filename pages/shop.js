@@ -1,33 +1,30 @@
+// Modules
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import {
-  Collapse,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from "reactstrap";
+import { Collapse } from "reactstrap";
 import { connect } from "react-redux";
 import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../components/fontawesome";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
+import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
+// Components
 import FilterBar from "../components/filter-bar";
-// import FilterBarSmall from "../components/filter-bar-small";
 import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
+import "../components/fontawesome";
+// import FilterBarSmall from "../components/filter-bar-small";
+
+// Redux
 import { clearFilter } from "../redux/actions/filter";
-import store from "../redux/store/index";
 import { getProducts, setProducts } from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
     clearFilter: () => dispatch(clearFilter()),
-    getProducts: () => dispatch(getProducts()),
+    getProducts: page => dispatch(getProducts(page)),
     setProducts: payload => dispatch(setProducts(payload))
   };
 }
@@ -58,9 +55,15 @@ const Shop = props => {
 
   const [filterModal, setFilterModal] = useState(false);
 
-  const toggleFilterModal = () => {
-    setFilterModal(!filterModal);
-  };
+  const [pagination, setPagination] = useState({
+    totalItems: Number(props.headers["x-total-count"]),
+    pageNumbers: [],
+    perPage: 16,
+    totalPage: 0,
+    currentPage: 1,
+    isLast: 0,
+    isFirst: 0
+  });
 
   // Life cycles
   useEffect(() => {
@@ -70,7 +73,27 @@ const Shop = props => {
     };
   });
 
+  useEffect(() => {
+    if (props.asPath === "/shop") {
+      setPagination({
+        ...pagination,
+        totalPage: Math.ceil(pagination.totalItems / pagination.perPage)
+      });
+    } else if (props.query.page !== undefined) {
+      setPagination({
+        ...pagination,
+        totalPage: Math.ceil(pagination.totalItems / pagination.perPage),
+        currentPage: Number(props.query.page)
+      });
+    }
+
+  }, []);
+
   // Methods
+
+  const toggleFilterModal = () => {
+    setFilterModal(!filterModal);
+  };
 
   // Toggle Sort
   const toggleSort = event => {
@@ -129,6 +152,15 @@ const Shop = props => {
     router.push(`${Router.pathname}?${slug}`);
   };
 
+  // Pagaination
+
+  const handlePagination = (number, event) => {
+    props.getProducts(number);
+
+    setPagination({ ...pagination, currentPage: number });
+    router.push({pathname: "/shop", query: {page: number}})
+  };
+
   // Renderes
 
   // Render products
@@ -170,7 +202,6 @@ const Shop = props => {
   });
 
   // Render sort by
-
   const sortByItems = sortBy.conditions.map(condition => {
     if (condition === sortBy.chose) {
       return (
@@ -193,6 +224,21 @@ const Shop = props => {
       );
     }
   });
+
+  //Render pagination
+
+  const pageNumbers = [];
+  for (let i = 0; i < pagination.totalPage; i++) {
+    pageNumbers.push(i + 1);
+  }
+
+  const renderPagination = pageNumbers.map(number => (
+    <PaginationItem active={number === pagination.currentPage} key={number}>
+      <PaginationLink onClick={handlePagination.bind(this, number)}>
+        {number}
+      </PaginationLink>
+    </PaginationItem>
+  ));
 
   return (
     <Layout>
@@ -250,6 +296,22 @@ const Shop = props => {
                 </div>
               </div>
               <div className="product-row">{product}</div>
+              <Pagination className="pagination-wrapper">
+                <PaginationItem disabled={pagination.isFirst === true}>
+                  <PaginationLink first href="#" />
+                </PaginationItem>
+                <PaginationItem disabled={pagination.isFirst === true}>
+                  <PaginationLink previous href="#" />
+                </PaginationItem>
+
+                {renderPagination}
+                <PaginationItem disabled={pagination.isLast === true}>
+                  <PaginationLink next href="#" />
+                </PaginationItem>
+                <PaginationItem disabled={pagination.isLast === true}>
+                  <PaginationLink last href="#" />
+                </PaginationItem>
+              </Pagination>
             </div>
           </div>
         </div>
@@ -386,15 +448,40 @@ const Shop = props => {
           <img src="/images/back-to-top.png" alt="back-to-top" />
         </a>
       </main>
+
+      <style jsx global>
+        {`
+          .page-item.active .page-link {
+            background-color: #f04d40;
+            border-color: #f04d40;
+          }
+
+          .page-link {
+            color: #333;
+          }
+
+          .page-item.disabled .page-link {
+            opacity: 0.7;
+          }
+        `}
+      </style>
     </Layout>
   );
 };
 
 Shop.getInitialProps = async ctx => {
-  const { store, isServer } = ctx;
-  await store.dispatch(getProducts());
+  const { store, isServer, asPath, query } = ctx;
+  const storeData = store.getState();
 
-  return { isServer };
+  console.log(asPath);
+  if (storeData.productReducer.products.length === 0) {
+    await store.dispatch(getProducts(1));
+  }
+  if (query.page !== undefined) {
+    await store.dispatch(getProducts(query.page))
+  }
+
+  return { isServer, asPath, query };
 };
 
 export default connect(

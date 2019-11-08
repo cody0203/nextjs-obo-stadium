@@ -10,7 +10,7 @@ import axios from "axios";
 import { sizes } from "../db";
 import { filterProducts } from "../redux/actions/filter";
 import { clearFilter } from "../redux/actions/filter";
-import { getProducts, setProducts } from "../redux/actions/product";
+import { setProducts } from "../redux/actions/product";
 
 import Aux from "./hoc/aux";
 
@@ -26,7 +26,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getProducts: () => dispatch(getProducts()),
     filterProducts: payload => dispatch(filterProducts(payload)),
     clearFilter: () => dispatch(clearFilter()),
     setProducts: payload => dispatch(setProducts(payload))
@@ -45,6 +44,13 @@ const ConnectedFilterBar = props => {
     size: true,
     relateDate: true
   });
+
+  const [urlLink, setUrlLink] = useState({
+    brand: [],
+    release_date: [],
+    available_size_like: [],
+    gender: []
+  })
 
   const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
 
@@ -138,7 +144,7 @@ const ConnectedFilterBar = props => {
   };
 
   // Get data brands filter
-  const brandChoose = (brand, event) => {
+  const brandChoose = async (brand, event) => {
     setIsBrandChose(
       Object.assign(
         {},
@@ -146,6 +152,12 @@ const ConnectedFilterBar = props => {
         (isBrandChose[brand] = !isBrandChose[brand])
       )
     );
+
+    // const currentPath = router.asPath;
+
+    // let a = props.filterData.brands;
+
+    // console.log(`https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&brand=${brand}`)
 
     props.filterProducts({
       brands: getFilterDatas(
@@ -229,10 +241,9 @@ const ConnectedFilterBar = props => {
     let slug = data;
     let queryIndex;
     let queries;
-    console.log(slug);
     if (slug.length !== 0) {
       if (currentUrl === "/shop") {
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&${type}=${[
+        url = `https://cody-json-server.herokuapp.com/products?_page=1&_sort=release_date&_order=desc&_limit=16&${type}=${[
           slug
         ].join(",")}`;
       } else {
@@ -243,7 +254,7 @@ const ConnectedFilterBar = props => {
         ].join(",")}`;
       }
     } else {
-      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16`;
+      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc`;
     }
 
     axios
@@ -261,12 +272,12 @@ const ConnectedFilterBar = props => {
           props.setProducts([""]);
         }
       });
-    // router.push(`${Router.pathname}?${slug}`);
   };
 
   const getFilterDatas = (source, data, target, type) => {
     const sourceData = [...source];
     let index;
+    const newUrlLink = {...urlLink, [type]: sourceData}
 
     if (target.checked) {
       sourceData.push(data);
@@ -274,7 +285,24 @@ const ConnectedFilterBar = props => {
       index = sourceData.indexOf(data);
       sourceData.splice(index, 1);
     }
+
+
     filterRequest(sourceData, type);
+
+    setUrlLink(newUrlLink)
+
+    let slug = `_page=1&_limit=16`;
+
+    if (router.asPath === "/shop") {
+      slug += `&_sort=release_date&_order=desc&${type}=${newUrlLink[type]}`
+      router.push({pathname: "/shop", query: {...newUrlLink}});
+    } else {
+      if (router.asPath.search(type) === -1) {
+        slug = `${router.asPath}&${type}=${newUrlLink[type]}`;
+        // router.push(slug)
+      }
+    }
+
     return sourceData;
   };
 
@@ -433,14 +461,22 @@ const ConnectedFilterBar = props => {
         </div>
         <Collapse isOpen={isSectionOpen.brand} className="select-filter">
           <div className="item">{firstPart}</div>
-          <Collapse isOpen={isOpen}>{lastPart}</Collapse>
-          <div
-            className="see-more"
-            id="see-more-brand"
-            onClick={toggleMoreBrand}
-          >
-            {isOpen ? "Rút gọn" : "Xem thêm"}
-          </div>
+          {props.brands.length > 4 ? (
+            <>
+              {" "}
+              <Collapse isOpen={isOpen}>{lastPart}</Collapse>
+              <div
+                className="see-more"
+                id="see-more-brand"
+                onClick={toggleMoreBrand}
+              >
+                {isOpen ? "Rút gọn" : "Xem thêm"}
+              </div>{" "}
+            </>
+          ) : (
+            <div></div>
+          )}
+
           {brandItems}
         </Collapse>
       </div>

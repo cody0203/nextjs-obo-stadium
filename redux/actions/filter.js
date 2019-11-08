@@ -1,6 +1,4 @@
-import { FILTER_PRODUCTS } from "../constants/action-types";
-import { CLEAR_FILTER } from "../constants/action-types";
-
+import { FILTER_PRODUCTS, CLEAR_FILTER, FILTER_QUERY } from "../constants/action-types";
 export function filterProducts(payload) {
   return {
     type: FILTER_PRODUCTS,
@@ -12,4 +10,11 @@ export function clearFilter() {
   return {
     type: CLEAR_FILTER
   };
+}
+
+export function setFilterQuery(payload) {
+  return {
+    type: FILTER_QUERY,
+    payload
+  }
 }

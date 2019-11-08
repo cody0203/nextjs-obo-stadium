@@ -1,5 +1,4 @@
-import { FILTER_PRODUCTS } from "../constants/action-types";
-import { CLEAR_FILTER } from "../constants/action-types";
+import { FILTER_PRODUCTS, CLEAR_FILTER, FILTER_QUERY } from "../constants/action-types";
 
 const filterState = {
   sizes: [],
@@ -12,12 +11,24 @@ const filterState = {
   }
 };
 
+const filterQuery = {
+  sorting: "",
+  filter: {
+    brand: [],
+    available_size_like: [],
+    gender: [],
+    release_date: []
+  }
+}
+
 const filterReducer = (state = filterState, action) => {
   switch (action.type) {
     case FILTER_PRODUCTS:
       return Object.assign({}, state, action.payload);
     case CLEAR_FILTER:
       return filterState
+    case FILTER_QUERY:
+      return Object.assign({}, filterQuery, action.payload)
     default:
       return state;
   }

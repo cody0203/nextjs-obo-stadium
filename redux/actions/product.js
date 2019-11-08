@@ -5,11 +5,11 @@ import {
 } from "../constants/action-types";
 import axios from "axios";
 
-export function getProducts() {
+export function getProducts(page) {
   return dispatch =>
     axios
       .get(
-        "https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc"
+        `https://cody-json-server.herokuapp.com/products?_page=${page}&_limit=16&_sort=release_date&_order=desc`
       )
       .then(response => {
         return {
