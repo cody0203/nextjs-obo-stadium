@@ -60,13 +60,12 @@ const Shop = props => {
     pageNumbers: [],
     perPage: 16,
     totalPage: Math.ceil(Number(props.headers["x-total-count"]) / 16),
-    currentPage: Number(props.query.page) || 1,
-    isLast: 1,
-    isFirst: 1
+    currentPage: Number(props.query.page) || 1
   });
 
   // Life cycles
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.addEventListener("click", toggleSort);
     return () => {
       document.removeEventListener("click", toggleSort);
@@ -74,58 +73,25 @@ const Shop = props => {
   });
 
   useEffect(() => {
-    async function setupPagination() {
       const pageNumbers = [];
       const currentPage = Number(props.query.page) || 1;
-      const totalPages = pagination.totalPage;
+
       for (let i = 0; i < pagination.totalPage; i++) {
         pageNumbers.push(i + 1);
       }
 
-      if (props.asPath === "/shop" && currentPage !== undefined) {
-        setPaginationAsync({
-          ...pagination,
-          pageNumbers,
-          isFirst: true,
-          isLast: false
-        });
-      }
-      if (currentPage === 1) {
-        setPaginationAsync({
-          ...pagination,
-          pageNumbers,
-          isFirst: true,
-          isLast: false
-        });
-      } else if (currentPage > 1 && currentPage < totalPages) {
-        setPaginationAsync({
-          ...pagination,
-          pageNumbers,
-          isFirst: false,
-          isLast: false
-        });
-      } else if (currentPage > 1 && currentPage === totalPages) {
-        setPaginationAsync({
-          ...pagination,
-          pageNumbers,
-          isFirst: false,
-          isLast: true
-        });
-      }
-    }
-    setupPagination();
+      setPagination({
+        ...pagination,
+        pageNumbers,
+        currentPage
+      });
+    
     return () => {
       props.getProducts(1);
     };
   }, []);
 
   // Methods
-
-  const setPaginationAsync = state => {
-    return new Promise(resolve => {
-      setPagination(state);
-    });
-  };
 
   const toggleFilterModal = () => {
     setFilterModal(!filterModal);
@@ -187,7 +153,7 @@ const Shop = props => {
     router.push(`${Router.pathname}?${slug}`);
   };
 
-  // Pagaination
+  // Pagination
 
   const handlePagination = number => {
     props.getProducts(number);
@@ -198,16 +164,24 @@ const Shop = props => {
 
   const handleNavPagination = type => {
     const currentPage = Number(router.query.page) || 1;
-
-    switch(type) {
+    const lastPage = pagination.pageNumbers.slice(-1)[0]
+    switch (type) {
       case "next":
-      setPagination({ ...pagination, currentPage: currentPage + 1 });
-      router.push({ pathname: "/shop", query: { page: currentPage + 1 } });
-      break;
+        setPagination({ ...pagination, currentPage: currentPage + 1 });
+        router.push({ pathname: "/shop", query: { page: currentPage + 1 } });
+        break;
       case "previous":
-      setPagination({ ...pagination, currentPage: currentPage - 1 });
-      router.push({ pathname: "/shop", query: { page: currentPage - 1 } });
-      break;
+        setPagination({ ...pagination, currentPage: currentPage - 1 });
+        router.push({ pathname: "/shop", query: { page: currentPage - 1 } });
+        break;
+      case "first":
+        setPagination({ ...pagination, currentPage: 1 });
+        router.push({ pathname: "/shop", query: { page: 1 } });
+        break;
+      case "last":
+        setPagination({ ...pagination, currentPage: lastPage });
+        router.push({ pathname: "/shop", query: { page: lastPage } });
+        break;
     }
   };
 
@@ -345,28 +319,32 @@ const Shop = props => {
               <div className="product-row">{product}</div>
               <Pagination className="pagination-wrapper">
                 <PaginationItem
-                  disabled={pagination.isFirst === true}
-                  onClick={handleNavPagination.bind(null, 'first')}
+                  disabled={pagination.currentPage === 1}
+                  onClick={handleNavPagination.bind(null, "first")}
+                  style={{pointerEvents : pagination.currentPage === 1 ? 'none' : 'auto'}}
                 >
                   <PaginationLink first />
                 </PaginationItem>
                 <PaginationItem
-                  disabled={pagination.isFirst === true}
-                  onClick={handleNavPagination.bind(null, 'previous')}
+                  disabled={pagination.currentPage === 1}
+                  onClick={handleNavPagination.bind(null, "previous")}
+                  style={{pointerEvents : pagination.currentPage === 1 ? 'none' : 'auto'}}
                 >
                   <PaginationLink previous />
                 </PaginationItem>
 
                 {renderPagination}
                 <PaginationItem
-                  disabled={pagination.isLast === true}
-                  onClick={handleNavPagination.bind(null, 'next')}
+                  disabled={pagination.currentPage === pagination.pageNumbers.slice(-1)[0]}
+                  onClick={handleNavPagination.bind(null, "next")}
+                  style={{pointerEvents : pagination.currentPage === pagination.pageNumbers.slice(-1)[0] ? 'none' : 'auto'}}
                 >
                   <PaginationLink next />
                 </PaginationItem>
                 <PaginationItem
-                  disabled={pagination.isLast === true}
-                  onClick={handleNavPagination.bind(null, 'last')}
+                  disabled={pagination.currentPage === pagination.pageNumbers.slice(-1)[0]}
+                  onClick={handleNavPagination.bind(null, "last")}
+                  style={{pointerEvents : pagination.currentPage === pagination.pageNumbers.slice(-1)[0] ? 'none' : 'auto'}}
                 >
                   <PaginationLink last />
                 </PaginationItem>
