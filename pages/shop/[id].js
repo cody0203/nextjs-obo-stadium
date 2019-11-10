@@ -8,13 +8,11 @@ import { connect } from "react-redux";
 import { FormattedNumber, FormattedDate } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../components/fontawesome";
-
-import store from "../../redux/store/index"
-import {getProducts} from "../../redux/actions/product";
+import { getAllProducts } from "../../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
-    products: state.productReducer.products
+    products: state.productReducer.productsAll
   };
 }
 
@@ -22,7 +20,7 @@ const Product = props => {
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
 
-  console.log(props)
+  console.log(props);
 
   let slider1, slider2;
   const router = useRouter();
@@ -171,7 +169,6 @@ const Product = props => {
           <div className="main-info row">
             <div className="product-image col-lg-6">
               <div className="img-zoom-container">
-
                 <img
                   src={product.thumbnail}
                   alt="image-1"
@@ -318,11 +315,14 @@ const Product = props => {
   );
 };
 
-Product.getInitialProps = async (ctx) => {
-  const {store, query, isServer} = ctx
-  if (isServer) {
-    await store.dispatch(getProducts())
+Product.getInitialProps = async ctx => {
+  const { store, query, isServer } = ctx;
+  const storeData = store.getState();
+
+  if (storeData.productReducer.productsAll.length === 0) {
+    await store.dispatch(getAllProducts());
   }
+
   return {
     isServer,
     productId: query.id
