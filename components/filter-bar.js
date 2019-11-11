@@ -18,7 +18,7 @@ function mapStateToProps(state) {
   return {
     products: state.productReducer.products,
     brands: [
-      ...new Set(state.productReducer.products.map(product => product.brand))
+      ...new Set(state.productReducer.products.map(product => product.brand).sort())
     ],
     filterData: state.filterReducer
   };
