@@ -103,6 +103,14 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     setIsPricesInput({ from: "", to: "" });
+    router.push({
+      pathname: "/shop",
+      query: {
+        page: 1,
+        order: "desc",
+        sort: "id"
+      }
+    });
   };
 
   // Get data brand filter
