@@ -15,11 +15,10 @@ import { setProducts } from "../redux/actions/product";
 import Aux from "./hoc/aux";
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     products: state.productReducer.products,
-    brands: [
-      ...new Set(state.productReducer.products.map(product => product.brand))
-    ],
+    brands: state.filterReducer.brands,
     filterData: state.filterReducer
   };
 }
@@ -140,11 +139,10 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     props.clearFilter();
-    filterRequest([], "");
   };
 
   // Get data brands filter
-  const brandChoose = async (brand, event) => {
+  const brandChoose = async (brand) => {
     setIsBrandChose(
       Object.assign(
         {},
@@ -153,32 +151,6 @@ const ConnectedFilterBar = props => {
       )
     );
 
-    // const currentPath = router.asPath;
-
-    // let a = props.filterData.brands;
-
-    // console.log(`https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&brand=${brand}`)
-
-    props.filterProducts({
-      brands: getFilterDatas(
-        props.filterData.brands,
-        brand,
-        event.target,
-        "brand"
-      )
-    });
-  };
-
-  // Get data sizes filter
-  const sizeChoose = async (size, event) => {
-    props.filterProducts({
-      sizes: getFilterDatas(
-        props.filterData.sizes,
-        size,
-        event.target,
-        "available_size_like"
-      )
-    });
   };
 
   // Get data categories filter
@@ -190,15 +162,6 @@ const ConnectedFilterBar = props => {
         (isCategoryChose[category] = !isCategoryChose[category])
       )
     );
-
-    props.filterProducts({
-      categories: getFilterDatas(
-        props.filterData.categories,
-        category,
-        event.target,
-        "gender"
-      )
-    });
   };
 
   // Get data release date filter
@@ -210,15 +173,6 @@ const ConnectedFilterBar = props => {
         (isReleaseDateChose[date] = !isReleaseDateChose[date])
       )
     );
-
-    props.filterProducts({
-      releaseDates: getFilterDatas(
-        props.filterData.releaseDates,
-        date,
-        event.target,
-        "release_date"
-      )
-    });
   };
 
   const handleFilterPrices = event => {
@@ -233,77 +187,6 @@ const ConnectedFilterBar = props => {
     props.filterProducts({
       prices: filterPrices
     });
-  };
-
-  const filterRequest = (data, type) => {
-    let currentUrl = router.asPath;
-    let url;
-    let slug = data;
-    let queryIndex;
-    let queries;
-    if (slug.length !== 0) {
-      if (currentUrl === "/shop") {
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_sort=release_date&_order=desc&_limit=16&${type}=${[
-          slug
-        ].join(",")}`;
-      } else {
-        queryIndex = currentUrl.indexOf("?");
-        queries = currentUrl.slice(queryIndex);
-        url = `https://cody-json-server.herokuapp.com/products${queries}&${type}=${[
-          slug
-        ].join(",")}`;
-      }
-    } else {
-      url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=release_date&_order=desc`;
-    }
-
-    axios
-      .get(url)
-      .then(response => {
-        return {
-          data: response.data,
-          headers: response.headers
-        };
-      })
-      .then(json => {
-        if (json.data.length !== 0) {
-          props.setProducts(json.data);
-        } else {
-          props.setProducts([""]);
-        }
-      });
-  };
-
-  const getFilterDatas = (source, data, target, type) => {
-    const sourceData = [...source];
-    let index;
-    const newUrlLink = {...urlLink, [type]: sourceData}
-
-    if (target.checked) {
-      sourceData.push(data);
-    } else {
-      index = sourceData.indexOf(data);
-      sourceData.splice(index, 1);
-    }
-
-
-    filterRequest(sourceData, type);
-
-    setUrlLink(newUrlLink)
-
-    let slug = `_page=1&_limit=16`;
-
-    if (router.asPath === "/shop") {
-      slug += `&_sort=release_date&_order=desc&${type}=${newUrlLink[type]}`
-      router.push({pathname: "/shop", query: {...newUrlLink}});
-    } else {
-      if (router.asPath.search(type) === -1) {
-        slug = `${router.asPath}&${type}=${newUrlLink[type]}`;
-        // router.push(slug)
-      }
-    }
-
-    return sourceData;
   };
 
   // Render
@@ -327,7 +210,6 @@ const ConnectedFilterBar = props => {
           id={size}
           name={size}
           style={{ display: "none" }}
-          onChange={sizeChoose.bind(this, size)}
         />
         <label
           className={isSizeChose[size] ? "item size-choose" : "item"}

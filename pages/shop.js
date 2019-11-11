@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import ReactPaginate from "react-paginate";
 
 // Components
 import FilterBar from "../components/filter-bar";
@@ -31,12 +32,15 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    products: state.productReducer.products,
-    headers: state.productReducer.headers
+    products: state.productReducer.products
   };
 }
 
 const Shop = props => {
+
+  // Props
+  const {clearFilter, setProducts, getProducts, products, order, limit, sort, totalItems, totalPages, currentPage } = props;
+
   // Router
   const router = useRouter();
 
@@ -55,14 +59,6 @@ const Shop = props => {
 
   const [filterModal, setFilterModal] = useState(false);
 
-  const [pagination, setPagination] = useState({
-    totalItems: Number(props.headers["x-total-count"]),
-    pageNumbers: [],
-    perPage: 16,
-    totalPage: Math.ceil(Number(props.headers["x-total-count"]) / 16),
-    currentPage: Number(props.query.page) || 1
-  });
-
   // Life cycles
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -71,25 +67,6 @@ const Shop = props => {
       document.removeEventListener("click", toggleSort);
     };
   });
-
-  useEffect(() => {
-      const pageNumbers = [];
-      const currentPage = Number(props.query.page) || 1;
-
-      for (let i = 0; i < pagination.totalPage; i++) {
-        pageNumbers.push(i + 1);
-      }
-
-      setPagination({
-        ...pagination,
-        pageNumbers,
-        currentPage
-      });
-    
-    return () => {
-      props.getProducts(1);
-    };
-  }, []);
 
   // Methods
 
@@ -112,83 +89,33 @@ const Shop = props => {
       ...sortBy,
       chose: condition
     });
-    let url;
-    let slug;
+    let sort = "";
+    let order = "";
     switch (condition) {
       case "Bán chạy":
-        slug = `total_sold&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
-        sortRequest(url, slug);
+        sort = 'total_sold';
+        order = "desc";
         break;
       case "Hàng mới":
-        slug = `release_date&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
-        sortRequest(url, slug);
+        sort = "release_date";
+        order = "desc"
         break;
       case "Giá thấp đến cao":
-        slug = `sell_price&_order=asc`;
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
-        sortRequest(url, slug);
+        sort = "sell_price";
+        order = "asc";
         break;
       case "Giá cao đến thấp":
-        slug = `sell_price&_order=desc`;
-        url = `https://cody-json-server.herokuapp.com/products?_page=1&_limit=16&_sort=${slug}`;
-        sortRequest(url, slug);
+        sort = "sell_price";
+        order = "desc"
         break;
     }
-  };
-
-  const sortRequest = (url, slug) => {
-    axios
-      .get(url)
-      .then(response => {
-        return {
-          data: response.data,
-          headers: response.headers
-        };
-      })
-      .then(json => {
-        props.setProducts(json.data);
-        router.push({pathname: "/shop", query: {sort: slug}});
-      });
-  };
-
-  // Pagination
-
-  const handlePagination = number => {
-    props.getProducts(number);
-    const queries = router.query;
-    setPagination ({ ...pagination, currentPage: number });
-    router.push({ pathname: "/shop", query: {...queries, page: number } });
-  };
-
-  const handleNavPagination = type => {
-    const currentPage = Number(router.query.page) || 1;
-    const lastPage = pagination.pageNumbers.slice(-1)[0]
-    switch (type) {
-      case "next":
-        setPagination({ ...pagination, currentPage: currentPage + 1 });
-        router.push({ pathname: "/shop", query: {  page: currentPage + 1 } });
-        break;
-      case "previous":
-        setPagination({ ...pagination, currentPage: currentPage - 1 });
-        router.push({ pathname: "/shop", query: { page: currentPage - 1 } });
-        break;
-      case "first":
-        setPagination({ ...pagination, currentPage: 1 });
-        router.push({ pathname: "/shop", query: { page: 1 } });
-        break;
-      case "last":
-        setPagination({ ...pagination, currentPage: lastPage });
-        router.push({ pathname: "/shop", query: { page: lastPage } });
-        break;
-    }
+    router.push({pathname: '/shop', query: {sort, order}})
   };
 
   // Renderes
 
   // Render products
-  const product = props.products.map(product => {
+  const product = products.map(product => {
     if (product) {
       return (
         <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
@@ -251,15 +178,19 @@ const Shop = props => {
 
   //Render pagination
 
-  const renderPagination = pagination.pageNumbers.map(number => (
-    <PaginationItem
-      active={number === pagination.currentPage}
-      key={number}
-      onClick={handlePagination.bind(null, number)}
-    >
-      <PaginationLink>{number}</PaginationLink>
-    </PaginationItem>
-  ));
+  const renderPagination = [];
+
+  for (let i = 0; i < totalPages; i++) {
+    renderPagination.push(
+      <Link href={`/shop?page=${i + 1}&sort=${sort}&order=${order}`} key={i}>
+        <a >
+          <PaginationItem active={i + 1 === Number(currentPage)}>
+            <PaginationLink>{i + 1}</PaginationLink>
+          </PaginationItem>
+        </a>
+      </Link>
+    );
+  }
 
   return (
     <Layout>
@@ -301,7 +232,7 @@ const Shop = props => {
         </div>
         <div className="shop-content-wrapper container">
           <div className="row">
-            <FilterBar a={props} />
+            <FilterBar />
             <div className="product-showing col-lg-9 col-12">
               <div className="sort">
                 <div className="sort-content sorting">
@@ -318,36 +249,7 @@ const Shop = props => {
               </div>
               <div className="product-row">{product}</div>
               <Pagination className="pagination-wrapper">
-                <PaginationItem
-                  disabled={pagination.currentPage === 1}
-                  onClick={handleNavPagination.bind(null, "first")}
-                  style={{pointerEvents : pagination.currentPage === 1 ? 'none' : 'auto'}}
-                >
-                  <PaginationLink first />
-                </PaginationItem>
-                <PaginationItem
-                  disabled={pagination.currentPage === 1}
-                  onClick={handleNavPagination.bind(null, "previous")}
-                  style={{pointerEvents : pagination.currentPage === 1 ? 'none' : 'auto'}}
-                >
-                  <PaginationLink previous />
-                </PaginationItem>
-
                 {renderPagination}
-                <PaginationItem
-                  disabled={pagination.currentPage === pagination.pageNumbers.slice(-1)[0]}
-                  onClick={handleNavPagination.bind(null, "next")}
-                  style={{pointerEvents : pagination.currentPage === pagination.pageNumbers.slice(-1)[0] ? 'none' : 'auto'}}
-                >
-                  <PaginationLink next />
-                </PaginationItem>
-                <PaginationItem
-                  disabled={pagination.currentPage === pagination.pageNumbers.slice(-1)[0]}
-                  onClick={handleNavPagination.bind(null, "last")}
-                  style={{pointerEvents : pagination.currentPage === pagination.pageNumbers.slice(-1)[0] ? 'none' : 'auto'}}
-                >
-                  <PaginationLink last />
-                </PaginationItem>
               </Pagination>
             </div>
           </div>
@@ -508,16 +410,26 @@ const Shop = props => {
 
 Shop.getInitialProps = async ctx => {
   const { store, isServer, asPath, query } = ctx;
+  const page = query.page || 1;
+  const limit = 16;
+  const sort = query.sort || "id";
+  const order = query.order || "desc";
+  await store.dispatch(getProducts(page, limit, sort, order));
+
   const storeData = store.getState();
+  const totalItems = storeData.productReducer.headers["x-total-count"];
+  const totalPages = Math.ceil(totalItems / limit);
 
-  if (storeData.productReducer.products.length === 0) {
-    await store.dispatch(getProducts(1));
-  }
-  if (query.page !== undefined) {
-    await store.dispatch(getProducts(query.page));
-  }
-
-  return { isServer, asPath, query };
+  return {
+    isServer,
+    asPath,
+    totalItems: totalItems,
+    currentPage: page,
+    limit: limit,
+    sort: sort,
+    totalPages: totalPages,
+    order: order
+  };
 };
 
 export default connect(
