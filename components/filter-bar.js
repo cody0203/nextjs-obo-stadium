@@ -139,7 +139,6 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     props.clearFilter();
-    filterRequest([], "");
   };
 
   // Get data brands filter
@@ -152,18 +151,6 @@ const ConnectedFilterBar = props => {
       )
     );
 
-  };
-
-  // Get data sizes filter
-  const sizeChoose = async (size, event) => {
-    props.filterProducts({
-      sizes: getFilterDatas(
-        props.filterData.sizes,
-        size,
-        event.target,
-        "available_size_like"
-      )
-    });
   };
 
   // Get data categories filter
@@ -223,7 +210,6 @@ const ConnectedFilterBar = props => {
           id={size}
           name={size}
           style={{ display: "none" }}
-          onChange={sizeChoose.bind(this, size)}
         />
         <label
           className={isSizeChose[size] ? "item size-choose" : "item"}
