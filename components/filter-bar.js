@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox } from "pretty-checkbox-react";
+import { Radio } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Collapse } from "reactstrap";
 import { connect } from "react-redux";
 import "../components/fontawesome";
 import Router, { useRouter } from "next/router";
-import axios from "axios";
 
 import { sizes } from "../db";
 import { filterProducts } from "../redux/actions/filter";
-import { clearFilter } from "../redux/actions/filter";
 import { setProducts } from "../redux/actions/product";
 
 import Aux from "./hoc/aux";
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     products: state.productReducer.products,
     brands: state.filterReducer.brands,
@@ -26,7 +23,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     filterProducts: payload => dispatch(filterProducts(payload)),
-    clearFilter: () => dispatch(clearFilter()),
     setProducts: payload => dispatch(setProducts(payload))
   };
 }
@@ -44,17 +40,10 @@ const ConnectedFilterBar = props => {
     relateDate: true
   });
 
-  const [urlLink, setUrlLink] = useState({
-    brand: [],
-    release_date: [],
-    available_size_like: [],
-    gender: []
-  })
-
   const [filterCategories] = useState(["Nam", "Nữ", "Thiếu niên", "Sơ sinh"]);
 
   const [filterReleaseDate] = useState([
-    "< 2010",
+    "2010",
     "2011",
     "2012",
     "2013",
@@ -66,34 +55,23 @@ const ConnectedFilterBar = props => {
     "2019"
   ]);
 
-  const [isSizeChose, setIsSizeChose] = useState(
-    Object.assign(...sizes.map(size => ({ [size]: false })))
-  );
+  const [isSizeChose, setIsSizeChose] = useState(undefined);
 
-  const [isBrandChose, setIsBrandChose] = useState(
-    Object.assign(...props.brands.map(brand => ({ [brand]: false })))
-  );
+  const [isBrandChose, setIsBrandChose] = useState(undefined);
 
-  const [isCategoryChose, setIsCategoryChose] = useState(
-    Object.assign(...filterCategories.map(category => ({ [category]: false })))
-  );
+  const [isCategoryChose, setIsCategoryChose] = useState(undefined);
 
-  const [isReleaseDateChose, setIsReleaseDateChose] = useState(
-    Object.assign(...filterReleaseDate.map(date => ({ [date]: false })))
-  );
+  const [isReleaseDateChose, setIsReleaseDateChose] = useState(undefined);
 
-  const [filterPrices, setFilterPrices] = useState({
+  const [isPricesInput, setIsPricesInput] = useState({
     from: "",
     to: ""
   });
 
-  // LifeCycles
-
-  useEffect(() => {
-    return () => {
-      props.clearFilter();
-    };
-  }, []);
+  const [prices, setPrices] = useState({
+    from: "",
+    to: ""
+  });
 
   // Methods
   const toggleMoreBrand = () => setIsOpen(!isOpen);
@@ -112,80 +90,83 @@ const ConnectedFilterBar = props => {
   const activeSizeChoose = event => {
     const choseSize = event.target.dataset.size;
 
-    setIsSizeChose(
-      Object.assign(
-        {},
-        isSizeChose,
-        (isSizeChose[choseSize] = !isSizeChose[choseSize])
-      )
-    );
+    setIsSizeChose(choseSize);
   };
 
   const clearFilterData = () => {
-    setIsSizeChose(Object.assign(...sizes.map(size => ({ [size]: false }))));
-    setIsBrandChose(
-      Object.assign(...props.brands.map(brand => ({ [brand]: false })))
-    );
-    setIsCategoryChose(
-      Object.assign(
-        ...filterCategories.map(category => ({ [category]: false }))
-      )
-    );
-    setIsReleaseDateChose(
-      Object.assign(...filterReleaseDate.map(date => ({ [date]: false })))
-    );
-    setFilterPrices({
+    setIsSizeChose(undefined);
+    setIsBrandChose(undefined);
+    setIsCategoryChose(undefined);
+    setIsReleaseDateChose(undefined);
+    setPrices({
       from: "",
       to: ""
     });
-    props.clearFilter();
+    setIsPricesInput({ from: "", to: "" });
   };
 
-  // Get data brands filter
-  const brandChoose = async (brand) => {
-    setIsBrandChose(
-      Object.assign(
-        {},
-        isBrandChose,
-        (isBrandChose[brand] = !isBrandChose[brand])
-      )
-    );
+  // Get data brand filter
+  const brandChoose = brand => {
+    setIsBrandChose(brand);
+    router.push({
+      pathname: "/shop",
+      query: {
+        ...router.query,
+        page: 1,
+        brand
+      }
+    });
+  };
 
+  // Get data size filter
+  const sizeChoose = size => {
+    setIsSizeChose(size);
+    router.push({
+      pathname: "/shop",
+      query: {
+        ...router.query,
+        available_size_like: size
+      }
+    });
   };
 
   // Get data categories filter
   const categoryChoose = (category, event) => {
-    setIsCategoryChose(
-      Object.assign(
-        {},
-        isCategoryChose,
-        (isCategoryChose[category] = !isCategoryChose[category])
-      )
-    );
+    setIsCategoryChose(category);
+    router.push({
+      pathname: "/shop",
+      query: {
+        ...router.query,
+        page: 1,
+        gender: category
+      }
+    });
   };
 
   // Get data release date filter
   const releaseDateChoose = (date, event) => {
-    setIsReleaseDateChose(
-      Object.assign(
-        {},
-        isReleaseDateChose,
-        (isReleaseDateChose[date] = !isReleaseDateChose[date])
-      )
-    );
+    setIsReleaseDateChose(date);
+    router.push({
+      pathname: "/shop",
+      query: {
+        ...router.query,
+        page: 1,
+        release_date: date
+      }
+    });
   };
 
   const handleFilterPrices = event => {
     const value = parseInt(event.target.value) || "";
-    setFilterPrices({
-      ...filterPrices,
+    setIsPricesInput({
+      ...isPricesInput,
       [event.target.name]: value
     });
   };
 
   const pricesChoose = () => {
-    props.filterProducts({
-      prices: filterPrices
+    setPrices({
+      ...isPricesInput
     });
   };
 
@@ -206,13 +187,15 @@ const ConnectedFilterBar = props => {
     return (
       <Aux key={size}>
         <input
-          type="checkbox"
+          type="radio"
           id={size}
           name={size}
           style={{ display: "none" }}
+          checked={isSizeChose === size}
+          onChange={sizeChoose.bind(this, size)}
         />
         <label
-          className={isSizeChose[size] ? "item size-choose" : "item"}
+          className={Number(isSizeChose) === size ? "item size-choose" : "item"}
           data-size={size}
           onClick={activeSizeChoose}
           htmlFor={size}
@@ -230,29 +213,29 @@ const ConnectedFilterBar = props => {
     if (index < 4) {
       firstPart.push(
         <div className="item" key={brand}>
-          <Checkbox
-            shape="curve"
+          <Radio
+            name="brand"
             color="danger"
             svg={checkIcon}
-            checked={isBrandChose[brand]}
+            checked={isBrandChose === brand}
             onChange={brandChoose.bind(this, brand)}
           >
             {brand}
-          </Checkbox>
+          </Radio>
         </div>
       );
     } else {
       lastPart.push(
         <div className="item" key={brand}>
-          <Checkbox
-            shape="curve"
+          <Radio
+            name="brand"
             color="danger"
             svg={checkIcon}
-            checked={isBrandChose[brand]}
+            checked={isBrandChose === brand}
             onChange={brandChoose.bind(this, brand)}
           >
             {brand}
-          </Checkbox>
+          </Radio>
         </div>
       );
     }
@@ -262,15 +245,15 @@ const ConnectedFilterBar = props => {
   const categoryItems = filterCategories.map(category => {
     return (
       <div className="item" key={category}>
-        <Checkbox
-          shape="curve"
+        <Radio
+          name="category"
           color="danger"
           svg={checkIcon}
-          checked={isCategoryChose[category]}
+          checked={isCategoryChose === category}
           onChange={categoryChoose.bind(this, category)}
         >
           {category}
-        </Checkbox>
+        </Radio>
       </div>
     );
   });
@@ -280,29 +263,29 @@ const ConnectedFilterBar = props => {
     if (index % 2 === 0) {
       return (
         <div className="item" key={index}>
-          <Checkbox
-            shape="curve"
+          <Radio
+            name="releaseDate"
             color="danger"
             svg={checkIcon}
-            checked={isReleaseDateChose[date]}
+            checked={isReleaseDateChose === date}
             onChange={releaseDateChoose.bind(this, date)}
           >
             {date}
-          </Checkbox>
+          </Radio>
         </div>
       );
     } else {
       return (
         <div className="item odd" key={index}>
-          <Checkbox
-            shape="curve"
+          <Radio
+            name="releaseDate"
             color="danger"
             svg={checkIcon}
-            checked={isReleaseDateChose[date]}
+            checked={isReleaseDateChose === date}
             onChange={releaseDateChoose.bind(this, date)}
           >
             {date}
-          </Checkbox>
+          </Radio>
         </div>
       );
     }
@@ -315,12 +298,13 @@ const ConnectedFilterBar = props => {
           <FontAwesomeIcon icon="sliders-h" />
           <div className="text">Lọc</div>
         </div>
-        {props.filterData.sizes.length !== 0 ||
-        props.filterData.brands.length !== 0 ||
-        props.filterData.categories.length !== 0 ||
-        props.filterData.releaseDates.length !== 0 ||
-        props.filterData.prices.from !== "" ||
-        props.filterData.prices.to !== "" ? (
+        {isReleaseDateChose !== undefined ||
+        isSizeChose !== undefined ||
+        isBrandChose !== undefined ||
+        isCategoryChose ||
+        undefined ||
+        prices.from !== "" ||
+        prices.to !== "" ? (
           <button
             className="clear-filter btn btn-primary"
             onClick={clearFilterData}
@@ -403,7 +387,7 @@ const ConnectedFilterBar = props => {
           className="form-control price-input"
           type="text"
           name="from"
-          value={filterPrices.from || ""}
+          value={isPricesInput.from || ""}
           onChange={handleFilterPrices}
           placeholder="Từ"
         />
@@ -411,7 +395,7 @@ const ConnectedFilterBar = props => {
           className="form-control price-input"
           type="text"
           name="to"
-          value={filterPrices.to || ""}
+          value={isPricesInput.to || ""}
           onChange={handleFilterPrices}
           placeholder="Đến"
           pattern="[0-9]"

@@ -8,8 +8,7 @@ import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
-import ReactPaginate from "react-paginate";
+import Pagination from "react-js-pagination";
 
 // Components
 import FilterBar from "../components/filter-bar";
@@ -37,9 +36,19 @@ function mapStateToProps(state) {
 }
 
 const Shop = props => {
-
   // Props
-  const {clearFilter, setProducts, getProducts, products, order, limit, sort, totalItems, totalPages, currentPage } = props;
+  const {
+    clearFilter,
+    setProducts,
+    getProducts,
+    products,
+    order,
+    limit,
+    sort,
+    totalItems,
+    totalPages,
+    currentPage
+  } = props;
 
   // Router
   const router = useRouter();
@@ -93,12 +102,12 @@ const Shop = props => {
     let order = "";
     switch (condition) {
       case "Bán chạy":
-        sort = 'total_sold';
+        sort = "total_sold";
         order = "desc";
         break;
       case "Hàng mới":
         sort = "release_date";
-        order = "desc"
+        order = "desc";
         break;
       case "Giá thấp đến cao":
         sort = "sell_price";
@@ -106,10 +115,22 @@ const Shop = props => {
         break;
       case "Giá cao đến thấp":
         sort = "sell_price";
-        order = "desc"
+        order = "desc";
         break;
     }
-    router.push({pathname: '/shop', query: {sort, order}})
+    router.push({ pathname: "/shop", query: { ...router.query, sort, order } });
+    console.log(router);
+  };
+
+  const handlePageChange = pageNumber => {
+    router.push({
+      pathname: "/shop",
+      query: {
+        page: pageNumber,
+        sort,
+        order
+      }
+    });
   };
 
   // Renderes
@@ -176,22 +197,6 @@ const Shop = props => {
     }
   });
 
-  //Render pagination
-
-  const renderPagination = [];
-
-  for (let i = 0; i < totalPages; i++) {
-    renderPagination.push(
-      <Link href={`/shop?page=${i + 1}&sort=${sort}&order=${order}`} key={i}>
-        <a >
-          <PaginationItem active={i + 1 === Number(currentPage)}>
-            <PaginationLink>{i + 1}</PaginationLink>
-          </PaginationItem>
-        </a>
-      </Link>
-    );
-  }
-
   return (
     <Layout>
       <Head>
@@ -248,9 +253,15 @@ const Shop = props => {
                 </div>
               </div>
               <div className="product-row">{product}</div>
-              <Pagination className="pagination-wrapper">
-                {renderPagination}
-              </Pagination>
+              <div className="pagination-wrapper">
+                <Pagination
+                  activePage={Number(currentPage)}
+                  itemsCountPerPage={limit}
+                  totalItemsCount={totalItems}
+                  pageRangeDisplayed={3}
+                  onChange={handlePageChange}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -390,9 +401,55 @@ const Shop = props => {
 
       <style jsx global>
         {`
-          .page-item.active .page-link {
+          .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+          }
+          .pagination > li {
+            display: inline;
+          }
+          .pagination > li > a,
+          .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            line-height: 1.42857143;
+            text-decoration: none;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-left: -1px;
+          }
+          .pagination > .disabled > a,
+          .pagination > .disabled > a:focus,
+          .pagination > .disabled > a:hover,
+          .pagination > .disabled > span,
+          .pagination > .disabled > span:focus,
+          .pagination > .disabled > span:hover {
+            color: #bbb;
+            background-color: #fff;
+            border-color: #ddd;
+            cursor: not-allowed;
+          }
+          .pagination > li:first-child > a,
+          .pagination > li:first-child > span {
+            margin-left: 0;
+            border-bottom-left-radius: 4px;
+            border-top-left-radius: 4px;
+          }
+
+          .pagination > .active > a,
+          .pagination > .active > a:focus,
+          .pagination > .active > a:hover,
+          .pagination > .active > span,
+          .pagination > .active > span:focus,
+          .pagination > .active > span:hover {
             background-color: #f04d40;
             border-color: #f04d40;
+            color: white;
+            pointer-events: none;
           }
 
           .page-link {
@@ -414,7 +471,7 @@ Shop.getInitialProps = async ctx => {
   const limit = 16;
   const sort = query.sort || "id";
   const order = query.order || "desc";
-  await store.dispatch(getProducts(page, limit, sort, order));
+  await store.dispatch(getProducts(page, limit, sort, order, query));
 
   const storeData = store.getState();
   const totalItems = storeData.productReducer.headers["x-total-count"];
