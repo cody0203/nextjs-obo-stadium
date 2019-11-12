@@ -1,6 +1,6 @@
 import {
   GET_PRODUCTS,
-  SET_PRODUCTS,
+  SET_PRODUCT_INFO,
   GET_ALL_PRODUCTS
 } from "../constants/action-types";
 import axios from "axios";
@@ -33,9 +33,9 @@ export function getProducts(page, limit, sort, order, query) {
       });
 }
 
-export function setProducts(payload) {
+export function setProductInfo(payload) {
   return {
-    type: SET_PRODUCTS,
+    type: SET_PRODUCT_INFO,
     payload
   };
 }

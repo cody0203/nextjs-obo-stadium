@@ -7,8 +7,6 @@ import "../components/fontawesome";
 import Router, { useRouter } from "next/router";
 
 import { sizes } from "../db";
-import { filterProducts } from "../redux/actions/filter";
-import { setProducts } from "../redux/actions/product";
 
 import Aux from "./hoc/aux";
 
@@ -17,13 +15,6 @@ function mapStateToProps(state) {
     products: state.productReducer.products,
     brands: state.filterReducer.brands,
     filterData: state.filterReducer
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    filterProducts: payload => dispatch(filterProducts(payload)),
-    setProducts: payload => dispatch(setProducts(payload))
   };
 }
 
@@ -439,9 +430,6 @@ const ConnectedFilterBar = props => {
   );
 };
 
-const FilterBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConnectedFilterBar);
+const FilterBar = connect(mapStateToProps)(ConnectedFilterBar);
 
 export default FilterBar;

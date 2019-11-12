@@ -6,7 +6,6 @@ import { Collapse } from "reactstrap";
 import { connect } from "react-redux";
 import { FormattedNumber } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import Router, { useRouter } from "next/router";
 import Pagination from "react-js-pagination";
 
@@ -16,17 +15,13 @@ import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import "../components/fontawesome";
 import FilterBarSmall from "../components/filter-bar-small";
-// import FilterBarSmall from "../components/filter-bar-small";
 
 // Redux
-import { clearFilter } from "../redux/actions/filter";
-import { getProducts, setProducts } from "../redux/actions/product";
+import { getProducts } from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearFilter: () => dispatch(clearFilter()),
-    getProducts: page => dispatch(getProducts(page)),
-    setProducts: payload => dispatch(setProducts(payload))
+    getProducts: page => dispatch(getProducts(page))
   };
 }
 
@@ -39,15 +34,12 @@ function mapStateToProps(state) {
 const Shop = props => {
   // Props
   const {
-    clearFilter,
-    setProducts,
-    getProducts,
+    setProductInfo,
     products,
     order,
     limit,
     sort,
     totalItems,
-    totalPages,
     currentPage
   } = props;
 
@@ -152,13 +144,22 @@ const Shop = props => {
     });
   };
 
+  // Save product details by filter
+
+  const saveDetails = () => {
+    const size = router.query['available_size_like'];
+    if (size) {
+      localStorage.setItem('size', size);
+    }
+  }
+
   // Renderes
 
   // Render products
   const productsRender = products.map(product => {
     return (
       <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
-        <a className="product-link" data-brand="${data[i]['brand']}">
+        <a className="product-link" data-brand="${data[i]['brand']}" onClick={saveDetails}>
           <div className="product position-relative">
             <div className="card">
               <img

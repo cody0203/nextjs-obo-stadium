@@ -1,3 +1,4 @@
+// Modules
 import React, { useState, useEffect } from "react";
 import { Radio } from "pretty-checkbox-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,10 +12,9 @@ import {
 import { connect } from "react-redux";
 import Router, { useRouter } from "next/router";
 
+// Components
 import "../components/fontawesome";
-
 import { sizes } from "../db";
-
 import Aux from "./hoc/aux";
 
 function mapStateToProps(state) {

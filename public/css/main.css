@@ -247,25 +247,10 @@ footer .footer-link .item:hover {
   border-bottom: 3px solid white !important;
 }
 
-.cross {
-  position: relative;
-  background-color: #fff;
-  color: #333333;
+.disabled-size {
   pointer-events: none;
-}
-.cross:after, .cross:before {
-  position: absolute;
-  content: " ";
-  height: 100%;
-  width: 2px;
-  background-color: #D5D6D6;
-  opacity: 1;
-}
-.cross:after {
-  transform: rotate(-45deg);
-}
-.cross:before {
-  transform: rotate(45deg);
+  background-color: rgb(247, 247, 247);
+  color: rgb(221, 221, 221);
 }
 
 @media (max-width: 576px) {

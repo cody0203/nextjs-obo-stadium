@@ -2,5 +2,5 @@ export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS";
 export const FILTER_PRODUCTS = "FILTER_PRODUCTS";
 export const CLEAR_FILTER = "CLEAR_FILTER";
-export const SET_PRODUCTS = "SET_PRODUCTS";
+export const SET_PRODUCT_INFO = "SET_PRODUCT_INFO";
 export const FILTER_QUERY = "FILTER_QUERY";

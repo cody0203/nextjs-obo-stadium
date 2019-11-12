@@ -1,13 +1,13 @@
 import {
   GET_PRODUCTS,
   GET_ALL_PRODUCTS,
-  SET_PRODUCTS
+  SET_PRODUCT_INFO
 } from "../constants/action-types";
 
 const initialState = {
   productsAll: [],
   products: [],
-  product: [],
+  productInfo: {},
   headers: {}
 };
 
@@ -24,9 +24,9 @@ const productReducer = (state = initialState, action) => {
         productsAll: action.payload
       });
     }
-    case SET_PRODUCTS: {
+    case SET_PRODUCT_INFO: {
       return Object.assign({}, state, {
-        products: action.payload
+        productInfo: action.payload
       });
     }
     default:

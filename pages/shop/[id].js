@@ -1,73 +1,53 @@
+// Modules
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/layout";
-import Slider from "react-slick";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { connect } from "react-redux";
-import { FormattedNumber, FormattedDate } from "react-intl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FormattedNumber, FormattedDate } from "react-intl";
+
+// Components
 import "../../components/fontawesome";
+import Layout from "../../components/layout";
+import SizeChooseModal from "../../components/size-choose-modal";
+import { convertedSizes } from "../../db";
+
+// Redux
 import { getAllProducts } from "../../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
-    products: state.productReducer.productsAll
+    products: state.productReducer.productsAll,
+    productInfo: state.productReducer.productInfo
   };
 }
 
 const Product = props => {
-  const { productId, products } = props;
-
-  const [nav1, setNav1] = useState(null);
-  const [nav2, setNav2] = useState(null);
-
-  let slider1, slider2;
+  // Props
   const router = useRouter();
+  const { productId, products, productInfo } = props;
+
+  // States
+  const [sizeModal, setSizeModal] = useState(false);
+  const [currentUserSize, setCurrentUserSize] = useState(null);
+
+  // Life cycles
 
   useEffect(() => {
-    setNav1(slider1);
-    setNav2(slider2);
+    setCurrentUserSize(Number(localStorage.getItem("size")));
   }, []);
 
-  const mainProductSlide = {
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    fade: true
+  // Methods
+  const toggleSizeModal = () => {
+    setSizeModal(!sizeModal);
   };
 
-  const pagingProductSlide = {
-    slidesToShow: 5, // 3,
-    slidesToScroll: 1,
-    dots: false,
-    infinite: false,
-    focusOnSelect: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
+  const updateUserCurrentSize = (size) => {
+    localStorage.setItem("size", size)
+    setCurrentUserSize(size);
+    toggleSizeModal()
+  }
 
   const product = products.find(product => product.id === Number(productId));
 
@@ -77,6 +57,7 @@ const Product = props => {
     })
     .slice(0, 5);
 
+  //Render
   const relateProductsRender = relateProducts.map(product => {
     return (
       <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
@@ -105,6 +86,17 @@ const Product = props => {
       </Link>
     );
   });
+
+  // Variables
+
+  const indexCurrentSize = convertedSizes["vn"].indexOf(currentUserSize);
+
+  const sizes = {
+    vn: convertedSizes["vn"][indexCurrentSize],
+    us: convertedSizes["us"][indexCurrentSize],
+    cm: convertedSizes["cm"][indexCurrentSize]
+  };
+
   return (
     <Layout>
       <Head>
@@ -189,16 +181,6 @@ const Product = props => {
                   cùng bản phối xám / xanh / cam đã dễ dàng thổi “bùa yêu” vào
                   giới yêu giày.
                 </p>
-                {/* <p>
-                  Phần upper sử dụng chất liệu breathable mesh, suede và nubuck.
-                  Điểm nhấn ấn tượng chính là thiết kế là dây giày màu neon đi
-                  kèm một số chi tiết được làm bằng chất liệu 3M phản quang. Với
-                  bộ đế boost nổi tiếng và form giày rộng rãi, Yeezy 700 Wave
-                  Runner Solid Grey mang đến cảm giác dễ chịu nhất cho người
-                  mang. Cộng nghệ Boost với tấm đệm lót “thần thánh” êm ái, bạn
-                  có thể mang đôi giày này từ sáng đến tối mà không hề có cảm
-                  giác khó chịu hay bí bách. Không những hype mà còn comfy nữa.
-                </p> */}
               </div>
               <div className="desc-sub">
                 <span className="desc-sub-title">Phối màu:</span>
@@ -222,18 +204,31 @@ const Product = props => {
                 />
               </div>
               <div className="btns">
-                <div className="size-btn">
-                  <button className="btn btn-primary size trans-btn">
-                    <span className="size-text">Size</span>{" "}
-                    <span className="size-details">
-                      8US | {product.available_size[0]}VN | 26CM
-                    </span>
-                    <FontAwesomeIcon
-                      icon="chevron-down"
-                      className="dropdown-arrow"
-                    />
-                  </button>
-                </div>
+                {currentUserSize ? (
+                  <div className="size-btn" onClick={toggleSizeModal}>
+                    <button className="btn btn-primary size trans-btn">
+                      <span className="size-text">Size</span>{" "}
+                      <span className="size-details">
+                        {sizes.us}US | {sizes.vn}VN | {sizes.cm}CM
+                      </span>
+                      <FontAwesomeIcon
+                        icon="chevron-down"
+                        className="dropdown-arrow"
+                      />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="size-btn" onClick={toggleSizeModal}>
+                    <button className="btn btn-primary size trans-btn">
+                      <span className="size-details">Vui lòng chọn size</span>
+                      <FontAwesomeIcon
+                        icon="chevron-down"
+                        className="dropdown-arrow"
+                      />
+                    </button>
+                  </div>
+                )}
+
                 <Link href="/shop/buy/[id]" as={`/shop/buy/${router.query.id}`}>
                   <a className="buy-btn">
                     <button className="btn btn-primary buy green-btn">
@@ -309,6 +304,14 @@ const Product = props => {
             {relateProductsRender}
           </div>
         </section>
+
+        <SizeChooseModal
+          toggleSizeModal={toggleSizeModal}
+          sizeModal={sizeModal}
+          currentUserSize={currentUserSize}
+          product={product}
+          updateUserCurrentSize={updateUserCurrentSize}
+        />
       </main>
     </Layout>
   );
