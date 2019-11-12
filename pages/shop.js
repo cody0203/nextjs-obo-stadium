@@ -50,6 +50,21 @@ const Shop = props => {
     currentPage
   } = props;
 
+  const getCurrentSort = () => {
+    const { sort, order } = router.query;
+    let currentSort = "Hàng mới";
+    if (sort === "total_sold" && order === "desc") {
+      currentSort = "Bán chạy";
+    } else if (sort === "release_date" && order === "desc") {
+      currentSort = "Hàng mới";
+    } else if (sort === "sell_price" && order === "asc") {
+      currentSort = "Giá thấp đến cao";
+    } else if (sort === "sell_price" && order === "desc") {
+      currentSort = "Giá cao đến thấp";
+    }
+    return currentSort;
+  };
+
   // Router
   const router = useRouter();
 
@@ -63,7 +78,7 @@ const Shop = props => {
       "Giá thấp đến cao",
       "Giá cao đến thấp"
     ],
-    chose: "Hàng mới"
+    chose: getCurrentSort()
   });
 
   const [filterModal, setFilterModal] = useState(false);
