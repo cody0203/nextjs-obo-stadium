@@ -20,7 +20,7 @@ const SizeChooseModal = props => {
       <Aux key={size}>
         <div
           className={
-            currentUserSize === size
+            currentUserSize === size && product["available_size"].includes(size)
               ? "item size-choose"
               : !product["available_size"].includes(size)
               ? "item disabled-size"

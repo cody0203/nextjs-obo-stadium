@@ -1,7 +1,8 @@
 import {
   GET_PRODUCTS,
   SET_PRODUCT_INFO,
-  GET_ALL_PRODUCTS
+  GET_ALL_PRODUCTS,
+  GET_A_PRODUCT
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -38,6 +39,18 @@ export function setProductInfo(payload) {
     type: SET_PRODUCT_INFO,
     payload
   };
+}
+
+export function getAProduct(id) {
+  const url = `https://cody-json-server.herokuapp.com/products/${id}`;
+  console.log(url);
+  return dispatch =>
+    axios
+      .get(url)
+      .then(({ data }) => data)
+      .then(json => {
+        dispatch({ type: GET_A_PRODUCT, payload: json });
+      });
 }
 
 export function getAllProducts() {

@@ -204,7 +204,7 @@ const Product = props => {
                 />
               </div>
               <div className="btns">
-                {currentUserSize ? (
+                {currentUserSize && product["available_size"].includes(currentUserSize) ? (
                   <div className="size-btn" onClick={toggleSizeModal}>
                     <button className="btn btn-primary size trans-btn">
                       <span className="size-text">Size</span>{" "}

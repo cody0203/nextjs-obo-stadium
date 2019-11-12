@@ -1,9 +1,22 @@
+// Modules
 import React from "react";
 import Layout from "../../../components/layout";
 import Link from "next/link";
+import { connect } from "react-redux";
 import Head from "next/head";
 
-const Buy = () => {
+// Redux
+import { getAProduct } from "../../../redux/actions/product";
+
+function mapStateToProps(state) {
+  return {
+    product: state.productReducer.product
+  };
+}
+
+const Buy = props => {
+  // Props
+  const {product} = props;
   return (
     <Layout>
       <Head>
@@ -62,7 +75,7 @@ const Buy = () => {
             <section className="product-info-wrapper col-lg-7">
               <div className="product-info">
                 <div className="product-name">
-                  Adidas Yeezy Boost 700 Wave Runner Solid Grey
+                  {product.name}
                 </div>
                 <div className="price-info">
                   <span className="first-row">
@@ -203,23 +216,14 @@ const Buy = () => {
           </div>
         </div>
       </main>
-
-      {/* <style jsx>
-        {`
-          @import "/css/components/buying/product-info.css";
-          @import "/css/components/buying/pricing.css";
-          @import "/css/components/buying/shipping-info.css";
-          @import "/css/components/product-details/size-choose.css";
-          @import "/css/components/buying/buying-section.css";
-          @import "/css/components/product-details/size-guide-table.css";
-          @import "/css/components/input-radio.css";
-          @import "/css/components/payment-methods-modal.css";
-          @import "/css/except-home-page.css";
-          @import "/css/buying.css";
-        `}
-      </style> */}
     </Layout>
   );
 };
 
-export default Buy;
+Buy.getInitialProps = async ({ query, store, isServer }) => {
+  await store.dispatch(getAProduct(query.id));
+  
+  return { isServer };
+};
+
+export default connect(mapStateToProps)(Buy);
