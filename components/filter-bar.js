@@ -103,12 +103,25 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     setIsPricesInput({ from: "", to: "" });
+    const order = router.query.order;
+    const sort = router.query.sort;
     router.push({
       pathname: "/shop",
       query: {
         page: 1,
-        order: "desc",
-        sort: "id"
+        order,
+        sort
+      }
+    });
+  };
+
+  const pushRouter = (key, value) => {
+    router.push({
+      pathname: "/shop",
+      query: {
+        page: 1,
+        ...router.query,
+        [key]: value
       }
     });
   };
@@ -116,52 +129,25 @@ const ConnectedFilterBar = props => {
   // Get data brand filter
   const brandChoose = brand => {
     setIsBrandChose(brand);
-    router.push({
-      pathname: "/shop",
-      query: {
-        ...router.query,
-        page: 1,
-        brand
-      }
-    });
+    pushRouter("brand", brand);
   };
 
   // Get data size filter
   const sizeChoose = size => {
     setIsSizeChose(size);
-    router.push({
-      pathname: "/shop",
-      query: {
-        ...router.query,
-        available_size_like: size
-      }
-    });
+    pushRouter("available_size_like", size);
   };
 
   // Get data categories filter
-  const categoryChoose = (category, event) => {
+  const categoryChoose = category => {
     setIsCategoryChose(category);
-    router.push({
-      pathname: "/shop",
-      query: {
-        ...router.query,
-        page: 1,
-        gender: category
-      }
-    });
+    pushRouter("gender", category);
   };
 
   // Get data release date filter
-  const releaseDateChoose = (date, event) => {
+  const releaseDateChoose = date => {
     setIsReleaseDateChose(date);
-    router.push({
-      pathname: "/shop",
-      query: {
-        ...router.query,
-        page: 1,
-        release_date: date
-      }
-    });
+    pushRouter("release_year", date);
   };
 
   const handleFilterPrices = event => {
@@ -176,6 +162,16 @@ const ConnectedFilterBar = props => {
     setPrices({
       ...isPricesInput
     });
+    router.push({
+      pathname: "/shop",
+      query: {
+        page: 1,
+        ...router.query,
+        sell_price_gte: isPricesInput.from,
+        sell_price_lte: isPricesInput.to
+      }
+    });
+    setIsPricesInput({ from: "", to: "" });
   };
 
   // Render
