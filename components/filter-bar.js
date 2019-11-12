@@ -119,8 +119,8 @@ const ConnectedFilterBar = props => {
     router.push({
       pathname: "/shop",
       query: {
-        page: 1,
         ...router.query,
+        page: 1,
         [key]: value
       }
     });
@@ -165,8 +165,8 @@ const ConnectedFilterBar = props => {
     router.push({
       pathname: "/shop",
       query: {
-        page: 1,
         ...router.query,
+        page: 1,
         sell_price_gte: isPricesInput.from,
         sell_price_lte: isPricesInput.to
       }

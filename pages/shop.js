@@ -118,7 +118,7 @@ const Shop = props => {
         order = "desc";
         break;
     }
-    router.push({ pathname: "/shop", query: { ...router.query, sort, order } });
+    router.push({ pathname: "/shop", query: { ...router.query, page: 1, sort, order } });
     console.log(router);
   };
 
@@ -126,9 +126,10 @@ const Shop = props => {
     router.push({
       pathname: "/shop",
       query: {
+        ...router.query,
         page: pageNumber,
         sort,
-        order
+        order,
       }
     });
   };
