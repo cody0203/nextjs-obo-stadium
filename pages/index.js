@@ -27,7 +27,6 @@ const Home = props => {
       </div>
     </div>
   );
-  console.log(props);
   const findBestSeller = props.products
     .filter(products => {
       return products.status === "Best Seller";

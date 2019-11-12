@@ -6,13 +6,11 @@ import {
 import axios from "axios";
 
 export function getProducts(page, limit, sort, order, query) {
-  console.log(query);
   let filters = "";
   for (let i in query) {
     if (i !== "sort" && i !== "order") {
       filters += `&${i}=${query[i]}`;
     }
-    console.log(filters);
   }
   const url = `https://cody-json-server.herokuapp.com/products?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}${filters}`;
   return dispatch =>

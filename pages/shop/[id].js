@@ -21,7 +21,6 @@ const Product = props => {
 
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
-  console.log(props);
 
   let slider1, slider2;
   const router = useRouter();
@@ -106,7 +105,6 @@ const Product = props => {
       </Link>
     );
   });
-  console.log(product);
   return (
     <Layout>
       <Head>
