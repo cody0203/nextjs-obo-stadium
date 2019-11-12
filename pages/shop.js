@@ -15,6 +15,7 @@ import FilterBar from "../components/filter-bar";
 import Layout from "../components/layout";
 import Aux from "../components/hoc/aux";
 import "../components/fontawesome";
+import FilterBarSmall from "../components/filter-bar-small";
 // import FilterBarSmall from "../components/filter-bar-small";
 
 // Redux
@@ -137,7 +138,6 @@ const Shop = props => {
       pathname: "/shop",
       query: { ...router.query, page: 1, sort, order }
     });
-    console.log(router);
   };
 
   const handlePageChange = pageNumber => {
@@ -286,135 +286,11 @@ const Shop = props => {
             </div>
           </div>
         </div>
-        {/* <FilterBarSmall
+        <FilterBarSmall
           filterModal={filterModal}
           toggleFilterModal={toggleFilterModal}
-        /> */}
-        <div
-          className="modal fade"
-          id="signInSignUp"
-          tabIndex={-1}
-          role="dialog"
-          aria-labelledby="signInSignUpLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <ul className="nav nav-pills" id="pills-tab" role="tablist">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link active"
-                      id="signIn-tab"
-                      data-toggle="pill"
-                      href="#signIn"
-                      role="tab"
-                      aria-controls="signIn"
-                      aria-selected="true"
-                    >
-                      Đăng nhập
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="signUp-tab"
-                      data-toggle="pill"
-                      href="#signUp"
-                      role="tab"
-                      aria-controls="signUp"
-                      aria-selected="false"
-                    >
-                      Đăng ký
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="modal-body">
-                <div className="tab-content" id="pills-tabContent">
-                  <div
-                    className="tab-pane fade show active"
-                    id="signIn"
-                    role="tabpanel"
-                    aria-labelledby="signIn-tab"
-                  >
-                    <form>
-                      <input
-                        className="form-control sign-in-email"
-                        placeholder="Email"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-in-password"
-                        type="password"
-                        placeholder="Mật khẩu"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <div className="forgot-password-wrapper" />
-                      Quên mật khẩu? Nhấn vào{" "}
-                      <span className="text-btn">đây</span>
-                      <div className="btn btn-primary red-btn sign-in-btn">
-                        Đăng nhập
-                      </div>
-                    </form>
-                  </div>
-                  <div
-                    className="tab-pane fade"
-                    id="signUp"
-                    role="tabpanel"
-                    aria-labelledby="signUp-tab"
-                  >
-                    <form>
-                      <input
-                        className="form-control sign-up-full-name"
-                        placeholder="Họ và tên *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-phone"
-                        placeholder="Số điện thoại *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-email"
-                        placeholder="Email *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-password"
-                        type="password"
-                        placeholder="Mật khẩu *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-confirm-password"
-                        type="password"
-                        placeholder="Xác nhận mật khẩu *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <div className="privacy-confirm" />
-                      Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao
-                      dịch mua bán theo{" "}
-                      <span className="text-btn">
-                        điều kiện sử dụng và chính sách của OBO Stadium.
-                      </span>
-                      <div className="btn btn-primary red-btn sign-up-btn">
-                        Đăng kí
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        />
+
         <a className="back-to-top" href="#">
           <img src="/images/back-to-top.png" alt="back-to-top" />
         </a>

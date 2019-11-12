@@ -111,8 +111,8 @@ const ConnectedFilterBar = props => {
       to: ""
     });
     setIsPricesInput({ from: "", to: "" });
-    const order = router.query.order;
-    const sort = router.query.sort;
+    const sort = router.query.sort || "id";
+    const order = router.query.order || "desc";
     router.push({
       pathname: "/shop",
       query: {
