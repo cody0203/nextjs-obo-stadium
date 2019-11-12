@@ -55,13 +55,21 @@ const ConnectedFilterBar = props => {
     "2019"
   ]);
 
-  const [isSizeChose, setIsSizeChose] = useState(undefined);
+  const [isSizeChose, setIsSizeChose] = useState(
+    router.query.available_size_like || undefined
+  );
 
-  const [isBrandChose, setIsBrandChose] = useState(undefined);
+  const [isBrandChose, setIsBrandChose] = useState(
+    router.query.brand || undefined
+  );
 
-  const [isCategoryChose, setIsCategoryChose] = useState(undefined);
+  const [isCategoryChose, setIsCategoryChose] = useState(
+    router.query.gender || undefined
+  );
 
-  const [isReleaseDateChose, setIsReleaseDateChose] = useState(undefined);
+  const [isReleaseDateChose, setIsReleaseDateChose] = useState(
+    router.query.release_year || undefined
+  );
 
   const [isPricesInput, setIsPricesInput] = useState({
     from: "",
@@ -69,8 +77,8 @@ const ConnectedFilterBar = props => {
   });
 
   const [prices, setPrices] = useState({
-    from: "",
-    to: ""
+    from: router.query.sell_price_gte || "",
+    to: router.query.sell_price_lte || ""
   });
 
   // Methods

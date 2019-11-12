@@ -17,9 +17,10 @@ function mapStateToProps(state) {
 }
 
 const Product = props => {
+  const { productId, products } = props;
+
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
-
   console.log(props);
 
   let slider1, slider2;
@@ -69,11 +70,9 @@ const Product = props => {
     ]
   };
 
-  const product = props.products.find(
-    product => product.id === props.productId
-  );
+  const product = products.find(product => product.id === Number(productId));
 
-  const relateProducts = props.products
+  const relateProducts = products
     .filter(products => {
       return products.brand === product.brand && products.id !== product.id;
     })
@@ -81,28 +80,30 @@ const Product = props => {
 
   const relateProductsRender = relateProducts.map(product => {
     return (
-      <div className="product position-relative" key={product.id}>
-        <div className="card">
-          <img
-            src={product.thumbnail}
-            className="card-img-top"
-            alt="adidas-Yeezy-Boost-350-V2-Lundmark"
-          />
-          <div className="card-body">
-            <h5 className="card-title">{product.name}</h5>
-            <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-            <p className="price">
-              <FormattedNumber
-                style="currency"
-                currency="VND"
-                value={product.sell_price}
-              />
-            </p>
-            <p className="card-text sold">Đã bán {product.total_sold} đôi</p>
+      <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
+        <a className="product position-relative">
+          <div className="card">
+            <img
+              src={product.thumbnail}
+              className="card-img-top"
+              alt="adidas-Yeezy-Boost-350-V2-Lundmark"
+            />
+            <div className="card-body">
+              <h5 className="card-title">{product.name}</h5>
+              <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
+              <p className="price">
+                <FormattedNumber
+                  style="currency"
+                  currency="VND"
+                  value={product.sell_price}
+                />
+              </p>
+              <p className="card-text sold">Đã bán {product.total_sold} đôi</p>
+            </div>
           </div>
-        </div>
-        <div className="shadow mx-auto position-absolute" />
-      </div>
+          <div className="shadow mx-auto position-absolute" />
+        </a>
+      </Link>
     );
   });
   console.log(product);
@@ -190,7 +191,7 @@ const Product = props => {
                   cùng bản phối xám / xanh / cam đã dễ dàng thổi “bùa yêu” vào
                   giới yêu giày.
                 </p>
-                <p>
+                {/* <p>
                   Phần upper sử dụng chất liệu breathable mesh, suede và nubuck.
                   Điểm nhấn ấn tượng chính là thiết kế là dây giày màu neon đi
                   kèm một số chi tiết được làm bằng chất liệu 3M phản quang. Với
@@ -199,7 +200,7 @@ const Product = props => {
                   mang. Cộng nghệ Boost với tấm đệm lót “thần thánh” êm ái, bạn
                   có thể mang đôi giày này từ sáng đến tối mà không hề có cảm
                   giác khó chịu hay bí bách. Không những hype mà còn comfy nữa.
-                </p>
+                </p> */}
               </div>
               <div className="desc-sub">
                 <span className="desc-sub-title">Phối màu:</span>

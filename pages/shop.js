@@ -118,7 +118,10 @@ const Shop = props => {
         order = "desc";
         break;
     }
-    router.push({ pathname: "/shop", query: { ...router.query, page: 1, sort, order } });
+    router.push({
+      pathname: "/shop",
+      query: { ...router.query, page: 1, sort, order }
+    });
     console.log(router);
   };
 
@@ -129,7 +132,7 @@ const Shop = props => {
         ...router.query,
         page: pageNumber,
         sort,
-        order,
+        order
       }
     });
   };
@@ -137,41 +140,37 @@ const Shop = props => {
   // Renderes
 
   // Render products
-  const product = products.map(product => {
-    if (product) {
-      return (
-        <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
-          <a className="product-link" data-brand="${data[i]['brand']}">
-            <div className="product position-relative">
-              <div className="card">
-                <img
-                  src={product.thumbnail}
-                  className="card-img-top"
-                  alt={product.name}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                  <p className="price">
-                    <FormattedNumber
-                      style="currency"
-                      currency="VND"
-                      value={product.sell_price}
-                    />
-                  </p>
-                  <p className="card-text sold">
-                    Đã bán {product.total_sold} đôi
-                  </p>
-                </div>
+  const productsRender = products.map(product => {
+    return (
+      <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
+        <a className="product-link" data-brand="${data[i]['brand']}">
+          <div className="product position-relative">
+            <div className="card">
+              <img
+                src={product.thumbnail}
+                className="card-img-top"
+                alt={product.name}
+              />
+              <div className="card-body">
+                <h5 className="card-title">{product.name}</h5>
+                <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
+                <p className="price">
+                  <FormattedNumber
+                    style="currency"
+                    currency="VND"
+                    value={product.sell_price}
+                  />
+                </p>
+                <p className="card-text sold">
+                  Đã bán {product.total_sold} đôi
+                </p>
               </div>
-              <div className="shadow mx-auto position-absolute" />
             </div>
-          </a>
-        </Link>
-      );
-    } else {
-      return <div key="not found">Không tìm thấy lựa chọn</div>;
-    }
+            <div className="shadow mx-auto position-absolute" />
+          </div>
+        </a>
+      </Link>
+    );
   });
 
   // Render sort by
@@ -253,16 +252,22 @@ const Shop = props => {
                   <FontAwesomeIcon icon="filter" />
                 </div>
               </div>
-              <div className="product-row">{product}</div>
-              <div className="pagination-wrapper">
-                <Pagination
-                  activePage={Number(currentPage)}
-                  itemsCountPerPage={limit}
-                  totalItemsCount={totalItems}
-                  pageRangeDisplayed={3}
-                  onChange={handlePageChange}
-                />
-              </div>
+              {products.length !== 0 ? (
+                <Aux>
+                  <div className="product-row">{productsRender}</div>
+                  <div className="pagination-wrapper">
+                    <Pagination
+                      activePage={Number(currentPage)}
+                      itemsCountPerPage={limit}
+                      totalItemsCount={totalItems}
+                      pageRangeDisplayed={3}
+                      onChange={handlePageChange}
+                    />
+                  </div>
+                </Aux>
+              ) : (
+                <div key="not found">Không tìm thấy sản phẩm phù hợp.</div>
+              )}
             </div>
           </div>
         </div>
@@ -490,7 +495,4 @@ Shop.getInitialProps = async ctx => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Shop);
+export default connect(mapStateToProps, mapDispatchToProps)(Shop);
