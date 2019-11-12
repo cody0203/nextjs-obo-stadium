@@ -1,16 +1,27 @@
+// Modules
 import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { connect } from "react-redux";
 
+// Components
 import { sizes } from "../db";
 import Aux from "./hoc/aux";
+
+// Redux
+
+function mapStateToProps(state) {
+  return {
+    productInfo: state.productReducer.productInfo
+  };
+}
 
 const SizeChooseModal = props => {
   // Props
   const {
     sizeModal,
     toggleSizeModal,
-    currentUserSize,
     product,
+    productInfo,
     updateUserCurrentSize
   } = props;
 
@@ -20,13 +31,14 @@ const SizeChooseModal = props => {
       <Aux key={size}>
         <div
           className={
-            currentUserSize === size && product["available_size"].includes(size)
+            productInfo.size === size &&
+            product["available_size"].includes(size)
               ? "item size-choose"
               : !product["available_size"].includes(size)
               ? "item disabled-size"
               : "item"
           }
-          onClick={updateUserCurrentSize.bind(this, size)}
+          onClick={updateUserCurrentSize.bind(null, size)}
         >
           {size}
         </div>
@@ -73,4 +85,4 @@ const SizeChooseModal = props => {
   );
 };
 
-export default SizeChooseModal;
+export default connect(mapStateToProps)(SizeChooseModal);

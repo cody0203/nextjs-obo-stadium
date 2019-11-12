@@ -41,7 +41,7 @@ export function setProductInfo(payload) {
   };
 }
 
-export function getAProduct(id) {
+export function getProduct(id) {
   const url = `https://cody-json-server.herokuapp.com/products/${id}`;
   console.log(url);
   return dispatch =>

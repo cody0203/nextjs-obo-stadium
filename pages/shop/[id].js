@@ -14,7 +14,7 @@ import SizeChooseModal from "../../components/size-choose-modal";
 import { convertedSizes } from "../../db";
 
 // Redux
-import { getAllProducts } from "../../redux/actions/product";
+import { getAllProducts, setProductInfo } from "../../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
@@ -23,19 +23,25 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    setProductInfo: info => dispatch(setProductInfo(info))
+  };
+}
+
 const Product = props => {
   // Props
   const router = useRouter();
-  const { productId, products, productInfo } = props;
+  const { productId, products, productInfo, setProductInfo } = props;
 
   // States
   const [sizeModal, setSizeModal] = useState(false);
-  const [currentUserSize, setCurrentUserSize] = useState(null);
 
   // Life cycles
 
   useEffect(() => {
-    setCurrentUserSize(Number(localStorage.getItem("size")));
+    isCorrectSize();
+    setProductInfo({ size: Number(localStorage.getItem("size")) });
   }, []);
 
   // Methods
@@ -43,11 +49,11 @@ const Product = props => {
     setSizeModal(!sizeModal);
   };
 
-  const updateUserCurrentSize = (size) => {
-    localStorage.setItem("size", size)
-    setCurrentUserSize(size);
-    toggleSizeModal()
-  }
+  const updateUserCurrentSize = size => {
+    localStorage.setItem("size", size);
+    setProductInfo({ size });
+    toggleSizeModal();
+  };
 
   const product = products.find(product => product.id === Number(productId));
 
@@ -56,6 +62,16 @@ const Product = props => {
       return products.brand === product.brand && products.id !== product.id;
     })
     .slice(0, 5);
+
+  function isCorrectSize() {
+    if (
+      productInfo.size &&
+      product["available_size"].includes(productInfo.size)
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   //Render
   const relateProductsRender = relateProducts.map(product => {
@@ -89,7 +105,7 @@ const Product = props => {
 
   // Variables
 
-  const indexCurrentSize = convertedSizes["vn"].indexOf(currentUserSize);
+  const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
 
   const sizes = {
     vn: convertedSizes["vn"][indexCurrentSize],
@@ -204,7 +220,7 @@ const Product = props => {
                 />
               </div>
               <div className="btns">
-                {currentUserSize && product["available_size"].includes(currentUserSize) ? (
+                {isCorrectSize() ? (
                   <div className="size-btn" onClick={toggleSizeModal}>
                     <button className="btn btn-primary size trans-btn">
                       <span className="size-text">Size</span>{" "}
@@ -230,8 +246,16 @@ const Product = props => {
                 )}
 
                 <Link href="/shop/buy/[id]" as={`/shop/buy/${router.query.id}`}>
-                  <a className="buy-btn">
-                    <button className="btn btn-primary buy green-btn">
+                  <a
+                    className="buy-btn"
+                    style={{
+                      pointerEvents: isCorrectSize() ? "auto" : "none"
+                    }}
+                  >
+                    <button
+                      className="btn btn-primary buy green-btn"
+                      disabled={!isCorrectSize()}
+                    >
                       <div className="ask-text left-content">
                         <div className="ask-price main-content">
                           <FormattedNumber
@@ -255,8 +279,16 @@ const Product = props => {
                   href="/shop/sell/[id]"
                   as={`/shop/sell/${router.query.id}`}
                 >
-                  <a className="sell-btn">
-                    <button className="btn btn-primary sell red-btn">
+                  <a
+                    className="sell-btn"
+                    style={{
+                      pointerEvents: isCorrectSize() ? "auto" : "none"
+                    }}
+                  >
+                    <button
+                      className="btn btn-primary sell red-btn"
+                      disabled={!isCorrectSize()}
+                    >
                       <div className="ask-text left-content">
                         <div className="bid-price main-content">
                           <FormattedNumber
@@ -308,7 +340,6 @@ const Product = props => {
         <SizeChooseModal
           toggleSizeModal={toggleSizeModal}
           sizeModal={sizeModal}
-          currentUserSize={currentUserSize}
           product={product}
           updateUserCurrentSize={updateUserCurrentSize}
         />
@@ -331,4 +362,4 @@ Product.getInitialProps = async ctx => {
   };
 };
 
-export default connect(mapStateToProps)(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

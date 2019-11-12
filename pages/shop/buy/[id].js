@@ -1,22 +1,64 @@
 // Modules
-import React from "react";
-import Layout from "../../../components/layout";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { connect } from "react-redux";
 import Head from "next/head";
+import { FormattedNumber } from "react-intl";
+import { useRouter } from "next/router";
+// Components
+import { convertedSizes } from "../../../db";
+import SizeChooseModal from "../../../components/size-choose-modal";
+import Layout from "../../../components/layout";
 
 // Redux
-import { getAProduct } from "../../../redux/actions/product";
+import { getProduct, setProductInfo } from "../../../redux/actions/product";
 
 function mapStateToProps(state) {
   return {
-    product: state.productReducer.product
+    product: state.productReducer.product,
+    productInfo: state.productReducer.productInfo
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setProductInfo: info => dispatch(setProductInfo(info))
   };
 }
 
 const Buy = props => {
   // Props
-  const {product} = props;
+  const { product, productInfo, setProductInfo } = props;
+  const router = useRouter();
+  // States
+  const [sizeModal, setSizeModal] = useState(false);
+
+  // Life cycles
+  useEffect(() => {
+    setProductInfo({ size: Number(localStorage.getItem("size")) });
+  }, []);
+
+  // Methods
+  const toggleSizeModal = () => {
+    setSizeModal(!sizeModal);
+  };
+
+  const updateUserCurrentSize = size => {
+    localStorage.setItem("size", size);
+    setProductInfo({ size });
+    toggleSizeModal();
+  };
+
+  // Variables
+
+  const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
+
+  const sizes = {
+    vn: convertedSizes["vn"][indexCurrentSize],
+    us: convertedSizes["us"][indexCurrentSize],
+    cm: convertedSizes["cm"][indexCurrentSize]
+  };
+
   return (
     <Layout>
       <Head>
@@ -74,30 +116,45 @@ const Buy = props => {
             {/* Product Info Section */}
             <section className="product-info-wrapper col-lg-7">
               <div className="product-info">
-                <div className="product-name">
-                  {product.name}
-                </div>
+                <div className="product-name">{product.name}</div>
                 <div className="price-info">
                   <span className="first-row">
                     Giá đặt mua cao nhất:{" "}
-                    <span className="bid-price-info">9.310.000 ₫</span>
+                    <span className="bid-price-info">
+                      <FormattedNumber
+                        style="currency"
+                        currency="VND"
+                        value={product.buy_price}
+                      />
+                    </span>
                   </span>
-                  <span className="line">|</span>{" "}
+                  <span className="line"> |</span>{" "}
                   <span className="second-line">
                     Giá đặt bán thấp nhất:{" "}
-                    <span className="ask-price-info">9.550.000 ₫</span>
+                    <span className="ask-price-info">
+                      <FormattedNumber
+                        style="currency"
+                        currency="VND"
+                        value={product.sell_price}
+                      />
+                    </span>
                   </span>
                 </div>
                 <div className="size-info-wrapper">
-                  Size: <span className="size-info">8US | 41VN | 26CM</span>
+                  Size:{" "}
+                  <span className="size-info">
+                    {sizes.us}US | {sizes.vn}VN | {sizes.cm}CM
+                  </span>
                 </div>
-                <a href="./product-details.html" className="product-image">
-                  <img
-                    src="/images/product-details-image/1.jpg"
-                    alt="image-1"
-                    className="img-fluid"
-                  />
-                </a>
+                <Link href="/shop/[id]" as={`/shop/${router.query.id}`}>
+                  <a className="product-image">
+                    <img
+                      src={product.thumbnail}
+                      alt="image-1"
+                      className="img-fluid"
+                    />
+                  </a>
+                </Link>
               </div>
             </section>
             {/* Buying Function Section */}
@@ -133,10 +190,12 @@ const Buy = props => {
               </div>
               {/* Pricing Section */}
               <div className="pricing childs">
-                <div className="size-btn">
+                <div className="size-btn" onClick={toggleSizeModal}>
                   <button className="btn btn-primary size trans-btn">
                     <span className="size-text">Size</span>{" "}
-                    <span className="size-details">8US | 41VN | 26CM</span>
+                    <span className="size-details">
+                      {sizes.us}US | {sizes.vn}VN | {sizes.cm}CM
+                    </span>
                     <i className="fas fa-chevron-down dropdown-arrow" />
                   </button>
                 </div>
@@ -155,7 +214,14 @@ const Buy = props => {
                 />
                 <div className="sub-price price-include">
                   <div className="text">Giá sản phẩm</div>
-                  <div className="sub-price-showing">9.550.000 ₫</div>
+                  <div className="sub-price-showing">
+                    <FormattedNumber
+                      style="currency"
+                      currency="VND"
+                      value={product.buy_price}
+                    />{" "}
+                    ₫
+                  </div>
                 </div>
                 <div className="shipping-price price-include">
                   <div className="text">Phí vận chuyển</div>
@@ -215,15 +281,21 @@ const Buy = props => {
             </section>
           </div>
         </div>
+        <SizeChooseModal
+          toggleSizeModal={toggleSizeModal}
+          sizeModal={sizeModal}
+          product={product}
+          updateUserCurrentSize={updateUserCurrentSize}
+        />
       </main>
     </Layout>
   );
 };
 
 Buy.getInitialProps = async ({ query, store, isServer }) => {
-  await store.dispatch(getAProduct(query.id));
-  
+  await store.dispatch(getProduct(query.id));
+
   return { isServer };
 };
 
-export default connect(mapStateToProps)(Buy);
+export default connect(mapStateToProps, mapDispatchToProps)(Buy);
