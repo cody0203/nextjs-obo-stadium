@@ -5,3 +5,4 @@ export const CLEAR_FILTER = "CLEAR_FILTER";
 export const SET_PRODUCT_INFO = "SET_PRODUCT_INFO";
 export const FILTER_QUERY = "FILTER_QUERY";
 export const GET_A_PRODUCT = "GET_A_PRODUCT";
+export const BIDDING_PRICE = "BIDDING_PRICE";

@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import Head from "next/head";
 import { FormattedNumber } from "react-intl";
 import { useRouter } from "next/router";
+import { TabContent, TabPane, Nav, NavItem } from "reactstrap";
+import IntlNumberInput from "react-intl-number-input";
+
 // Components
 import { convertedSizes } from "../../../db";
 import SizeChooseModal from "../../../components/size-choose-modal";
@@ -12,26 +15,31 @@ import Layout from "../../../components/layout";
 
 // Redux
 import { getProduct, setProductInfo } from "../../../redux/actions/product";
+import { bidding } from "../../../redux/actions/buying";
 
 function mapStateToProps(state) {
   return {
     product: state.productReducer.product,
-    productInfo: state.productReducer.productInfo
+    productInfo: state.productReducer.productInfo,
+    biddingPrice: state.buyingReducer.biddingPrice
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setProductInfo: info => dispatch(setProductInfo(info))
+    setProductInfo: info => dispatch(setProductInfo(info)),
+    bidding: value => dispatch(bidding(value))
   };
 }
 
 const Buy = props => {
   // Props
-  const { product, productInfo, setProductInfo } = props;
+  const { product, productInfo, setProductInfo, biddingPrice, bidding } = props;
   const router = useRouter();
   // States
   const [sizeModal, setSizeModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("1");
+  const [biddingInput, setBiddingInput] = useState(0);
 
   // Life cycles
   useEffect(() => {
@@ -43,10 +51,24 @@ const Buy = props => {
     setSizeModal(!sizeModal);
   };
 
+  const toggleTab = tab => {
+    if (activeTab !== tab) setActiveTab(tab);
+    if (tab === "1") {
+      setBiddingInput(0);
+    }
+  };
+
   const updateUserCurrentSize = size => {
     localStorage.setItem("size", size);
     setProductInfo({ size });
     toggleSizeModal();
+  };
+
+  const handleBidding = (e, value) => {
+    setBiddingInput(value);
+    if (product.sell_price < value) {
+      setActiveTab("2");
+    }
   };
 
   // Variables
@@ -58,6 +80,8 @@ const Buy = props => {
     us: convertedSizes["us"][indexCurrentSize],
     cm: convertedSizes["cm"][indexCurrentSize]
   };
+
+  const tax = 50000;
 
   return (
     <Layout>
@@ -199,46 +223,135 @@ const Buy = props => {
                     <i className="fas fa-chevron-down dropdown-arrow" />
                   </button>
                 </div>
-                <div className="bid-buy-btn">
-                  <button className="bid-btn btn btn-primary green-btn">
-                    Đặt giá mua
-                  </button>
-                  <button className="buy-btn btn btn-primary trans-btn">
-                    Mua ngay
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  className="price-input form-control"
-                  placeholder="Đặt giá mua ..."
-                />
-                <div className="sub-price price-include">
-                  <div className="text">Giá sản phẩm</div>
-                  <div className="sub-price-showing">
+                <Nav tabs>
+                  <NavItem style={{ flex: "1" }}>
+                    <button
+                      className={
+                        activeTab === "1"
+                          ? "bid-btn btn btn-primary green-btn"
+                          : "bid-btn btn btn-primary trans-btn"
+                      }
+                      onClick={() => {
+                        toggleTab("1");
+                      }}
+                    >
+                      Đặt giá mua
+                    </button>
+                  </NavItem>
+                  <NavItem style={{ flex: "1" }}>
+                    <button
+                      className={
+                        activeTab === "2"
+                          ? "buy-btn btn btn-primary green-btn"
+                          : "buy-btn btn btn-primary trans-btn"
+                      }
+                      onClick={() => {
+                        toggleTab("2");
+                      }}
+                    >
+                      Mua ngay
+                    </button>
+                  </NavItem>
+                </Nav>
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="1">
+                    <IntlNumberInput
+                      value={biddingInput}
+                      onChange={handleBidding}
+                      className="price-input form-control"
+                      suffix="₫"
+                      precision={0}
+                    />
+
+                    <div className="sub-price price-include">
+                      <div className="text">Giá sản phẩm</div>
+                      <div className="sub-price-showing">
+                        <FormattedNumber
+                          style="currency"
+                          currency="VND"
+                          value={biddingInput}
+                        />
+                      </div>
+                    </div>
+                    <div className="shipping-price price-include">
+                      <div className="text">Phí vận chuyển</div>
+                      <div className="sub-price-showing">
+                        <FormattedNumber
+                          style="currency"
+                          currency="VND"
+                          value={tax}
+                        />
+                      </div>
+                    </div>
+                    <div className="total-price price-include">
+                      <div className="text">Tổng thanh toán</div>
+
+                      <div className="total-price-showing">
+                        {biddingInput !== 0 ? (
+                          <FormattedNumber
+                            style="currency"
+                            currency="VND"
+                            value={biddingInput + tax}
+                          />
+                        ) : (
+                          <FormattedNumber
+                            style="currency"
+                            currency="VND"
+                            value={0}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="2">
                     <FormattedNumber
                       style="currency"
                       currency="VND"
-                      value={product.buy_price}
-                    />{" "}
-                    ₫
-                  </div>
-                </div>
-                <div className="shipping-price price-include">
-                  <div className="text">Phí vận chuyển</div>
-                  <div className="sub-price-showing">50.000 ₫</div>
-                </div>
-                <div className="coupon price-include">
-                  <div className="text">Mã giảm giá</div>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Nhập mã giảm giá ..."
-                  />
-                </div>
-                <div className="total-price price-include">
-                  <div className="text">Tổng thanh toán</div>
-                  <div className="total-price-showing">9.600.000 ₫</div>
-                </div>
+                      value={product.sell_price}
+                    >
+                      {value => (
+                        <input
+                          type="text"
+                          className="price-input form-control"
+                          value={value}
+                          disabled
+                        />
+                      )}
+                    </FormattedNumber>
+
+                    <div className="sub-price price-include">
+                      <div className="text">Giá sản phẩm</div>
+                      <div className="sub-price-showing">
+                        <FormattedNumber
+                          style="currency"
+                          currency="VND"
+                          value={product.sell_price}
+                        />
+                      </div>
+                    </div>
+                    <div className="shipping-price price-include">
+                      <div className="text">Phí vận chuyển</div>
+                      <div className="sub-price-showing">
+                        <FormattedNumber
+                          style="currency"
+                          currency="VND"
+                          value={tax}
+                        />
+                      </div>
+                    </div>
+                    <div className="total-price price-include">
+                      <div className="text">Tổng thanh toán</div>
+                      <div className="total-price-showing">
+                        <FormattedNumber
+                          style="currency"
+                          currency="VND"
+                          value={+product.sell_price + tax}
+                        />
+                      </div>
+                      {/* <div className="total-price-showing">9.600.000 ₫</div> */}
+                    </div>
+                  </TabPane>
+                </TabContent>
               </div>
               {/* Payment Methods Section */}
               <div className="payment-methods childs">
@@ -287,6 +400,28 @@ const Buy = props => {
           product={product}
           updateUserCurrentSize={updateUserCurrentSize}
         />
+
+        <style jsx>
+          {`
+            .bid-btn {
+              border-top-right-radius: 0px;
+              border-bottom-right-radius: 0px;
+            }
+
+            .buy-btn {
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 0px;
+            }
+
+            .bid-btn.trans-btn {
+              border-right-color: transparent !important;
+            }
+
+            .buy-btn.trans-btn {
+              border-left-color: transparent !important;
+            }
+          `}
+        </style>
       </main>
     </Layout>
   );
