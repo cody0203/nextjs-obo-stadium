@@ -15,7 +15,7 @@ import Layout from "../../../components/layout";
 
 // Redux
 import { getProduct, setProductInfo } from "../../../redux/actions/product";
-import { bidding } from "../../../redux/actions/buying";
+import { buying } from "../../../redux/actions/buying";
 
 function mapStateToProps(state) {
   return {
@@ -28,23 +28,24 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setProductInfo: info => dispatch(setProductInfo(info)),
-    bidding: value => dispatch(bidding(value))
+    buying: value => dispatch(buying(value))
   };
 }
 
 const Buy = props => {
   // Props
-  const { product, productInfo, setProductInfo, biddingPrice, bidding } = props;
+  const { product, productInfo, setProductInfo, biddingPrice, buying } = props;
   const router = useRouter();
+
+  // Variables
+  const tax = 50000;
+
   // States
   const [sizeModal, setSizeModal] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [biddingInput, setBiddingInput] = useState(0);
 
   // Life cycles
-  useEffect(() => {
-    setProductInfo({ size: Number(localStorage.getItem("size")) });
-  }, []);
 
   // Methods
   const toggleSizeModal = () => {
@@ -55,23 +56,23 @@ const Buy = props => {
     if (activeTab !== tab) setActiveTab(tab);
     if (tab === "1") {
       setBiddingInput(0);
+      buying({ buyNow: 0 });
     }
   };
 
   const updateUserCurrentSize = size => {
-    localStorage.setItem("size", size);
     setProductInfo({ size });
     toggleSizeModal();
   };
 
   const handleBidding = (e, value) => {
     setBiddingInput(value);
+    buying({ bidding: value + tax });
     if (product.sell_price < value) {
       setActiveTab("2");
+      buying({ buyNow: product.sell_price + tax });
     }
   };
-
-  // Variables
 
   const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
 
@@ -80,8 +81,6 @@ const Buy = props => {
     us: convertedSizes["us"][indexCurrentSize],
     cm: convertedSizes["cm"][indexCurrentSize]
   };
-
-  const tax = 50000;
 
   return (
     <Layout>
@@ -223,7 +222,7 @@ const Buy = props => {
                     <i className="fas fa-chevron-down dropdown-arrow" />
                   </button>
                 </div>
-                <Nav tabs>
+                <Nav tabs style={{ borderBottom: "none" }}>
                   <NavItem style={{ flex: "1" }}>
                     <button
                       className={
@@ -231,6 +230,9 @@ const Buy = props => {
                           ? "bid-btn btn btn-primary green-btn"
                           : "bid-btn btn btn-primary trans-btn"
                       }
+                      style={{
+                        pointerEvents: activeTab === "1" ? "none" : "auto"
+                      }}
                       onClick={() => {
                         toggleTab("1");
                       }}
@@ -245,6 +247,9 @@ const Buy = props => {
                           ? "buy-btn btn btn-primary green-btn"
                           : "buy-btn btn btn-primary trans-btn"
                       }
+                      style={{
+                        pointerEvents: activeTab === "2" ? "none" : "auto"
+                      }}
                       onClick={() => {
                         toggleTab("2");
                       }}
@@ -386,7 +391,10 @@ const Buy = props => {
               </div>
               <Link href="/congrats">
                 <a>
-                  <button className="btn btn-primary confirm-btn red-btn">
+                  <button
+                    className="btn btn-primary confirm-btn red-btn"
+                    disabled
+                  >
                     Đặt mua
                   </button>
                 </a>

@@ -41,7 +41,6 @@ const Product = props => {
 
   useEffect(() => {
     isCorrectSize();
-    setProductInfo({ size: Number(localStorage.getItem("size")) });
   }, []);
 
   // Methods
@@ -50,7 +49,6 @@ const Product = props => {
   };
 
   const updateUserCurrentSize = size => {
-    localStorage.setItem("size", size);
     setProductInfo({ size });
     toggleSizeModal();
   };

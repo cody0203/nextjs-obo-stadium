@@ -17,11 +17,12 @@ import "../components/fontawesome";
 import FilterBarSmall from "../components/filter-bar-small";
 
 // Redux
-import { getProducts } from "../redux/actions/product";
+import { getProducts, setProductInfo } from "../redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
-    getProducts: page => dispatch(getProducts(page))
+    getProducts: page => dispatch(getProducts(page)),
+    setProductInfo: info => dispatch(setProductInfo(info))
   };
 }
 
@@ -147,11 +148,11 @@ const Shop = props => {
   // Save product details by filter
 
   const saveDetails = () => {
-    const size = router.query['available_size_like'];
+    const size = Number(router.query["available_size_like"]);
     if (size) {
-      localStorage.setItem('size', size);
+      setProductInfo({ size });
     }
-  }
+  };
 
   // Renderes
 
@@ -159,7 +160,11 @@ const Shop = props => {
   const productsRender = products.map(product => {
     return (
       <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
-        <a className="product-link" data-brand="${data[i]['brand']}" onClick={saveDetails}>
+        <a
+          className="product-link"
+          data-brand="${data[i]['brand']}"
+          onClick={saveDetails}
+        >
           <div className="product position-relative">
             <div className="card">
               <img

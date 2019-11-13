@@ -1,7 +1,10 @@
 import { BIDDING_PRICE } from "../constants/action-types";
 
 const initialState = {
-  biddingPrice: 0
+  biddingPrice: {
+    bidding: 0,
+    buyNow: 0
+  }
 };
 
 const buyingReducer = (state = initialState, action) => {

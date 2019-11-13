@@ -11,6 +11,7 @@ import {
   Button
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../components/fontawesome";
 
 const Header = props => {
   const router = useRouter();
@@ -73,9 +74,7 @@ const Header = props => {
           navbar
           className="justify-content-md-end text-center"
         >
-          <Nav className="navbar-nav">
-            {menuItems}
-          </Nav>
+          <Nav className="navbar-nav">{menuItems}</Nav>
         </Collapse>
       </Navbar>
       {props.title}
