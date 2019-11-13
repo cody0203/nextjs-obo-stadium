@@ -1,8 +1,8 @@
-import { BIDDING_PRICE } from "../constants/action-types";
+import { BUYING_PRICE } from "../constants/action-types";
 
 export function buying(value) {
   return {
-    type: BIDDING_PRICE,
+    type: BUYING_PRICE,
     payload: value
   };
 }

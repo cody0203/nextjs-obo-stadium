@@ -21,7 +21,7 @@ function mapStateToProps(state) {
   return {
     product: state.productReducer.product,
     productInfo: state.productReducer.productInfo,
-    biddingPrice: state.buyingReducer.biddingPrice
+    buyingDetails: state.buyingReducer.buyingDetails
   };
 }
 
@@ -34,11 +34,20 @@ function mapDispatchToProps(dispatch) {
 
 const Buy = props => {
   // Props
-  const { product, productInfo, setProductInfo, biddingPrice, buying } = props;
+  const { product, productInfo, setProductInfo, buyingDetails, buying } = props;
   const router = useRouter();
+
+  console.log(buyingDetails);
 
   // Variables
   const tax = 50000;
+  const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
+
+  const sizes = {
+    vn: convertedSizes["vn"][indexCurrentSize],
+    us: convertedSizes["us"][indexCurrentSize],
+    cm: convertedSizes["cm"][indexCurrentSize]
+  };
 
   // States
   const [sizeModal, setSizeModal] = useState(false);
@@ -46,6 +55,18 @@ const Buy = props => {
   const [biddingInput, setBiddingInput] = useState(0);
 
   // Life cycles
+  useEffect(() => {
+    setBiddingInput(0);
+    buying({
+      buyingPrice: 0,
+      tax: 0,
+      size: 0,
+      paymentMethod: "",
+      buyingDate: "",
+      productName: "",
+      productId: null
+    });
+  }, []);
 
   // Methods
   const toggleSizeModal = () => {
@@ -56,7 +77,9 @@ const Buy = props => {
     if (activeTab !== tab) setActiveTab(tab);
     if (tab === "1") {
       setBiddingInput(0);
-      buying({ buyNow: 0 });
+      buying({ ...buyingDetails, buyingPrice: 0 });
+    } else {
+      buying({ ...buyingDetails, buyingPrice: product.sell_price });
     }
   };
 
@@ -67,25 +90,29 @@ const Buy = props => {
 
   const handleBidding = (e, value) => {
     setBiddingInput(value);
-    buying({ bidding: value + tax });
+    buying(value + tax);
     if (product.sell_price < value) {
       setActiveTab("2");
-      buying({ buyNow: product.sell_price + tax });
+      buying({ ...buyingDetails, buyingPrice: product.sell_price });
     }
   };
 
-  const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
-
-  const sizes = {
-    vn: convertedSizes["vn"][indexCurrentSize],
-    us: convertedSizes["us"][indexCurrentSize],
-    cm: convertedSizes["cm"][indexCurrentSize]
+  const handleBought = () => {
+    const today = new Date().valueOf();
+    buying({
+      ...buyingDetails,
+      size: productInfo.size,
+      tax: tax,
+      buyingDate: today,
+      productName: product.name,
+      productId: router.query.id
+    });
   };
 
   return (
     <Layout>
       <Head>
-        <title>Mua</title>
+        <title>{product.name}</title>
         <link
           rel="stylesheet"
           type="text/css"
@@ -350,7 +377,7 @@ const Buy = props => {
                         <FormattedNumber
                           style="currency"
                           currency="VND"
-                          value={+product.sell_price + tax}
+                          value={product.sell_price + tax}
                         />
                       </div>
                       {/* <div className="total-price-showing">9.600.000 ₫</div> */}
@@ -393,7 +420,8 @@ const Buy = props => {
                 <a>
                   <button
                     className="btn btn-primary confirm-btn red-btn"
-                    disabled
+                    disabled={buyingDetails.buyingPrice === 0 ? true : false}
+                    onClick={handleBought}
                   >
                     Đặt mua
                   </button>

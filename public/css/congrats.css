@@ -6,6 +6,10 @@
   margin: 0px;
 }
 
+.h1.error {
+  margin-bottom: 30px;
+}
+
 .sub-title {
   text-align: center;
   margin: 1.25rem 0px;
@@ -25,7 +29,7 @@
   font-weight: bold;
 }
 .short-desc .main-content {
-  color: #ABACAD;
+  color: #abacad;
   font-weight: bold;
   line-height: 1.5rem;
 }
@@ -49,15 +53,15 @@
   text-align: right;
 }
 .full-desc .break-line {
-  background-color: #D5D6D6;
+  background-color: #d5d6d6;
   height: 0.0625rem;
   margin-bottom: 0.625rem;
 }
 .full-desc .product-name {
-  color: #F04E40;
+  color: #f04e40;
 }
 .full-desc .size {
-  color: #ABACAD;
+  color: #abacad;
   font-weight: normal;
   text-align: left !important;
 }
@@ -76,7 +80,7 @@
 }
 .content-price .total-price-wrapper .sub-price {
   font-size: 1.5rem;
-  color: #F04E40;
+  color: #f04e40;
 }
 
 .go-back-home-wrapper {
@@ -123,4 +127,3 @@
     font-size: 1.875rem;
   }
 }
-

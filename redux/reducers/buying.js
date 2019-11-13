@@ -1,16 +1,21 @@
-import { BIDDING_PRICE } from "../constants/action-types";
+import { BUYING_PRICE } from "../constants/action-types";
 
 const initialState = {
-  biddingPrice: {
-    bidding: 0,
-    buyNow: 0
+  buyingDetails: {
+    buyingPrice: 0,
+    tax: 0,
+    size: 0,
+    paymentMethod: "",
+    buyingDate: "",
+    productName: "",
+    productId: null
   }
 };
 
 const buyingReducer = (state = initialState, action) => {
   switch (action.type) {
-    case BIDDING_PRICE: {
-      return Object.assign({}, state, { biddingPrice: action.payload });
+    case BUYING_PRICE: {
+      return Object.assign({}, state, { buyingDetails: action.payload });
     }
     default:
       return state;
