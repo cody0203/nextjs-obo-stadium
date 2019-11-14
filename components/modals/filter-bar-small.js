@@ -13,9 +13,9 @@ import { connect } from "react-redux";
 import Router, { useRouter } from "next/router";
 
 // Components
-import "../components/fontawesome";
-import { sizes } from "../db";
-import Aux from "./hoc/aux";
+import "../fontawesome";
+import { sizes } from "../../db";
+import Aux from "../hoc/aux";
 
 function mapStateToProps(state) {
   return {
@@ -298,6 +298,7 @@ const FilterBarSmall = props => {
       isOpen={filterModal}
       toggle={toggleFilterModal}
       unmountOnClose={true}
+      className="filter-modal"
     >
       <ModalHeader toggle={toggleFilterModal}>Lọc sản phẩm</ModalHeader>
       <ModalBody>
@@ -418,6 +419,13 @@ const FilterBarSmall = props => {
           áp dụng
         </button>
       </ModalFooter>
+      <style jsx global>
+        {`
+          .filter-modal .modal-body {
+            height: 100%;
+          }
+        `}
+      </style>
     </Modal>
   );
 };

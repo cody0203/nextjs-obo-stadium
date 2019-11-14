@@ -1,11 +1,11 @@
 // Modules
 import React, { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { connect } from "react-redux";
 
 // Components
-import { sizes } from "../db";
-import Aux from "./hoc/aux";
+import { sizes } from "../../db";
+import Aux from "../hoc/aux";
 
 // Redux
 
@@ -52,10 +52,7 @@ const SizeChooseModal = props => {
       toggle={toggleSizeModal}
       className="size-modal modal-dialog-scrollable"
     >
-      <div className="size-modal-header">
-        <ModalHeader>Chọn size</ModalHeader>
-        <a className="size-guide text-btn">Bảng size</a>
-      </div>
+      <ModalHeader>Chọn size</ModalHeader>
       <ModalBody>
         <div className="size content">
           <div className="select-filter">{sizeItems}</div>

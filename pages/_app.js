@@ -6,6 +6,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { IntlProvider } from "react-intl";
 import withRedux from "next-redux-wrapper";
 
+import Loading from "../components/loading";
+
 // CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
@@ -27,10 +29,7 @@ export default withRedux(makeStore)(
       return (
         <Provider store={store}>
           <IntlProvider locale="vi">
-            <PersistGate
-              persistor={store.__persistor}
-              loading={<div>Loading</div>}
-            >
+            <PersistGate persistor={store.__persistor} loading={<Loading />}>
               <Component {...pageProps} />
             </PersistGate>
           </IntlProvider>

@@ -1,19 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 .size-modal a:hover,
 #sizeGuideModal a:hover {
-  color: #C1554E;
-}
-.size-modal .size-modal-header, .size-modal .modal-body,
-#sizeGuideModal .size-modal-header,
-#sizeGuideModal .modal-body {
-  padding: 1.5rem 1.875rem;
-  border: 0px;
+  color: #c1554e;
 }
 
-.size-modal .modal-header {
-  padding: 0;
-  border: 0px;
-}
 .size-modal .size .select-filter,
 #sizeGuideModal .size .select-filter {
   display: grid;

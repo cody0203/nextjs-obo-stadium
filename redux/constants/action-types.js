@@ -7,3 +7,4 @@ export const FILTER_QUERY = "FILTER_QUERY";
 export const GET_A_PRODUCT = "GET_A_PRODUCT";
 export const BUYING_PRICE = "BIDDING_PRICE";
 export const ADDING_ADDRESS = "ADDING_ADDRESS";
+export const GET_ALL_USERS = "GET_ALL_USERS";

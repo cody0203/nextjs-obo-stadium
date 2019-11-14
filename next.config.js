@@ -1,5 +1,6 @@
 /* eslint-disable */
 const withCss = require("@zeit/next-css");
+const path = require("path");
 
 module.exports = withCss({
   webpack: function(config) {
@@ -13,6 +14,9 @@ module.exports = withCss({
         }
       }
     });
+    config.resolve.alias["components"] = path.join(__dirname, "components");
+    config.resolve.alias["/redux"] = path.join(__dirname, "/redux");
+
     return config;
   }
 });

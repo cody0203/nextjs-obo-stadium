@@ -1,12 +1,16 @@
+// Modules
 import React, { useEffect } from "react";
-import Layout from "../components/layout";
-import LastestNews from "../components/lastest-news";
 import Head from "next/head";
 import Link from "next/link";
-
 import { FormattedNumber } from "react-intl";
 import { connect } from "react-redux";
-import { getAllProducts } from "../redux/actions/product";
+
+// Components
+import Layout from "components/layout";
+import LastestNews from "components/lastest-news";
+
+// Redux
+import { getAllProducts } from "/redux/actions/product";
 
 function mapStateToProps(state) {
   return {

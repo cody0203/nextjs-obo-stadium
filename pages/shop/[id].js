@@ -6,15 +6,15 @@ import Head from "next/head";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormattedNumber, FormattedDate } from "react-intl";
-
-// Components
-import "../../components/fontawesome";
-import Layout from "../../components/layout";
-import SizeChooseModal from "../../components/size-choose-modal";
 import { convertedSizes } from "../../db";
 
+// Components
+import "components/fontawesome";
+import Layout from "components/layout";
+import SizeChooseModal from "components/modals/size-choose-modal";
+
 // Redux
-import { getAllProducts, setProductInfo } from "../../redux/actions/product";
+import { getAllProducts, setProductInfo } from "/redux/actions/product";
 
 function mapStateToProps(state) {
   return {

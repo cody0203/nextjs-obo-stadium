@@ -7,21 +7,24 @@ import { FormattedNumber } from "react-intl";
 import { useRouter } from "next/router";
 import { TabContent, TabPane, Nav, NavItem } from "reactstrap";
 import IntlNumberInput from "react-intl-number-input";
+import { convertedSizes } from "../../../db";
 
 // Components
-import { convertedSizes } from "../../../db";
-import SizeChooseModal from "../../../components/size-choose-modal";
-import Layout from "../../../components/layout";
+import Layout from "components/layout";
+import SizeChooseModal from "components/modals/size-choose-modal";
+import AddressModal from "components/modals/address";
 
 // Redux
-import { getProduct, setProductInfo } from "../../../redux/actions/product";
-import { buying } from "../../../redux/actions/buying";
+import { getProduct, setProductInfo } from "/redux/actions/product";
+import { buying } from "/redux/actions/buying";
+import { getUsers } from "/redux/actions/user";
 
 function mapStateToProps(state) {
   return {
     product: state.productReducer.product,
     productInfo: state.productReducer.productInfo,
-    buyingDetails: state.buyingReducer.buyingDetails
+    buyingDetails: state.buyingReducer.buyingDetails,
+    user: state.userReducer.user
   };
 }
 
@@ -34,11 +37,16 @@ function mapDispatchToProps(dispatch) {
 
 const Buy = props => {
   // Props
-  const { product, productInfo, setProductInfo, buyingDetails, buying } = props;
+  const {
+    product,
+    productInfo,
+    setProductInfo,
+    buyingDetails,
+    buying,
+    user
+  } = props;
+
   const router = useRouter();
-
-  console.log(buyingDetails);
-
   // Variables
   const tax = 50000;
   const indexCurrentSize = convertedSizes["vn"].indexOf(productInfo.size);
@@ -53,6 +61,7 @@ const Buy = props => {
   const [sizeModal, setSizeModal] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [biddingInput, setBiddingInput] = useState(0);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   // Life cycles
   useEffect(() => {
@@ -71,6 +80,10 @@ const Buy = props => {
   // Methods
   const toggleSizeModal = () => {
     setSizeModal(!sizeModal);
+  };
+
+  const toggleAddressModal = () => {
+    setIsAddressModalOpen(!isAddressModalOpen);
   };
 
   const toggleTab = tab => {
@@ -108,6 +121,34 @@ const Buy = props => {
       productId: router.query.id
     });
   };
+
+  // Render
+
+  const addressRender = user.addresses.map((address, index) => {
+    return (
+      <div className="info-wrapper radio-wrapper" key={index}>
+        <input
+          type="radio"
+          name={`address-info${index}`}
+          id="address-info"
+          className="address-radio-btn"
+          defaultChecked
+        />
+        <label htmlFor={`address-info${index}`}>
+          <div className="radio-dot" />
+          <div>
+            <div className="name-phone">
+              <b>{address.name}</b> | {address.phone}
+            </div>
+            <div className="address">
+              {address.alias}, {address.ward}, {address.district},{" "}
+              {address.city}
+            </div>
+          </div>
+        </label>
+      </div>
+    );
+  });
 
   return (
     <Layout>
@@ -213,30 +254,14 @@ const Buy = props => {
               <div className="address-info-wrapper childs">
                 <div className="header">
                   <div className="title">Địa chỉ nhận hàng</div>
-                  <button className="btn btn-primary change red-btn">
-                    Thay đổi
+                  <button
+                    className="btn btn-primary change red-btn"
+                    onClick={toggleAddressModal}
+                  >
+                    {user.addresses.length !== 0 ? "Thay đổi" : "+ Thêm mới"}
                   </button>
                 </div>
-                <div className="info-wrapper radio-wrapper">
-                  <input
-                    type="radio"
-                    name="address-info"
-                    id="address-info"
-                    className="address-radio-btn"
-                    defaultChecked
-                  />
-                  <label htmlFor="address-info">
-                    <div className="radio-dot" />
-                    <div>
-                      <div className="name-phone">
-                        <b>Cody</b> | 036530xxxx
-                      </div>
-                      <div className="address">
-                        48 Tố Hữu, Lê Văn Lương kéo dài, Từ Liêm, Hà Nội
-                      </div>
-                    </div>
-                  </label>
-                </div>
+                {addressRender}
               </div>
               {/* Pricing Section */}
               <div className="pricing childs">
@@ -420,7 +445,12 @@ const Buy = props => {
                 <a>
                   <button
                     className="btn btn-primary confirm-btn red-btn"
-                    disabled={buyingDetails.buyingPrice === 0 ? true : false}
+                    disabled={
+                      user.addresses.length === 0 ||
+                      buyingDetails.buyingPrice === 0
+                        ? true
+                        : false
+                    }
                     onClick={handleBought}
                   >
                     Đặt mua
@@ -430,11 +460,17 @@ const Buy = props => {
             </section>
           </div>
         </div>
+
+        {/* Modals  */}
         <SizeChooseModal
           toggleSizeModal={toggleSizeModal}
           sizeModal={sizeModal}
           product={product}
           updateUserCurrentSize={updateUserCurrentSize}
+        />
+        <AddressModal
+          toggleAddressModal={toggleAddressModal}
+          isAddressModalOpen={isAddressModalOpen}
         />
 
         <style jsx>
@@ -464,6 +500,7 @@ const Buy = props => {
 };
 
 Buy.getInitialProps = async ({ query, store, isServer }) => {
+  await store.dispatch(getUsers());
   await store.dispatch(getProduct(query.id));
 
   return { isServer };

@@ -10,14 +10,14 @@ import Router, { useRouter } from "next/router";
 import Pagination from "react-js-pagination";
 
 // Components
-import FilterBar from "../components/filter-bar";
-import Layout from "../components/layout";
-import Aux from "../components/hoc/aux";
-import "../components/fontawesome";
-import FilterBarSmall from "../components/filter-bar-small";
+import FilterBar from "components/filter-bar";
+import Layout from "components/layout";
+import Aux from "components/hoc/aux";
+import "components/fontawesome";
+import FilterBarSmall from "components/modals/filter-bar-small";
 
 // Redux
-import { getProducts, setProductInfo } from "../redux/actions/product";
+import { getProducts, setProductInfo } from "/redux/actions/product";
 
 function mapDispatchToProps(dispatch) {
   return {
