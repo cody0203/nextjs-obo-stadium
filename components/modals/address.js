@@ -39,6 +39,13 @@ const AddressModal = props => {
     alias: ""
   });
 
+  // Life cycles
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  // Methods
+
   const closeModal = () => {
     setAddress({
       name: "",
@@ -46,14 +53,11 @@ const AddressModal = props => {
       city: "",
       district: "",
       ward: "",
-      alias: ""
+      alias: "",
+      isDefault: false
     });
   };
-
-  // Life cycles
-  useEffect(() => {
-    getUsers();
-  }, []);
+  
 
   const handleAddAddress = () => {
     const addresses = address;

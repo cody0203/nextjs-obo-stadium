@@ -8,11 +8,13 @@ import { useRouter } from "next/router";
 import { TabContent, TabPane, Nav, NavItem } from "reactstrap";
 import IntlNumberInput from "react-intl-number-input";
 import { convertedSizes } from "../../../db";
+import IntlCurrencyInput from "react-intl-currency-input";
 
 // Components
 import Layout from "components/layout";
 import SizeChooseModal from "components/modals/size-choose-modal";
 import AddressModal from "components/modals/address";
+import CreditCard from "components/modals/credit-card";
 
 // Redux
 import { getProduct, setProductInfo } from "/redux/actions/product";
@@ -59,9 +61,11 @@ const Buy = props => {
 
   // States
   const [sizeModal, setSizeModal] = useState(false);
+  const [creditCardModal, setCreditCardModal] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [biddingInput, setBiddingInput] = useState(0);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [currentPaymentMethod, setCurrentPaymentMethod] = useState("cod");
 
   // Life cycles
   useEffect(() => {
@@ -101,7 +105,8 @@ const Buy = props => {
     toggleSizeModal();
   };
 
-  const handleBidding = (e, value) => {
+  const handleBidding = e => {
+    const value = +e.target.value;
     setBiddingInput(value);
     buying(value + tax);
     if (product.sell_price < value) {
@@ -120,6 +125,19 @@ const Buy = props => {
       productName: product.name,
       productId: router.query.id
     });
+  };
+
+  const changePaymentMethod = e => {
+    const method = e.target.id;
+    setCurrentPaymentMethod(method);
+
+    if (e.target.id === "visa-master" && user.paymentMethod.length === 0) {
+      togglePaymentMethodModal()
+    }
+  };
+
+  const togglePaymentMethodModal = () => {
+    setCreditCardModal(!creditCardModal);
   };
 
   // Render
@@ -312,12 +330,10 @@ const Buy = props => {
                 </Nav>
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId="1">
-                    <IntlNumberInput
+                    <input
                       value={biddingInput}
                       onChange={handleBidding}
                       className="price-input form-control"
-                      suffix="₫"
-                      precision={0}
                     />
 
                     <div className="sub-price price-include">
@@ -419,7 +435,8 @@ const Buy = props => {
                     name="payment-methods"
                     id="cod"
                     className="cod-radio-btn"
-                    defaultChecked
+                    checked={currentPaymentMethod === "cod" ? true : false}
+                    onChange={changePaymentMethod}
                   />
                   <label htmlFor="cod">
                     <div className="radio-dot" />
@@ -432,6 +449,10 @@ const Buy = props => {
                     name="payment-methods"
                     id="visa-master"
                     className="cod-radio-btn"
+                    checked={
+                      currentPaymentMethod === "visa-master" ? true : false
+                    }
+                    onChange={changePaymentMethod}
                   />
                   <label htmlFor="visa-master">
                     <div className="radio-dot" />
@@ -471,6 +492,11 @@ const Buy = props => {
         <AddressModal
           toggleAddressModal={toggleAddressModal}
           isAddressModalOpen={isAddressModalOpen}
+        />
+
+        <CreditCard
+          togglePaymentMethodModal={togglePaymentMethodModal}
+          creditCardModal={creditCardModal}
         />
 
         <style jsx>
