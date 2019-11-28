@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+.filter-bar .content {
+  padding: 0px 0.9375rem;
+}
+.filter-bar .content .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.9375rem;
+  cursor: pointer;
+}
+.filter-bar .content .select-filter .item {
+  margin-bottom: 0.625rem;
+}
+.filter-bar .see-more {
+  color: #abacad;
+  cursor: pointer;
+}
+.filter-bar #see-more-dropdown {
+  display: none;
+}
+.filter-bar .collapse:not(.show) {
+  display: none !important;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-header .left-side {
+  color: #abacad;
+}
+.filter-header .fa-sliders-h {
+  transform: rotate(90deg);
+  margin-right: 0.625rem;
+}
+
+.clear-filter.btn-primary {
+  border: none;
+  color: #ffffff;
+  padding: 0.3125rem 0.9375rem;
+  line-height: 1.1875rem;
+  text-transform: uppercase;
+  background-color: #333333;
+}
+
+.clear-filter.btn-primary.disabled,
+.clear-filter.btn-primary:disabled,
+.clear-filter.btn-primary:not(:disabled):not(.disabled):active,
+.clear-filter.btn-primary:hover,
+.clear-filter.btn-primary:focus {
+  background-color: #333333;
+}
+
+.clear-filter.btn-primary:disabled {
+  cursor: not-allowed;
+}
+
+.break-line {
+  width: 100%;
+  border-top: 1px solid #d5d6d6;
+  margin: 1.25rem 0px;
+}
+
+.size .select-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: wrap;
+}
+.size .select-filter .item {
+  font-size: 0.75rem;
+  width: calc(100% / 4 - 10px);
+  height: 50px;
+  text-align: center;
+  border: 1px solid #333333;
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.price-input {
+  width: 100%;
+  margin-bottom: 0.625rem;
+  color: #333333 !important;
+}
+.price-input:focus {
+  color: #333333 !important;
+}
+
+.apply-price.btn-primary {
+  text-transform: uppercase;
+}
+
+.release-date .select-filter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.release-date .item .pretty {
+  margin: 0;
+}
+
+.release-date .item.odd {
+  text-align: right;
+}

@@ -13,7 +13,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "react-credit-cards/es/styles-compiled.css";
 
 export default withRedux(makeStore)(
   class MyApp extends App {

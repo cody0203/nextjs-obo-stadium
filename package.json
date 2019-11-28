@@ -29,6 +29,7 @@
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-image-magnify": "^2.7.4",
+    "react-input-mask": "^2.0.4",
     "react-intl": "^3.4.0",
     "react-intl-currency-input": "^0.1.9",
     "react-intl-number-input": "^0.4.0",

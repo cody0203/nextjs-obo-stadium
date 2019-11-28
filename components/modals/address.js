@@ -57,7 +57,6 @@ const AddressModal = props => {
       isDefault: false
     });
   };
-  
 
   const handleAddAddress = () => {
     const addresses = address;
@@ -135,25 +134,6 @@ const AddressModal = props => {
             onChange={handleInput}
           />
 
-          {/* <select
-            className="form-control custom-select city"
-            data-name="Thành phố"
-          />
-
-          <select
-            className="form-control custom-select district"
-            data-name="Quận/Huyện"
-          >
-            <option>Quận/Huyện</option>
-          </select>
-
-          <select
-            className="form-control custom-select ward"
-            data-name="Phường/Xã"
-          >
-            <option>Phường/Xã</option>
-          </select> */}
-
           <textarea
             className="form-control address"
             placeholder="Địa chỉ"
@@ -176,10 +156,6 @@ const AddressModal = props => {
         {`
           .form-control {
             margin-top: 1.25rem;
-          }
-
-          .addressModal .modal-footer {
-            align-items: baseline;
           }
         `}
       </style>

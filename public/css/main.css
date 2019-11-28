@@ -30,7 +30,8 @@ body {
   text-transform: uppercase;
 }
 
-.addressModal .modal-footer {
+.addressModal .modal-footer,
+.paymentMethodModal .modal-footer {
   align-items: stretch;
 }
 
