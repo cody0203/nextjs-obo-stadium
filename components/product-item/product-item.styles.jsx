@@ -5,8 +5,6 @@ import {
   CardText,
   CardBody,
   CardTitle,
-  CardSubtitle,
-  Button
 } from 'reactstrap';
 
 export const Shadow = styled.div`

@@ -1,135 +1,48 @@
-import React from "react";
-import Slider from "react-slick";
+import React, { Fragment } from 'react';
+import RelateNewsItem from 'components/relate-news-item/relate-news-item.component';
 
 const LastestNews = () => {
-  const slickSetting = {
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    dots: true,
-    arrows: true,
-    focusOnSelect: true,
-    variableWidth: true,
-    touchThreshold: 6,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          arrows: false
-        }
-      }
-    ]
-  };
-
+  const news = [
+    {
+      id: 1,
+      link: '/post.html',
+      imgLink: '/assets/images/news/news-1-thumnails.jpg',
+      title: `Pack “Logo Sketch” với branding mộc mạc trên Air Max 97`,
+      description: `Cùng đến với mẫu branding kiểu phác thảo, đầy mộc mạc và 'blend'
+    hoàn hảo cùng tổng thể phối màu.`
+    },
+    {
+      id: 2,
+      link: './post.html',
+      imgLink: '/assets/images/news/news-2-thumnails.jpg',
+      title: 'Nike Classic Cortez – Phối Màu Của Sự Tinh Tế',
+      description: `Bộ sưu tập Nike Classic Cortez với sự kết hợp của 2 tông màu: Hồng
+    Hoa Đăng và màu Cam`
+    },
+    {
+      id: 3,
+      link: './post.html',
+      imgLink: '/assets/images/news/news-3-thumnails.jpg',
+      title: 'Air Jordan 1 “Satin Black Toe” xuất hiện hình ảnh chi tiết',
+      description: `Air Jordan 1 “Black Toe” luôn là thiết kế đáng mua nhất, lại còn
+      là satin nữa chứ?`
+    },
+    {
+      id: 4,
+      link: './post.html',
+      imgLink: '/assets/images/news/news-4-thumnails.jpg',
+      title: 'HOT! Nike và Levi’s tái hợp với hàng loạt siêu phẩm mới',
+      description: `Đến hẹn lại lên, Nike và Levi’s lại tái hợp với nhau khiến các tín
+      đồ thời trang mê mệt.`
+    }
+  ];
   return (
-    <Slider {...slickSetting}>
-      <a className="news position-relative" href="./post.html">
-        <div className="card">
-          <img
-            className="card-img-top"
-            src="/assets/images/news/news-1-thumnails.jpg"
-            alt="news-1"
-          />
-          <div className="card-body">
-            <h5 className="card-title">
-              Pack “Logo Sketch” với branding mộc mạc trên Air Max 97
-              và&nbsp;Air&nbsp;Max Plus
-            </h5>
-            <p className="card-text news-short-desc">
-              Cùng đến với mẫu branding kiểu phác thảo, đầy mộc mạc và “blend"
-              hoàn hảo cùng tổng thể phối màu.
-            </p>
-            <p className="card-text author">
-              By <span className="name">Cody</span> · 27/08/2019
-            </p>
-          </div>
-        </div>
-        <div className="shadow mx-auto position-absolute" />
-      </a>
-      <div className="news position-relative">
-        <div className="card">
-          <img
-            className="card-img-top"
-            src="/assets/images/news/news-2-thumnails.jpg"
-            alt="news-1"
-          />
-          <div className="card-body">
-            <h5 className="card-title">
-              Nike Classic Cortez – Phối Màu Của Sự Tinh Tế
-            </h5>
-            <p className="card-text news-short-desc">
-              Bộ sưu tập Nike Classic Cortez với sự kết hợp của 2 tông màu: Hồng
-              Hoa Đăng và màu Cam
-            </p>
-            <p className="card-text author">
-              By <span className="name">Cody</span> · 21/08/2019
-            </p>
-          </div>
-        </div>
-        <div className="shadow mx-auto position-absolute" />
-      </div>
-      <div className="news position-relative">
-        <div className="card">
-          <img
-            className="card-img-top"
-            src="/assets/images/news/news-3-thumnails.jpg"
-            alt="news-3"
-          />
-          <div className="card-body">
-            <h5 className="card-title">
-              Air Jordan 1 “Satin Black Toe” xuất hiện hình ảnh chi tiết
-            </h5>
-            <p className="card-text news-short-desc">
-              Air Jordan 1 “Black Toe” luôn là thiết kế đáng mua nhất, lại còn
-              là satin nữa chứ?
-            </p>
-            <p className="card-text author">
-              By <span className="name">Cody</span> · 18/08/2019
-            </p>
-          </div>
-        </div>
-        <div className="shadow mx-auto position-absolute" />
-      </div>
-      <div className="news position-relative">
-        <div className="card">
-          <img
-            className="card-img-top"
-            src="/assets/images/news/news-4-thumnails.jpg"
-            alt="news-4"
-          />
-          <div className="card-body">
-            <h5 className="card-title">
-              HOT! Nike và Levi’s tái hợp với hàng loạt siêu phẩm mới
-            </h5>
-            <p className="card-text news-short-desc">
-              Đến hẹn lại lên, Nike và Levi’s lại tái hợp với nhau khiến các tín
-              đồ thời trang mê mệt.
-            </p>
-            <p className="card-text author">
-              By <span className="name">Cody</span> · 15/08/2019
-            </p>
-          </div>
-        </div>
-        <div className="shadow mx-auto position-absolute" />
-      </div>
-      <div className="news position-relative">
+    <Fragment>
+      {news.map(newsItem => (
+        <RelateNewsItem key={newsItem.id} {...newsItem} />
+      ))}
+
+      {/* <div className="news position-relative">
         <div className="card">
           <img
             className="card-img-top"
@@ -196,8 +109,8 @@ const LastestNews = () => {
           </div>
         </div>
         <div className="shadow mx-auto position-absolute" />
-      </div>
-    </Slider>
+      </div> */}
+    </Fragment>
   );
 };
 

@@ -7,7 +7,8 @@ import Link from 'next/link';
 import Layout from 'components/layout';
 import LastestNews from 'components/lastest-news';
 import ProductItem from 'components/product-item/product-item.component';
-import RowShowcase from 'components/row-showcase/row-showcase.component.jsx';
+import RowShowcase from 'components/row-showcase/row-showcase.component';
+import NewsLetter from 'components/newsletter/newsletter.component';
 
 const Home = props => {
   const title = (
@@ -50,11 +51,6 @@ const Home = props => {
     <Layout title={title}>
       <Head>
         <title>Trang chủ</title>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="/css/components/lastest-news.css"
-        />
         <link
           rel="stylesheet"
           type="text/css"
@@ -183,29 +179,7 @@ const Home = props => {
           </div>
         </section>
         {/* Newsletter Section*/}
-        <section className="newsletter container-fluid d-flex justify-content-center">
-          <div className="newsletter-form-wrapper">
-            <div className="title">Đăng ký nhận bản tin OBO Stadium</div>
-            <div className="sub-title">
-              Hãy đăng ký để nhận tin mới nhanh nhất qua email
-            </div>
-            <div className="newsletter-form d-flex">
-              <form className="d-flex w-100 justify-content-between flex-column flex-md-row">
-                <input
-                  className="form-control"
-                  type="text"
-                  placeholder="Nhập địa chỉ email của bạn"
-                />
-                <button
-                  className="btn btn-primary text-uppercase red-btn"
-                  type="submit"
-                >
-                  đăng ký
-                </button>
-              </form>
-            </div>
-          </div>
-        </section>
+        <NewsLetter />
         {/* Lastest News Section*/}
 
         <RowShowcase title="Bài viết mới" link="./news.html">
