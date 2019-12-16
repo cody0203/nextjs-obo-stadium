@@ -1,17 +1,12 @@
 // Modules
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FormattedNumber } from 'react-intl';
-import { connect } from 'react-redux';
 
 // Components
 import Layout from 'components/layout';
 import LastestNews from 'components/lastest-news';
-
-// Redux
-import { fetchProductsStart } from 'state/products/product.actions';
-
+import ProductItem from 'components/product-item/product-item.component';
 const Home = props => {
   const title = (
     <div className="content text-center">
@@ -45,34 +40,7 @@ const Home = props => {
 
   function productCategoriesRender(category) {
     return category.map(product => {
-      return (
-        <Link href="/shop/[id]" as={`/shop/${product.id}`} key={product.id}>
-          <a className="product position-relative">
-            <div className="card">
-              <img
-                className="card-img-top"
-                src={product.thumbnail}
-                alt={product.name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{product.name}</h5>
-                <p className="card-text price-desc">Giá thấp nhất hiện tại</p>
-                <p className="price">
-                  <FormattedNumber
-                    style="currency"
-                    currency="VND"
-                    value={product.sell_price}
-                  />
-                </p>
-                <p className="card-text sold">
-                  Đã bán {product.total_sold} đôi
-                </p>
-              </div>
-            </div>
-            <div className="shadow mx-auto position-absolute" />
-          </a>
-        </Link>
-      );
+      return <ProductItem product={product} key={product.id} />;
     });
   }
 
@@ -434,16 +402,4 @@ const Home = props => {
   );
 };
 
-Home.getInitialProps = ({ store, isServer }) => {
-  store.dispatch(fetchProductsStart());
-
-  return { isServer };
-};
-
-function mapStateToProps(state) {
-  return {
-    products: state.productReducer.products
-  };
-}
-
-export default connect(mapStateToProps)(Home);
+export default Home;
