@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Layout from 'components/layout';
 import LastestNews from 'components/lastest-news';
 import ProductItem from 'components/product-item/product-item.component';
+import RowShowcase from 'components/row-showcase/row-showcase.component.jsx';
+
 const Home = props => {
   const title = (
     <div className="content text-center">
@@ -51,11 +53,6 @@ const Home = props => {
         <link
           rel="stylesheet"
           type="text/css"
-          href="/css/components/products.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
           href="/css/components/lastest-news.css"
         />
         <link
@@ -68,30 +65,12 @@ const Home = props => {
           type="text/css"
           href="/css/components/index/index-category.css"
         />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="/css/components/index/product-showcase.css"
-        />
         <link rel="stylesheet" type="text/css" href="/css/index.css" />
       </Head>
       <main>
-        <section className="products-showcase best-seller container">
-          <div className="row">
-            <div className="title col-12">
-              <h2 className="h2">Sản phẩm bán chạy</h2>
-              <a
-                className="see-more-btn-text text-uppercase"
-                href="./shop.html"
-              >
-                Xem Thêm
-              </a>
-            </div>
-          </div>
-          <div className="row product-row d-flex justify-content-md-between">
-            {productCategoriesRender(findBestSeller)}
-          </div>
-        </section>
+        <RowShowcase title="Sản phẩm bán chạy" link="./shop.html">
+          {productCategoriesRender(findBestSeller)}
+        </RowShowcase>
         {/* Break Banner*/}
         <section className="break-banner">
           <a href="./product-details.html">
@@ -104,22 +83,9 @@ const Home = props => {
           </a>
         </section>
         {/* Staff Selects*/}
-        <section className="products-showcase staffs-choose container">
-          <div className="row">
-            <div className="title col-12">
-              <h2 className="h2">OBO LỰA CHỌN</h2>
-              <a
-                className="see-more-btn-text text-uppercase"
-                href="./shop.html"
-              >
-                Xem Thêm
-              </a>
-            </div>
-          </div>
-          <div className="row product-row d-flex justify-content-md-between">
-            {productCategoriesRender(findStaffChoose)}
-          </div>
-        </section>
+        <RowShowcase title="OBO LỰA CHỌN" link="./shop.html">
+          {productCategoriesRender(findStaffChoose)}
+        </RowShowcase>
         {/* Break Banner*/}
         <section className="break-banner">
           <a href="./product-details.html">
@@ -132,22 +98,9 @@ const Home = props => {
           </a>
         </section>
         {/* Under retails*/}
-        <section className="products-showcase under-retail container">
-          <div className="row">
-            <div className="title col-12">
-              <h2 className="h2">THẤP HƠN “GIÁ HÃNG”</h2>
-              <a
-                className="see-more-btn-text text-uppercase"
-                href="./shop.html"
-              >
-                Xem Thêm
-              </a>
-            </div>
-          </div>
-          <div className="row product-row d-flex justify-content-md-between">
-            {productCategoriesRender(findUnderRetails)}
-          </div>
-        </section>
+        <RowShowcase title="THẤP HƠN “GIÁ HÃNG”" link="./shop.html">
+          {productCategoriesRender(findUnderRetails)}
+        </RowShowcase>
         {/* Break Banner*/}
         <section className="break-banner">
           <a href="./product-details.html">
@@ -254,20 +207,10 @@ const Home = props => {
           </div>
         </section>
         {/* Lastest News Section*/}
-        <section className="latest-news container">
-          <div className="row">
-            <div className="title col-12">
-              <h2 className="h2">Bài viết mới</h2>
-              <a
-                className="see-more-btn-text text-uppercase"
-                href="./news.html"
-              >
-                Xem Thêm
-              </a>
-            </div>
-          </div>
+
+        <RowShowcase title="Bài viết mới" link="./news.html">
           <LastestNews />
-        </section>
+        </RowShowcase>
         {/* Modals*/}
         <div
           className="modal fade"
