@@ -1,22 +1,16 @@
 // Modules
-import React, { useEffect } from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { FormattedNumber } from "react-intl";
-import { connect } from "react-redux";
+import React, { useEffect } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { FormattedNumber } from 'react-intl';
+import { connect } from 'react-redux';
 
 // Components
-import Layout from "components/layout";
-import LastestNews from "components/lastest-news";
+import Layout from 'components/layout';
+import LastestNews from 'components/lastest-news';
 
 // Redux
-import { getAllProducts } from "/redux/actions/product";
-
-function mapStateToProps(state) {
-  return {
-    products: state.productReducer.productsAll
-  };
-}
+import { fetchProductsStart } from 'state/products/product.actions';
 
 const Home = props => {
   const title = (
@@ -33,19 +27,19 @@ const Home = props => {
   );
   const findBestSeller = props.products
     .filter(products => {
-      return products.status === "Best Seller";
+      return products.status === 'Best Seller';
     })
     .slice(0, 5);
 
   const findStaffChoose = props.products
     .filter(products => {
-      return products.status === "Staff Choose";
+      return products.status === 'Staff Choose';
     })
     .slice(0, 5);
 
   const findUnderRetails = props.products
     .filter(products => {
-      return products.status === "Under Retails";
+      return products.status === 'Under Retails';
     })
     .slice(0, 5);
 
@@ -136,7 +130,7 @@ const Home = props => {
             <img
               className="img-fluid"
               id="promo-banner-1"
-              src="/images/banner/promo-banner-1-lg.png"
+              src="/assets/images/banner/promo-banner-1-lg.png"
               alt="promo-banner-1"
             />
           </a>
@@ -164,7 +158,7 @@ const Home = props => {
             <img
               className="img-fluid"
               id="promo-banner-2"
-              src="/images/banner/promo-banner-2-lg.png"
+              src="/assets/images/banner/promo-banner-2-lg.png"
               alt="promo-banner-2"
             />
           </a>
@@ -192,7 +186,7 @@ const Home = props => {
             <img
               className="img-fluid"
               id="promo-banner-3"
-              src="/images/banner/promo-banner-3-lg.png"
+              src="/assets/images/banner/promo-banner-3-lg.png"
               alt="promo-banner-3"
             />
           </a>
@@ -209,7 +203,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src="/images/categories/category-1.png"
+                  src="/assets/images/categories/category-1.png"
                   alt="category-1"
                 />
                 <div className="tag">TECH PERFORMANCE</div>
@@ -219,7 +213,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src=" /images/categories/category-2.png"
+                  src=" /assets/images/categories/category-2.png"
                   alt="category-2"
                 />
                 <div className="tag">OFF-WHITE</div>
@@ -229,7 +223,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src=" /images/categories/category-3.png"
+                  src=" /assets/images/categories/category-3.png"
                   alt="category-3"
                 />
                 <div className="tag">SUPREME</div>
@@ -239,7 +233,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src=" /images/categories/category-4.png"
+                  src=" /assets/images/categories/category-4.png"
                   alt="category-4"
                 />
                 <div className="tag">NBA</div>
@@ -249,7 +243,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src=" /images/categories/category-5.png"
+                  src=" /assets/images/categories/category-5.png"
                   alt="category-5"
                 />
                 <div className="tag">YEEZY</div>
@@ -259,7 +253,7 @@ const Home = props => {
               <a className="category-wrap" href="./shop.html">
                 <img
                   className="img-fluid"
-                  src=" /images/categories/category-6.png"
+                  src=" /assets/images/categories/category-6.png"
                   alt="category-6"
                 />
                 <div className="tag">Comme Des Garçons</div>
@@ -370,7 +364,7 @@ const Home = props => {
                       />
                       <div className="invalid-feedback"> </div>
                       <div className="forgot-password-wrapper" />
-                      Quên mật khẩu? Nhấn vào{" "}
+                      Quên mật khẩu? Nhấn vào{' '}
                       <span className="text-btn">đây</span>
                       <div className="btn btn-primary red-btn sign-in-btn">
                         Đăng nhập
@@ -418,7 +412,7 @@ const Home = props => {
                       <div className="invalid-feedback"> </div>
                       <div className="privacy-confirm" />
                       Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao
-                      dịch mua bán theo{" "}
+                      dịch mua bán theo{' '}
                       <span className="text-btn">
                         điều kiện sử dụng và chính sách của OBO Stadium.
                       </span>
@@ -433,17 +427,23 @@ const Home = props => {
           </div>
         </div>
         <a className="back-to-top" href="#">
-          <img src="/images/back-to-top.png" alt="back-to-top" />
+          <img src="/assets/images/back-to-top.png" alt="back-to-top" />
         </a>
       </main>
     </Layout>
   );
 };
 
-Home.getInitialProps = async ({ store, isServer }) => {
-  await store.dispatch(getAllProducts());
+Home.getInitialProps = ({ store, isServer }) => {
+  store.dispatch(fetchProductsStart());
 
   return { isServer };
 };
+
+function mapStateToProps(state) {
+  return {
+    products: state.productReducer.products
+  };
+}
 
 export default connect(mapStateToProps)(Home);

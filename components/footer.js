@@ -6,7 +6,7 @@ const Footer = () => (
     <div className="container">
       <div className="row align-items-center">
         <div className="logo col-md-3 col-12 text-md-left text-center">
-          <img className="img-fluid" src="/images/logo-white.png" alt="logo" />
+          <img className="img-fluid" src="/assets/images/logo-white.png" alt="logo" />
         </div>
         <div className="footer-link col-md-9 col-12">
           <div className="footer-menu d-flex justify-content-md-end align-items-center flex-md-row flex-column">

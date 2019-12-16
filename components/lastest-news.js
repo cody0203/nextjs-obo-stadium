@@ -44,7 +44,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-1-thumnails.jpg"
+            src="/assets/images/news/news-1-thumnails.jpg"
             alt="news-1"
           />
           <div className="card-body">
@@ -67,7 +67,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-2-thumnails.jpg"
+            src="/assets/images/news/news-2-thumnails.jpg"
             alt="news-1"
           />
           <div className="card-body">
@@ -89,7 +89,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-3-thumnails.jpg"
+            src="/assets/images/news/news-3-thumnails.jpg"
             alt="news-3"
           />
           <div className="card-body">
@@ -111,7 +111,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-4-thumnails.jpg"
+            src="/assets/images/news/news-4-thumnails.jpg"
             alt="news-4"
           />
           <div className="card-body">
@@ -133,7 +133,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-6-thumnails.jpg"
+            src="/assets/images/news/news-6-thumnails.jpg"
             alt="news-6"
           />
           <div className="card-body">
@@ -156,7 +156,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-5-thumnails.jpg"
+            src="/assets/images/news/news-5-thumnails.jpg"
             alt="news-5"
           />
           <div className="card-body">
@@ -178,7 +178,7 @@ const LastestNews = () => {
         <div className="card">
           <img
             className="card-img-top"
-            src="/images/news/news-7-thumnails.jpg"
+            src="/assets/images/news/news-7-thumnails.jpg"
             alt="news-7"
           />
           <div className="card-body">

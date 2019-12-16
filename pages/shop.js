@@ -1,36 +1,23 @@
 // Modules
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import Head from "next/head";
-import { Collapse } from "reactstrap";
-import { connect } from "react-redux";
-import { FormattedNumber } from "react-intl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Router, { useRouter } from "next/router";
-import Pagination from "react-js-pagination";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Head from 'next/head';
+import { Collapse } from 'reactstrap';
+import { connect } from 'react-redux';
+import { FormattedNumber } from 'react-intl';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Router, { useRouter } from 'next/router';
+import Pagination from 'react-js-pagination';
 
 // Components
-import FilterBar from "components/filter-bar";
-import Layout from "components/layout";
-import Aux from "components/hoc/aux";
-import "components/fontawesome";
-import FilterBarSmall from "components/modals/filter-bar-small";
+import FilterBar from 'components/filter-bar';
+import Layout from 'components/layout';
+import Aux from 'components/hoc/aux';
+import 'components/fontawesome';
+import FilterBarSmall from 'components/modals/filter-bar-small';
 
 // Redux
-import { getProducts, setProductInfo } from "/redux/actions/product";
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getProducts: page => dispatch(getProducts(page)),
-    setProductInfo: info => dispatch(setProductInfo(info))
-  };
-}
-
-function mapStateToProps(state) {
-  return {
-    products: state.productReducer.products
-  };
-}
+import { getProducts, setProductInfo } from '/redux/actions/product';
 
 const Shop = props => {
   // Props
@@ -46,15 +33,15 @@ const Shop = props => {
 
   const getCurrentSort = () => {
     const { sort, order } = router.query;
-    let currentSort = "Hàng mới";
-    if (sort === "total_sold" && order === "desc") {
-      currentSort = "Bán chạy";
-    } else if (sort === "release_date" && order === "desc") {
-      currentSort = "Hàng mới";
-    } else if (sort === "sell_price" && order === "asc") {
-      currentSort = "Giá thấp đến cao";
-    } else if (sort === "sell_price" && order === "desc") {
-      currentSort = "Giá cao đến thấp";
+    let currentSort = 'Hàng mới';
+    if (sort === 'total_sold' && order === 'desc') {
+      currentSort = 'Bán chạy';
+    } else if (sort === 'release_date' && order === 'desc') {
+      currentSort = 'Hàng mới';
+    } else if (sort === 'sell_price' && order === 'asc') {
+      currentSort = 'Giá thấp đến cao';
+    } else if (sort === 'sell_price' && order === 'desc') {
+      currentSort = 'Giá cao đến thấp';
     }
     return currentSort;
   };
@@ -67,10 +54,10 @@ const Shop = props => {
 
   const [sortBy, setSortBy] = useState({
     conditions: [
-      "Hàng mới",
-      "Bán chạy",
-      "Giá thấp đến cao",
-      "Giá cao đến thấp"
+      'Hàng mới',
+      'Bán chạy',
+      'Giá thấp đến cao',
+      'Giá cao đến thấp'
     ],
     chose: getCurrentSort()
   });
@@ -80,9 +67,9 @@ const Shop = props => {
   // Life cycles
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.addEventListener("click", toggleSort);
+    document.addEventListener('click', toggleSort);
     return () => {
-      document.removeEventListener("click", toggleSort);
+      document.removeEventListener('click', toggleSort);
     };
   });
 
@@ -94,7 +81,7 @@ const Shop = props => {
 
   // Toggle Sort
   const toggleSort = event => {
-    if (event.target.classList.contains("sorting")) {
+    if (event.target.classList.contains('sorting')) {
       setIsOpen(!isOpen);
     } else {
       setIsOpen(false);
@@ -107,35 +94,35 @@ const Shop = props => {
       ...sortBy,
       chose: condition
     });
-    let sort = "";
-    let order = "";
+    let sort = '';
+    let order = '';
     switch (condition) {
-      case "Bán chạy":
-        sort = "total_sold";
-        order = "desc";
+      case 'Bán chạy':
+        sort = 'total_sold';
+        order = 'desc';
         break;
-      case "Hàng mới":
-        sort = "release_date";
-        order = "desc";
+      case 'Hàng mới':
+        sort = 'release_date';
+        order = 'desc';
         break;
-      case "Giá thấp đến cao":
-        sort = "sell_price";
-        order = "asc";
+      case 'Giá thấp đến cao':
+        sort = 'sell_price';
+        order = 'asc';
         break;
-      case "Giá cao đến thấp":
-        sort = "sell_price";
-        order = "desc";
+      case 'Giá cao đến thấp':
+        sort = 'sell_price';
+        order = 'desc';
         break;
     }
     router.push({
-      pathname: "/shop",
+      pathname: '/shop',
       query: { ...router.query, page: 1, sort, order }
     });
   };
 
   const handlePageChange = pageNumber => {
     router.push({
-      pathname: "/shop",
+      pathname: '/shop',
       query: {
         ...router.query,
         page: pageNumber,
@@ -148,7 +135,7 @@ const Shop = props => {
   // Save product details by filter
 
   const saveDetails = () => {
-    const size = Number(router.query["available_size_like"]);
+    const size = Number(router.query['available_size_like']);
     if (size) {
       setProductInfo({ size });
     }
@@ -298,7 +285,7 @@ const Shop = props => {
         />
 
         <a className="back-to-top" href="#">
-          <img src="/images/back-to-top.png" alt="back-to-top" />
+          <img src="/assets/images/back-to-top.png" alt="back-to-top" />
         </a>
       </main>
 
@@ -372,12 +359,12 @@ Shop.getInitialProps = async ctx => {
   const { store, isServer, asPath, query } = ctx;
   const page = query.page || 1;
   const limit = 16;
-  const sort = query.sort || "id";
-  const order = query.order || "desc";
+  const sort = query.sort || 'id';
+  const order = query.order || 'desc';
   await store.dispatch(getProducts(page, limit, sort, order, query));
 
   const storeData = store.getState();
-  const totalItems = storeData.productReducer.headers["x-total-count"];
+  const totalItems = storeData.productReducer.headers['x-total-count'];
   const totalPages = Math.ceil(totalItems / limit);
 
   return {
@@ -391,5 +378,18 @@ Shop.getInitialProps = async ctx => {
     order: order
   };
 };
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getProducts: page => dispatch(getProducts(page)),
+    setProductInfo: info => dispatch(setProductInfo(info))
+  };
+}
+
+function mapStateToProps(state) {
+  return {
+    products: state.productReducer.products
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Shop);

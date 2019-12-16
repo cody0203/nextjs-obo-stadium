@@ -3,13 +3,13 @@ import {
   SET_PRODUCT_INFO,
   GET_ALL_PRODUCTS,
   GET_A_PRODUCT
-} from "../constants/action-types";
-import axios from "axios";
+} from '../constants/action-types';
+import axios from 'axios';
 
 export function getProducts(page, limit, sort, order, query) {
-  let filters = "";
+  let filters = '';
   for (let i in query) {
-    if (i !== "sort" && i !== "order") {
+    if (i !== 'sort' && i !== 'order') {
       filters += `&${i}=${query[i]}`;
     }
   }
@@ -49,15 +49,5 @@ export function getProduct(id) {
       .then(({ data }) => data)
       .then(json => {
         dispatch({ type: GET_A_PRODUCT, payload: json });
-      });
-}
-
-export function getAllProducts() {
-  return dispatch =>
-    axios
-      .get("https://cody-json-server.herokuapp.com/products")
-      .then(({ data }) => data)
-      .then(json => {
-        dispatch({ type: GET_ALL_PRODUCTS, payload: json });
       });
 }

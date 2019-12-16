@@ -78,7 +78,7 @@ const Sell = () => {
                 </div>
                 <a href="./product-details.html" className="product-image">
                   <img
-                    src="/images/product-details-image/1.jpg"
+                    src="/assets/images/product-details-image/1.jpg"
                     alt="image-1"
                     className="img-fluid"
                   />

@@ -37,7 +37,7 @@ const Account = () => {
                 <div className="header">
                   <div className="avatar">
                     <img
-                      src="/images/post/avatar.png"
+                      src="/assets/images/post/avatar.png"
                       alt="avatar"
                       className="img-fluid"
                     />

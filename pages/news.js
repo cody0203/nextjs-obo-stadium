@@ -50,7 +50,7 @@ const News = () => {
                 </div>
                 <div className="thumbnail col-lg-6 col-12">
                   <img
-                    src="/images/news/news-1-thumnails.jpg"
+                    src="/assets/images/news/news-1-thumnails.jpg"
                     alt="thumbnail"
                     className="img-fluid"
                   />
@@ -74,7 +74,7 @@ const News = () => {
             <div className="row">
               <div className="thumbnail col-lg-6 col-12">
                 <img
-                  src="/images/news/news-2-thumnails.jpg"
+                  src="/assets/images/news/news-2-thumnails.jpg"
                   alt="thumbnail"
                   className="img-fluid"
                 />
@@ -116,7 +116,7 @@ const News = () => {
               </div>
               <div className="thumbnail col-lg-6 col-12">
                 <img
-                  src="/images/news/news-3-thumnails.jpg"
+                  src="/assets/images/news/news-3-thumnails.jpg"
                   alt="thumbnail"
                   className="img-fluid"
                 />
@@ -138,7 +138,7 @@ const News = () => {
             <div className="row">
               <div className="thumbnail col-lg-6 col-12">
                 <img
-                  src="/images/news/news-4-thumnails.jpg"
+                  src="/assets/images/news/news-4-thumnails.jpg"
                   alt="thumbnail"
                   className="img-fluid"
                 />
@@ -180,7 +180,7 @@ const News = () => {
               </div>
               <div className="thumbnail col-lg-6 col-12">
                 <img
-                  src="/images/news/news-5-thumnails.jpg"
+                  src="/assets/images/news/news-5-thumnails.jpg"
                   alt="thumbnail"
                   className="img-fluid"
                 />

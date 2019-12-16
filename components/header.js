@@ -50,7 +50,7 @@ const Header = props => {
             <img
               className="navbar-brand"
               className="img-fluid"
-              src="/images/logo-white.png"
+              src="/assets/images/logo-white.png"
               alt="logo"
             />
           </a>

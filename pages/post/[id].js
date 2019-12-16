@@ -37,7 +37,7 @@ const Post = () => {
             </p>
             <figure className="img-post-wrapper">
               <img
-                src="/images/post/post-1.jpg"
+                src="/assets/images/post/post-1.jpg"
                 alt="post-1"
                 className="img-fluid img-post"
               />
@@ -57,7 +57,7 @@ const Post = () => {
             </p>
             <figure className="img-post-wrapper">
               <img
-                src="/images/post/post-2.jpg"
+                src="/assets/images/post/post-2.jpg"
                 alt="post-2"
                 className="img-fluid img-post"
               />
@@ -78,27 +78,27 @@ const Post = () => {
               Đen.
             </p>
             <img
-              src="/images/post/post-3.jpg"
+              src="/assets/images/post/post-3.jpg"
               alt="post-3"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-4.jpg"
+              src="/assets/images/post/post-4.jpg"
               alt="post-4"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-5.jpg"
+              src="/assets/images/post/post-5.jpg"
               alt="post-5"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-6.jpg"
+              src="/assets/images/post/post-6.jpg"
               alt="post-6"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-7.jpg"
+              src="/assets/images/post/post-7.jpg"
               alt="post-7"
               className="img-post img-fluid"
             />
@@ -113,17 +113,17 @@ const Post = () => {
               chất liệu Da Bóng ở các mảng Đen.
             </p>
             <img
-              src="/images/post/post-8.jpg"
+              src="/assets/images/post/post-8.jpg"
               alt="post-8"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-9.jpg"
+              src="/assets/images/post/post-9.jpg"
               alt="post-9"
               className="img-post img-fluid"
             />
             <img
-              src="/images/post/post-10.jpg"
+              src="/assets/images/post/post-10.jpg"
               alt="post-10"
               className="img-post img-fluid"
             />
@@ -151,7 +151,7 @@ const Post = () => {
           <div className="row">
             <div className="avatar-wrapper col-md-2 col-7 mx-auto">
               <img
-                src="/images/post/avatar.png"
+                src="/assets/images/post/avatar.png"
                 alt="avatar"
                 className="img-fluid avatar"
               />

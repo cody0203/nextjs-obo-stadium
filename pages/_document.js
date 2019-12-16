@@ -12,7 +12,7 @@ class MyDocument extends Document {
         <Head>
           <link
             rel="shortcut icon"
-            href="/images/favicon.ico"
+            href="/assets/images/favicon.ico"
             type="image/x-icon"
           />
           <link rel="stylesheet" type="text/css" href="/css/nprogress.css" />
