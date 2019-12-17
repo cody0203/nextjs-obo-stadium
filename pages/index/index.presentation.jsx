@@ -1,7 +1,6 @@
 // Modules
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 
 // Components
 import Layout from 'components/layout';
@@ -9,8 +8,12 @@ import LastestNews from 'components/lastest-news';
 import ProductItem from 'components/product-item/product-item.component';
 import RowShowcase from 'components/row-showcase/row-showcase.component';
 import NewsLetter from 'components/newsletter/newsletter.component';
+import PromoBanner from 'components/promo-banner/promo-banner.component';
 
 const Home = props => {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [bannerSize, setBannerSize] = useState('lg');
+
   const title = (
     <div className="content text-center">
       <h1 className="slogan main-heading text-uppercase">
@@ -47,15 +50,28 @@ const Home = props => {
     });
   }
 
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    if (width > 768) {
+      setBannerSize('lg');
+    } else if (width <= 768 && width > 576) {
+      setBannerSize('md');
+    } else {
+      setBannerSize('sm');
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [window.innerWidth]);
+
   return (
     <Layout title={title}>
       <Head>
         <title>Trang chủ</title>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="/css/components/index/index-newsletter.css"
-        />
         <link
           rel="stylesheet"
           type="text/css"
@@ -67,38 +83,32 @@ const Home = props => {
         <RowShowcase title="Sản phẩm bán chạy" link="./shop.html">
           {productCategoriesRender(findBestSeller)}
         </RowShowcase>
+
         {/* Break Banner*/}
-        <section className="break-banner">
-          <a href="./product-details.html">
-            <img
-              className="img-fluid"
-              id="promo-banner-1"
-              src="/assets/images/banner/promo-banner-1-lg.png"
-              alt="promo-banner-1"
-            />
-          </a>
-        </section>
+        <PromoBanner
+          link={`/assets/images/banner/promo-banner-1-${bannerSize}.png`}
+        />
+
         {/* Staff Selects*/}
         <RowShowcase title="OBO LỰA CHỌN" link="./shop.html">
           {productCategoriesRender(findStaffChoose)}
         </RowShowcase>
+
         {/* Break Banner*/}
-        <section className="break-banner">
-          <a href="./product-details.html">
-            <img
-              className="img-fluid"
-              id="promo-banner-2"
-              src="/assets/images/banner/promo-banner-2-lg.png"
-              alt="promo-banner-2"
-            />
-          </a>
-        </section>
+        <PromoBanner
+          link={`/assets/images/banner/promo-banner-2-${bannerSize}.png`}
+        />
+
         {/* Under retails*/}
         <RowShowcase title="THẤP HƠN “GIÁ HÃNG”" link="./shop.html">
           {productCategoriesRender(findUnderRetails)}
         </RowShowcase>
         {/* Break Banner*/}
-        <section className="break-banner">
+
+        <PromoBanner
+          link={`/assets/images/banner/promo-banner-3-${bannerSize}.png`}
+        />
+        {/* <section className="break-banner">
           <a href="./product-details.html">
             <img
               className="img-fluid"
@@ -107,7 +117,7 @@ const Home = props => {
               alt="promo-banner-3"
             />
           </a>
-        </section>
+        </section> */}
         {/* Category Section*/}
         <section className="categories-showcase container">
           <div className="row">
@@ -180,137 +190,14 @@ const Home = props => {
         </section>
         {/* Newsletter Section*/}
         <NewsLetter />
-        {/* Lastest News Section*/}
 
+        {/* Lastest News Section*/}
         <RowShowcase title="Bài viết mới" link="./news.html">
           <LastestNews />
         </RowShowcase>
+
         {/* Modals*/}
-        <div
-          className="modal fade"
-          id="signInSignUp"
-          tabIndex={-1}
-          role="dialog"
-          aria-labelledby="signInSignUpLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <ul className="nav nav-pills" id="pills-tab" role="tablist">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link active"
-                      id="signIn-tab"
-                      data-toggle="pill"
-                      href="#signIn"
-                      role="tab"
-                      aria-controls="signIn"
-                      aria-selected="true"
-                    >
-                      Đăng nhập
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="signUp-tab"
-                      data-toggle="pill"
-                      href="#signUp"
-                      role="tab"
-                      aria-controls="signUp"
-                      aria-selected="false"
-                    >
-                      Đăng ký
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="modal-body">
-                <div className="tab-content" id="pills-tabContent">
-                  <div
-                    className="tab-pane fade show active"
-                    id="signIn"
-                    role="tabpanel"
-                    aria-labelledby="signIn-tab"
-                  >
-                    <form>
-                      <input
-                        className="form-control sign-in-email"
-                        placeholder="Email"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-in-password"
-                        type="password"
-                        placeholder="Mật khẩu"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <div className="forgot-password-wrapper" />
-                      Quên mật khẩu? Nhấn vào{' '}
-                      <span className="text-btn">đây</span>
-                      <div className="btn btn-primary red-btn sign-in-btn">
-                        Đăng nhập
-                      </div>
-                    </form>
-                  </div>
-                  <div
-                    className="tab-pane fade"
-                    id="signUp"
-                    role="tabpanel"
-                    aria-labelledby="signUp-tab"
-                  >
-                    <form>
-                      <input
-                        className="form-control sign-up-full-name"
-                        placeholder="Họ và tên *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-phone"
-                        placeholder="Số điện thoại *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-email"
-                        placeholder="Email *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-password"
-                        type="password"
-                        placeholder="Mật khẩu *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <input
-                        className="form-control sign-up-confirm-password"
-                        type="password"
-                        placeholder="Xác nhận mật khẩu *"
-                        autoComplete="autocomplete"
-                      />
-                      <div className="invalid-feedback"> </div>
-                      <div className="privacy-confirm" />
-                      Khi bạn nhấn Đăng ký, bạn đã đồng ý thực hiện mọi giao
-                      dịch mua bán theo{' '}
-                      <span className="text-btn">
-                        điều kiện sử dụng và chính sách của OBO Stadium.
-                      </span>
-                      <div className="btn btn-primary red-btn sign-up-btn">
-                        Đăng kí
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <a className="back-to-top" href="#">
           <img src="/assets/images/back-to-top.png" alt="back-to-top" />
         </a>

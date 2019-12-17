@@ -2,12 +2,14 @@ import styled from 'styled-components';
 import { Container, Input, Button } from 'reactstrap';
 
 export const ContainerStyles = styled(Container)`
+  margin: auto;
   margin-top: 1rem;
   margin-bottom: 3.125rem;
   background-color: #2f4858;
   color: #ffffff;
   display: flex;
   justify-content: center;
+  max-width: 1920px;
 `;
 
 export const Title = styled.div`

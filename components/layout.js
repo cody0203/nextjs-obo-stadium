@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/router';
 
 // Component
-import Header from "./header";
-import Footer from "./footer";
+import Header from 'components/header/header.component';
+import Footer from './footer';
 
 const Layout = props => {
   const router = useRouter();
@@ -15,8 +15,7 @@ const Layout = props => {
       <Footer />
       <style jsx global>
         {`
-          @import "/css/main.css";
-          @import "/css/components/header.css";
+          @import '/css/main.css';
         `}
       </style>
     </div>

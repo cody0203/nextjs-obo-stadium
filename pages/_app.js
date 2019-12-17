@@ -6,8 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { IntlProvider } from 'react-intl';
 import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
-
-import Loading from '../components/loading';
+import GlobalStyle from '../global.styles';
 
 // CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,9 +30,10 @@ class MyApp extends App {
     return (
       <Provider store={store}>
         <IntlProvider locale="vi">
-          {/* <PersistGate persistor={store.__persistor} loading={<Loading />}> */}
-          <Component {...pageProps} />
-          {/* </PersistGate> */}
+          <PersistGate persistor={store.__PERSISTOR} loading={null}>
+            <Component {...pageProps} />
+            <GlobalStyle />
+          </PersistGate>
         </IntlProvider>
       </Provider>
     );
