@@ -135,9 +135,6 @@
   border-color: inherit;
   border-color: #333;
 }
-.form-control::placeholder {
-  color: #b6b6b6;
-}
 .navbar-light .navbar-nav .nav-link {
   white-space: nowrap;
 }
@@ -203,14 +200,6 @@ footer .footer-link .item:hover {
 }
 .top-header .social-icon .fa-facebook-square:hover {
   color: #fafafa;
-}
-.card {
-  border: none;
-}
-@media (min-width: 1230px) {
-  .container {
-    max-width: 1230px;
-  }
 }
 @media (max-width: 768px) {
   .navbar-expand-lg .navbar-nav .nav-link {

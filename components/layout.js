@@ -13,11 +13,6 @@ const Layout = props => {
       <Header currentPage={router.pathname} title={props.title} />
       <div>{props.children}</div>
       <Footer />
-      <style jsx global>
-        {`
-          @import '/css/main.css';
-        `}
-      </style>
     </div>
   );
 };

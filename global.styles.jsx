@@ -28,6 +28,15 @@ const GlobalStyle = createGlobalStyle`
     cursor: not-allowed;
   }
 
+  @media (min-width: 1230px) {
+    .container {
+      max-width: 1230px;
+    }
+  }  
+  .form-control::placeholder {
+    color: #b6b6b6;
+  }
+  
 `;
 
 export default GlobalStyle;
